@@ -3,7 +3,7 @@ import sys, numpy as np, moderngl as gl
 from PIL import Image
 lab = np.load(sys.argv[1]); out = sys.argv[2]; wx, wy, wz, hw, yaw = map(float, sys.argv[3:8]); ppm = float(sys.argv[8]) if len(sys.argv) > 8 else 25; el = np.deg2rad(float(sys.argv[9]) if len(sys.argv) > 9 else 0)
 PAL = np.array([[222,164,133],[14,14,16],[140,151,157],[241,236,225],[249,168,0]], 'f4')/255
-z = np.load('printable.npz'); V, F = z['v'], z['f']; S = int(2*hw*ppm)
+import os; z = np.load(os.environ.get('MESH', 'printable.npz')); V, F = z['v'], z['f']; S = int(2*hw*ppm)
 n = np.cross(V[F][:,1]-V[F][:,0], V[F][:,2]-V[F][:,0]); n /= np.linalg.norm(n, axis=1, keepdims=True)+1e-12
 a = np.deg2rad(yaw); right = np.array([np.cos(a), -np.sin(a), 0]); fwd = np.array([np.sin(a)*np.cos(el), np.cos(a)*np.cos(el), -np.sin(el)]); up = np.cross(right, fwd)
 shade = .78 + .22*np.clip(-(n @ (fwd*.8 - up*.4 + right*.3)), 0, 1)

@@ -109,6 +109,30 @@ The [PLAYBOOK](PLAYBOOK.md) holds the current best practice distilled from this 
 - **Conflict resolved:** catchlights depend on the style. Realistic models get none (owner, round 2); stylised models get one (local session).
 - **Next:** port contour split into `coloring/`, and merge their A/B results of part lock and crease snap on the family bust.
 
+## 2026-11-18 · Contour split ported and adopted; the local session's family-bust A/B merged
+
+- **What:** smooth paint edges cut through triangles, replacing the 0.3 mm per-triangle sawtooth on eyes, brows, teeth, the frame edge and the thumb.
+- **How:**
+  - `coloring/contour_split.py`, ported and vectorised from the local session's `maroon_refine.py`.
+  - Area-weighted label shares go onto the vertices; ITER 0 for the vertex colours.
+  - T_ITER 4 smoothing is used only for the cut positions, with one shared cut point per edge.
+  - Two-colour triangles become 3 triangles, three-colour triangles 6. Single-face dots keep their colour.
+  - Runtime 6.5 s for 1M faces. Asserted: no open edges, 1 body, area unchanged to 1e-6.
+  - Applied after the locks, then exported with `MESH=cs.npz`.
+- **Why:** the shares are smooth across the surface, so the cuts follow a smooth contour instead of triangle edges. The shared edge points keep the mesh conforming.
+- **Failure found and fixed:** the exact plane-split liquid line went jagged, because vertices on the plane sit at 50/50.
+  - Added `--keep mask`: kept faces are untouched, and cuts are blocked on any edge they touch, propagated until stable (no T-junctions).
+  - The liquid line is straight again.
+  - Before/after images: `jobs/man-with-drink/renders/contour-split-ab.png` and `contour-split-without-keep-glass.png`.
+- **When:** as the last colouring step on every model. Use `--keep` wherever an edge is already exact.
+- **Result:**
+  - The man with the drink went to 1,022,958 faces.
+  - Both 3MFs re-verified (decode, watertight, layer check at 0.08 and 0.2 mm, swap margins).
+  - Front previews regenerated.
+- **Merged from the local session's family-bust A/B:**
+  - Crease snap can't fix texture noise on smooth beads (no fold). Patch majority with fold faces as a barrier can.
+  - New customer rule: remove raised bindis, moles and dots from the art before Tripo.
+
 ---
 
 ### How to add an entry

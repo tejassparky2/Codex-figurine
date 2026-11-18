@@ -44,7 +44,7 @@
    - Smooths the skin/black sawtooth below the head.
    - Turns enclosed skin specks on the head silver.
    - Merges islands under 0.16 mm². The smallest island left is 0.207 mm².
-10. `export.py`: writes the Orca `paint_color` 3MFs, then re-opens them and decodes every triangle against the arrays.
+10. `coloring/contour_split.py printable.npz final.npy cs.npz --keep cs_keep.npy` smooths the paint edges through the triangles. The glass zone is kept so the liquid line stays exact. Then `MESH=cs.npz export.py`: writes the Orca `paint_color` 3MFs, then re-opens them and decodes every triangle against the arrays.
 11. `render_outputs.py`: a 12-view unlit turnaround with an exact palette check on every pixel, the lit hero, and straight-front previews of the full figure and the face. All are decoded from the exported guide.
 
 ## Physical schedule

@@ -1,7 +1,9 @@
 """Write the finish guide (5 finish colours) and the U1 print project (4 tool IDs) as Orca paint_color 3MFs,
 then re-open both archives and verify geometry and decoded paint against the arrays."""
 import json, re, zipfile, numpy as np, trimesh
-z = np.load('printable.npz'); V, F = z['v'], z['f']; lab = np.load('final.npy').astype(int)
+import os
+z = np.load(os.environ.get('MESH', 'printable.npz')); V, F = z['v'], z['f']
+lab = (z['l'] if 'l' in z.files else np.load('final.npy')).astype(int)   # cs.npz carries its own labels
 CODES = np.array(['4', '8', '0C', '1C', '2C'])
 FINISH = ['#E6BAA8', '#0E0E10', '#8C979D', '#F9A800', '#F1ECE1']        # Apricot, Black, Simply Silver, Orange, Pure White
 NAMES = ['Apricot (skin)', 'Black', 'Simply Silver', 'Orange (whisky)', 'Pure White']

@@ -21,6 +21,7 @@ Sources so far:
 | Previews | **Always send straight-front previews** (full figure and face) with every revision, rendered from the exported file. | Man-with-drink, review 3 |
 | Colours | Pick print colours only from the stock list in section 2. Say clearly when a requested colour (clear glass, brown iris) isn't stocked and what replaces it. | Filament list |
 | Details | Beads and bracelets get 1–2 colours at most (customers accept this). The owner zooms in on faces, brows and beards, so edges there must be clean. | Local session |
+| Face dots | **No raised bindis, moles or dots.** Remove them from the art before Tripo ("plain smooth skin" in ChatGPT), then paint them flat on the model. Tripo turns every dark dot into a bump. | Local session, customer rule |
 | Bases | Printed separately and glued, so each model gets a flat bottom and no base. | Local session |
 | Generation | Ask before spending Tripo credits. Prefer a model whose hidden back colours are already right (see section 6). | Toolkit and family comparison |
 
@@ -86,8 +87,9 @@ Tools are in `coloring/` (generic) and `jobs/<model>/tools/` (as run, with model
    - Run the sawtooth vote and merge islands under 0.16 mm².
    - Enclosed specks take the colour around them.
    - **Re-apply part locks last.**
-10. **Export and verify.** `export.py` writes a finish guide (one slot per final colour) and a printer project (tool IDs). Reopen both, decode every triangle and compare it with the arrays. Run `scripts/layer_colors.py` at both 0.08 and 0.2 mm bands. Check the swap margins.
-11. **Previews.** `coloring/front_preview.py` (always), a 12-view unlit turnaround with an exact palette check, and a lit hero. Decode all of them from the exported file.
+10. **Contour split** (`coloring/contour_split.py`), the last colouring step. It replaces the 0.3 mm triangle sawtooth with smooth cuts. Pass `--keep` for areas whose edges are already exact (plane-split liquid lines). Without it, vertices on the plane sit at 50/50 and the straight line turns jagged.
+11. **Export and verify.** `export.py` writes a finish guide (one slot per final colour) and a printer project (tool IDs). Reopen both, decode every triangle and compare it with the arrays. Run `scripts/layer_colors.py` at both 0.08 and 0.2 mm bands. Check the swap margins.
+12. **Previews.** `coloring/front_preview.py` (always), a 12-view unlit turnaround with an exact palette check, and a lit hero. Decode all of them from the exported file.
 
 ## 4. Techniques that worked
 
@@ -147,7 +149,20 @@ Colour-based masks fail wherever two materials touch, because the texture is blu
 - Cut triangles where two filaments' shares are equal. Shared edge points keep the mesh watertight and conforming.
 - Use ITER 0 for the vertex labels; 2 ate thin eye-white crescents.
 - Use 4 smoothing passes for the cut positions.
-- This removes the 0.3 mm triangle sawtooth on eyes, brows and beards. Planned as the next upgrade to `split_planes.py`.
+- This removes the 0.3 mm triangle sawtooth on eyes, brows and beards.
+- **Ported: `coloring/contour_split.py`** (vectorised; regression asserts no open edges, the same body count and the area to 1e-6).
+- On the man with the drink it added 14k faces and visibly smoothed the eyes, brows, teeth, frame edge and thumb.
+- **Lesson: protect exact edges with `--keep`.** Cuts are blocked on edges a kept face touches, propagated to a fixed point, so no T-junctions form.
+- The local session's next idea: leave vertices on concave folds unsmoothed, so the cut stays on the fold (`--protect-folds DEG`; not yet A/B-tested).
+
+### 4.4b Texture noise on smooth shapes (beads, buttons): patch majority (local session A/B)
+
+- Crease snap can't fix texture noise on a smooth sphere: there is no fold to snap to.
+- Patch majority, with a gotcha: fold edges never form closed loops, so the components between fold edges merge into one giant patch.
+- Fix: mark the fold **faces** (concave > 15°) as a barrier, dilate 1 ring and take the connected components. Give the barrier faces back to the adjacent small patch.
+- Patches under 80 mm² then take their area-majority colour. Each bead becomes its own patch of about 50 mm².
+- Limitation: where beads touch, they merge through the barrier.
+- Still to A/B on that model: thin_network_lock or part_lock for strings of beads.
 
 ### 4.5 Remove baked shadows at the source
 
@@ -186,12 +201,17 @@ Always render the back before choosing.
 ## 7. Open experiments (next models)
 
 - **Headless slicing.** Snapmaker Orca CLI `--info` / `--slice`, to confirm supports and paint on the real toolpath. Not yet done for any model.
-- **Finer boundaries along curves.** Port the local session's contour split (4.4) into `coloring/`, so edges aren't limited by about 0.3 mm triangles.
+- **Contour split with fold protection** (`--protect-folds`): A/B against the plain version on a beard or hairline.
 - **Tilt-aware swap check.** Compute swap heights after the owner's chosen orientation, and verify them against the G-code (section 2).
 - **De-shading before labelling** (research note): AO division and a down-weighted L*.
 - **MediaPipe landmarks** to propose eye and mouth tracings automatically, then hand-check them.
 - **Auto-detect contact pairs** for part locks: boundaries where thickness changes sharply across a concave crease.
-- **Awaited from the local session:** A/B results of part lock and crease snap on its new family bust (glasses, hands on clothes). Merge the winner here.
+- **Family bust A/B (local session):**
+  - Baseline: hands clean, glasses OK.
+  - Crease snap: cleaner finger webbing and frame base, but a black wedge at one brow end, and the beads not fixed.
+  - Patch majority: fixed the front beads.
+  - Next: thin_network_lock and part_lock on the same beads and frame.
+  - Open problems: a cheek patch baked into the texture (fix at the source with Remove Lighting), a fuzzy hairline (contour split), buttons that go teal with no grey slot, and teal irises (traced eye pass).
 
 ## 8. Model log
 
