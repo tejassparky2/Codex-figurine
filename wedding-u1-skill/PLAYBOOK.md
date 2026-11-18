@@ -90,6 +90,7 @@ Tools are in `coloring/` (generic) and `jobs/<model>/tools/` (as run, with model
 10. **Contour split** (`coloring/contour_split.py`), the last colouring step. It replaces the 0.3 mm triangle sawtooth with smooth cuts. Pass `--keep` for areas whose edges are already exact (plane-split liquid lines). Without it, vertices on the plane sit at 50/50 and the straight line turns jagged.
 11. **Export and verify.** `export.py` writes a finish guide (one slot per final colour) and a printer project (tool IDs). Reopen both, decode every triangle and compare it with the arrays. Run `scripts/layer_colors.py` at both 0.08 and 0.2 mm bands. Check the swap margins.
 12. **Previews.** `coloring/front_preview.py` (always), a 12-view unlit turnaround with an exact palette check, and a lit hero. Decode all of them from the exported file.
+13. **Approval gate (required before delivery).** `coloring/approved_match.py <finish-guide>.3mf <out> --approved <image> --prototypes anchors.json` for every approved view. Loop on fixes until PASS, then review every tile sheet and patch crop by eye (section 4.7). The mission prompt `/FIGURINE-AGENT-PROMPT.md` has the full loop.
 
 ## 4. Techniques that worked
 
@@ -177,6 +178,40 @@ Colour-based masks fail wherever two materials touch, because the texture is blu
 - Check this with `scripts/layer_colors.py` (no band with both colours).
 - Assert the margins in `export.py`.
 
+### 4.7 Approval gate: comparing with the approved image pixel by pixel (`coloring/approved_match.py`)
+
+What it does:
+- Separates the figure from the background.
+- Solves the camera from silhouettes: yaw, pitch, roll, scale, shift and perspective. A coarse grid, then Nelder–Mead on a soft IoU.
+- Applies a smoothed, capped optical-flow correction for the generator's shape drift. It's kept only if it raises label agreement.
+- Labels the approved art by slot, using vision-picked anchors and region voting.
+- Renders the model's finish labels from the same camera with a depth-tested triangle-ID raster, then compares the two.
+
+What it outputs:
+- `report.json`: verdict, per-slot IoU, confusion matrix, boundary offset in mm, and patches with their faces and 3-D centroids.
+- `patches/patch-NNN.png`: approved | model | difference crops.
+- `tiles/sheet-NN.png`: every tile of the figure, for vision review.
+- `patch_faces.npz` and `camera.json` (reuse the camera with `--camera` for fast rechecks).
+
+Verdicts and exit codes: PASS 0 · FAIL 1 · CANNOT_JUDGE 2 · NEEDS_REVIEW 3 (close calls between near-identical colours in the art).
+
+Measured (`approved_match_selftest.py`, reviewed wedding guide, hidden camera with perspective, shading and anti-aliasing):
+- Camera recovered within 0.1°.
+- The clean model PASSes.
+- A planted 30-face skin→ivory leak (6.8 mm² of surface) FAILs, located within 0.4 mm. A 1,500-face leak is located within 0.8 mm.
+
+Run on a real image (the maroon portrait, which is *not* the image the mesh was generated from):
+- Silhouette IoU 0.943 rigid, 0.952 after drift correction.
+- Without anchors the shaded cream trousers read as skin, and the gate falsely flagged 97 mm².
+- With 25 vision-checked anchors the remaining top patches were art-versus-geometry offsets (beard edge, braid gap), not paint errors.
+
+Rules learned building it:
+- **Use the exact image the model was generated from as the approved view.** Another render of the same couple differs in pose, and the gate says CANNOT_JUDGE or produces false patches.
+- **Anchors, not boxes.** A sample box that clipped the gold coat hem turned "shadow cream" gold-brown and flipped the whole face to ivory. Pick small `@x,y,r` points on a gridded zoom, lit and shadowed, and act on every `CHECK ANCHOR` warning. In the first attempt, 3 of 25 anchors were on the wrong material.
+- Self-calibration amplifies its first guess, so anchored slots skip it.
+- Shadowed cream and face skin can be the same colour in a render. Region voting and anchors resolve most of these. What's left is NEEDS_REVIEW and must be judged by eye, never auto-passed.
+- Ivory or white art on a white background loses its edge in the cut-out (braid, feather). Ask for a transparent PNG or pass `--mask`.
+
 ## 5. Failures — don't repeat
 
 - Colour thresholds for eyes, glasses frames or hand/clothes contacts. Each needed a geometric or traced replacement.
@@ -189,6 +224,9 @@ Colour-based masks fail wherever two materials touch, because the texture is blu
 - Any depth-unaware 2D fix: it paints through to surfaces behind. Always rasterise triangle IDs with a depth test first.
 - Projecting reference art onto the mesh (misregisters by about 1 mm).
 - Trusting the 3D texture's colours over the photo: brass frames in the texture versus silver in the photo, and over-orange skin.
+- Delivering on rendered previews alone. The owner found every man-with-drink leak by eye over 4 rounds; the approval gate exists so the agent finds them first.
+- Sampling approved-image colours with boxes, or skipping a `CHECK ANCHOR` warning (approval-gate build).
+- Judging a model against an approved image it wasn't generated from, and reading pose differences as paint errors.
 
 ## 6. Choosing among generated models
 

@@ -1,5 +1,7 @@
 # Codex figurine
 
+**Agents: start with the [mission prompt](FIGURINE-AGENT-PROMPT.md).** Nothing ships until the [approval gate](wedding-u1-skill/coloring/approved_match.py) passes against the customer-approved image and the tile review is done.
+
 **For another figurine, give your agent the [A–Z agent prompt](wedding-u1-skill/NEW-MODEL-PROMPT.md).** It covers source alignment, paint-region cleanup, geometry repair, layer-color conflicts, spool swaps, multiview inspection and slicer verification. The [installable skill](wedding-u1-skill/SKILL.md) points agents to the toolkit and the worked example.
 
 **Colouring playbook:** [wedding-u1-skill/PLAYBOOK.md](wedding-u1-skill/PLAYBOOK.md) collects what worked and failed on every model. The generic tools are in [wedding-u1-skill/coloring/](wedding-u1-skill/coloring/README.md).

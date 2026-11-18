@@ -133,6 +133,40 @@ The [PLAYBOOK](PLAYBOOK.md) holds the current best practice distilled from this 
   - Crease snap can't fix texture noise on smooth beads (no fold). Patch majority with fold faces as a barrier can.
   - New customer rule: remove raised bindis, moles and dots from the art before Tripo.
 
+## 2026-11-18 · Approval gate: checking the model against the customer-approved image, pixel by pixel
+
+- **What:** the owner's goal is a 1:1 match with the approved image, with no leaks or patches, and the agent must verify that itself. Until now every leak was found by the owner, over 4 man-with-drink rounds. Added `coloring/approved_match.py`, the gate, plus `approved_match_selftest.py` and the shared mission prompt `/FIGURINE-AGENT-PROMPT.md` (loaded for Codex/GPT through `/AGENTS.md`).
+- **How:**
+  - Separate the figure from the background (alpha, `--mask`, or border colour).
+  - Solve the camera from silhouettes: a 17×9 yaw/pitch grid with closed-form scale and shift, then Nelder–Mead over 7 parameters including perspective, on a soft IoU.
+  - Apply a smoothed (4 mm) and capped (2 mm) optical-flow correction for generator shape drift. It's kept only if it raises label agreement.
+  - Label the approved art by slot. Chroma-weighted Lab nearest-prototype; vision-picked `@x,y,r` anchors per slot; self-calibration for un-anchored slots; a 3×3 mode filter; graph-segmentation region voting that settles only unsure pixels.
+  - Render the finish labels with a depth-tested triangle-ID raster from the same camera and compare, with a 0.35 mm edge band.
+  - Output: patches with faces, mm², 3-D centroid and zoomed crops; tile sheets of the whole figure; per-slot IoU and confusion matrix; boundary offset in mm; verdict PASS/FAIL/CANNOT_JUDGE/NEEDS_REVIEW.
+- **Why:**
+  - Previews show the model, not the difference from the approved image. The gate turns "does it match?" into numbers and crops tied to faces.
+  - A close call whose runner-up is the model's colour counts as consistent, not as a leak, and is reported separately.
+- **When:** every job, every approved view, on the exported finish guide, before every delivery. Then review the tiles by eye.
+- **Result** (self-test on the reviewed wedding guide; hidden camera with perspective, shading and anti-aliasing):
+  - Camera error under 0.1°. The clean model PASSes.
+  - A 30-face (6.8 mm²) skin→ivory leak FAILs, located 0.39 mm off. A 1,500-face leak FAILs, located 0.80 mm off.
+  - Real maroon portrait (`inputs/reference/2.png`, not the generation image):
+    - silhouette IoU 0.943 → 0.952 after drift correction;
+    - 25 anchors;
+    - 0.86% clear disagreement and a 16 mm² largest patch.
+  - The top patches I reviewed were art-versus-geometry offsets (beard edge, braid gap), not paint errors.
+- **Failures found while building it, now in PLAYBOOK §4.7 and §5:**
+  - A sample box clipped the gold hem and flipped the face to ivory. 3 of 25 hand-picked anchors were on the wrong material, which led to the `CHECK ANCHOR` warning.
+  - Self-calibration amplifies a wrong first guess, so anchored slots skip it.
+  - Shadowed cream equals face skin in this render.
+  - Ivory on a white background loses its edge in the cut-out.
+  - Region voting that overruled confident pixels erased the lips. The self-test caught that regression, and only unsure pixels are voted now.
+- **Not verified:** a gate PASS on a real job, since no real job has run since. Back views and multi-view sheets haven't been exercised on real art.
+- **Next:**
+  - Background matting for white-on-white art.
+  - Segmentation-model masks (SAM family) to place anchors and part masks automatically.
+  - Turn the man-with-drink owner findings into regression cases.
+
 ---
 
 ### How to add an entry
