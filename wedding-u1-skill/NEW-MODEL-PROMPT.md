@@ -1,5 +1,7 @@
 # Agent prompt for a new multicolor figurine
 
+**First read [PLAYBOOK.md](PLAYBOOK.md)** (owner preferences, filament stock, proven techniques, failures), and use the generic tools in [coloring/](coloring/README.md). After each review round, add what was learned to the playbook.
+
 Copy this prompt into the agent that has the new sculpt and photographs. Fill in the bracketed inputs. A new checkout of this repository includes the toolkit and a worked wedding example.
 
 > Build a printable multicolor project from [textured GLB and printable geometry] using [front, side and back photos]. Deliver it at [height in mm] for [printer, installed nozzle sizes, material and available colors]. My important color and facial-detail decisions are [list]. I can make [number] manual spool changes and hand paint [regions]. Use the steps below. Work on the actual mesh, open your exports in the target slicer and return downloadable files. Tell me where the reference is ambiguous, where the print relies on hand paint and which checks succeeded.

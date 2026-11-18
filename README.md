@@ -2,6 +2,14 @@
 
 **For another figurine, give your agent the [A–Z agent prompt](wedding-u1-skill/NEW-MODEL-PROMPT.md).** It covers source alignment, paint-region cleanup, geometry repair, layer-color conflicts, spool swaps, multiview inspection and slicer verification. The [installable skill](wedding-u1-skill/SKILL.md) points agents to the toolkit and the worked example.
 
+**Colouring playbook:** [wedding-u1-skill/PLAYBOOK.md](wedding-u1-skill/PLAYBOOK.md) collects what worked and failed on every model. The generic tools are in [wedding-u1-skill/coloring/](wedding-u1-skill/coloring/README.md).
+
+## Man with drink (220 mm caricature)
+
+[U1 print project](jobs/man-with-drink/out/Man-with-drink-U1-220mm.3mf) · [Finish guide](jobs/man-with-drink/out/Man-with-drink-220mm-finish-guide.3mf) · [Front preview](jobs/man-with-drink/out/Man-with-drink-front.png) · [Job record](jobs/man-with-drink/README.md)
+
+Four heads: Apricot, Black, Simply Silver and Orange. At 120 mm, pause and swap Orange for Pure White. The glasses frames are locked silver by geometry. Not yet sliced or printed.
+
 ## Reviewed wedding couple
 
 [150 mm U1 print project](Wedding-U1-150mm-reviewed.3mf) · [Finished-color guide](Wedding-150mm-reviewed-paint-guide.3mf) · [23-page color inspection](Wedding-color-inspection.pdf)
