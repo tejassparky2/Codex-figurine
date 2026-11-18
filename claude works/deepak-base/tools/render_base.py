@@ -15,8 +15,8 @@ argv = sys.argv[sys.argv.index('--') + 1:] if '--' in sys.argv else []
 p = argparse.ArgumentParser()
 p.add_argument('--out', type=Path, required=True)
 p.add_argument('--samples', type=int, default=128)
-p.add_argument('--machine-at', default='33,8')
-p.add_argument('--sack-at', default='-36,3')
+p.add_argument('--machine-at', default='31.5,8')
+p.add_argument('--sack-at', default='-36,6')
 A = p.parse_args(argv)
 scene = bpy.context.scene
 scene.render.engine = 'CYCLES'
@@ -26,7 +26,11 @@ scene.cycles.use_denoising = False   # the distro build has no OpenImageDenoise
 scene.view_settings.view_transform = 'Standard'
 cam = scene.camera
 ob = bpy.data.objects['Deepak base (print)']
-ob.data.polygons.foreach_set('use_smooth', [False] * len(ob.data.polygons))
+# Smooth curved surfaces (sack, beans, knobs) but keep creases and flat faces crisp.
+ob.data.polygons.foreach_set('use_smooth', [True] * len(ob.data.polygons))
+if hasattr(ob.data, 'use_auto_smooth'):
+    ob.data.use_auto_smooth = True
+    ob.data.auto_smooth_angle = 0.6
 mx, my = map(float, A.machine_at.split(','))
 sx, sy = map(float, A.sack_at.split(','))
 
@@ -40,8 +44,8 @@ def look(loc, target, lens):
 views = [
     ('base-hero', (0, -430, 95), (0, 0, 32), 62, (1400, 1000)),
     ('base-plate', (0, -190, 17.3), (0, 0, 17.3), 120, (1400, 700)),
-    ('machine', (mx - 40, my - 150, 85), (mx, my, 50), 85, (1000, 1100)),
-    ('sack', (sx + 30, sy - 120, 75), (sx, sy, 41), 95, (1000, 900)),
+    ('machine', (mx, my - 165, 62), (mx + 3, my, 51), 105, (1000, 1100)),
+    ('sack', (sx, sy - 145, 80), (sx, sy, 44), 115, (1000, 900)),          # ~14 degrees down, as in the render
 ]
 for name, loc, target, lens, res in views:
     look(loc, target, lens)

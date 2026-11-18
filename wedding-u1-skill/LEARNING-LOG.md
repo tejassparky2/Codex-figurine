@@ -251,6 +251,36 @@ The [PLAYBOOK](PLAYBOOK.md) holds the current best practice distilled from this 
   - Matches the approved composition by eye. The handle is deliberately angled for printing.
   - Not sliced in Orca.
 
+## 2026-11-18 · Deepak base, round 3 (owner: "coffee bag not good and not matching; machine missing 1 match")
+
+- **What the owner flagged:**
+  - The sack looked like a pot: stiff, coarse spiky weave, pinkish.
+  - The machine lacked the render's signature part: the horizontal portafilter handle sticking out to the right.
+- **Root causes:**
+  1. I had traded the handle's look for printability (angled up inside the bay) without asking. The owner wants the render's look; supports are acceptable.
+  2. The sack was modelled from the thumbnail, not measured. Its weave grooves were sharp and deep, and flat shading exaggerated them.
+  3. Apricot was rendered with its slicer hex, although PLAYBOOK §2 says to render it with its printed colour #DEA485.
+- **Fixes:**
+  - Both props were re-measured on zoomed, gridded crops of the full-resolution render.
+  - **Machine:**
+    - a horizontal silver portafilter, with a black capsule handle at 13.6 mm, in front of the right column and about 7 mm beyond the side;
+    - bay ceiling at 18 mm; panel from 19.1 to 35.3 mm;
+    - grey slats; round cup handle.
+  - **Sack:**
+    - a pillowy profile: rounded foot, near-cylindrical body, left lump;
+    - a thick soft collar with the lip widest;
+    - a smooth sinusoidal diamond knit, 0.14 mm deep;
+    - beans filling the mouth to below the lip.
+  - Renders: smooth shading by angle, and Apricot shown with its printed colour.
+  - New `out/compare-props.png` puts each prop next to the matching crop of the render.
+- **Lessons:**
+  - **Match the approved look first, then state the print cost** (here: supports under the handle). Ask before trading the look for printability.
+  - Compare each prop against a zoomed crop of the reference, side by side, before delivering, not just the whole scene.
+- **Result:**
+  - The machine matches the render by eye. The sack matches in shape, collar, knit and beans; it's still more saturated than the render's beige (the closest stock filament), and the beans are black.
+  - One body, watertight; at most 4 colours per band; head plan as before (pause at 30.4 mm: H1 → Apricot, H2 → White).
+  - Not sliced.
+
 ---
 
 ### How to add an entry

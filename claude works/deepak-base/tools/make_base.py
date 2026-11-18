@@ -45,8 +45,8 @@ p.add_argument('--silver', default='#8C979D', help='Simply Silver')
 p.add_argument('--apricot', default='#E6BAA8', help='Apricot, for the burlap sack')
 p.add_argument('--white', default='#F1ECE1', help='Pure White, for the cup')
 p.add_argument('--no-props', action='store_true', help='base only, without the espresso machine and coffee sack')
-p.add_argument('--machine-at', default='33,8', help='x,y of the machine centre on the base top (mm)')
-p.add_argument('--sack-at', default='-36,3', help='x,y of the sack centre on the base top (mm)')
+p.add_argument('--machine-at', default='31.5,8', help='x,y of the machine centre on the base top (mm)')
+p.add_argument('--sack-at', default='-36,6', help='x,y of the sack centre on the base top (mm)')
 A = p.parse_args(argv)
 A.out.mkdir(parents=True, exist_ok=True)
 R, H = A.diameter / 2, A.height
@@ -65,9 +65,14 @@ scene.unit_settings.scale_length = 0.001
 scene.unit_settings.length_unit = 'MILLIMETERS'
 
 
+# Filaments that print visibly different from their slicer swatch: render with the printed colour (PLAYBOOK §2).
+PREVIEW = {'#E6BAA8': '#DEA485'}
+
+
 def material(name, hexcol):
     m = bpy.data.materials.new(name)
-    rgb = [int(hexcol[i:i + 2], 16) / 255 for i in (1, 3, 5)]
+    shown = PREVIEW.get(hexcol.upper(), hexcol)
+    rgb = [int(shown[i:i + 2], 16) / 255 for i in (1, 3, 5)]
     m.diffuse_color = (*[c ** 2.2 for c in rgb], 1)
     m.use_nodes = True
     bsdf = m.node_tree.nodes['Principled BSDF']
