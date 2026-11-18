@@ -3,7 +3,7 @@ name: wedding-figurine-u1
 description: Prepare and inspect multicolor figurines from textured meshes and reference photographs, map finished colors to printer tools, and reproduce the reviewed 150 mm wedding example. Read PLAYBOOK.md first; it accumulates what worked on every model.
 ---
 
-**Before colouring any model, read [the colouring playbook](PLAYBOOK.md)**. It lists the owner's standing preferences, the filament stock, the default pipeline, the techniques that worked and the failures to avoid. Add to it after every review round. The generic tools are in [coloring/](coloring/README.md).
+**Before colouring any model, read [the colouring playbook](PLAYBOOK.md)**. It lists the owner's standing preferences, the filament stock, the default pipeline, the techniques that worked and the failures to avoid. After every review round, add a dated entry to [LEARNING-LOG.md](LEARNING-LOG.md) (what, how, why, when, result), update the playbook, and push. The generic tools are in [coloring/](coloring/README.md).
 
 For a **new model**, follow [the A–Z agent prompt](NEW-MODEL-PROMPT.md). Use the toolkit CLI for initial labeling and the layer-color script for scheduling. Trace the new sculpt from its own references and record its camera, regions and printer settings.
 

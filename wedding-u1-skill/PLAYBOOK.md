@@ -1,6 +1,6 @@
 # Figurine colouring playbook (living document)
 
-Read this before colouring any new model. After every review round, add to it: what the owner flagged, the root cause, the fix, and the tool that now does it. When a fix works on two models, turn it into a default. The aim is that each model needs fewer review rounds than the last.
+Read this before colouring any new model. The dated what/how/why/when record behind it is in [LEARNING-LOG.md](LEARNING-LOG.md); the repo-wide rules are in `/CLAUDE.md`. After every review round, add a log entry, push it the same day, and add to this playbook: what the owner flagged, the root cause, the fix, and the tool that now does it. When a fix works on two models, turn it into a default. The aim is that each model needs fewer review rounds than the last.
 
 Sources so far:
 - the wedding couple (this repo),
