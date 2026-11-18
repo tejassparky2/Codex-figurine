@@ -1,0 +1,16 @@
+CANNOT_JUDGE
+view 1: /home/user/Codex-figurine/jobs/man-with-drink/judge/approved-front.jpg
+  coarse camera: yaw 15, pitch 0, IoU 0.9340
+  refined camera: soft IoU 0.9566 after 271 renders
+  camera {"yaw": 11.9483, "pitch": -3.7187, "roll": 0.0685, "s": 6.0681, "tx": 364.2305, "ty": 806.0144, "k": 0.003}  silhouette IoU 0.9663
+  CHECK ANCHOR @330,600,6 for slot 1: sampled #F08949 is nearer slot 4 (#F9A800)
+  CHECK ANCHOR @180,930,6 for slot 1: sampled #FDA259 is nearer slot 4 (#F9A800)
+  CHECK ANCHOR @520,1100,5 for slot 1: sampled #FE9B55 is nearer slot 4 (#F9A800)
+  CHECK ANCHOR @250,190,5 for slot 3: sampled #5A4639 is nearer slot 2 (#0E0E10)
+  CHECK ANCHOR @180,330,5 for slot 3: sampled #8A7869 is nearer slot 1 (#E6BAA8)
+  CHECK ANCHOR @510,280,4 for slot 3: sampled #AE988B is nearer slot 1 (#E6BAA8)
+  CHECK ANCHOR @350,548,2 for slot 5: sampled #DAAB7D is nearer slot 1 (#E6BAA8)
+  calibrated shaded prototypes: {'1': '#FAA060', '2': '#282521', '3': '#857163', '4': '#C16525', '5': '#DAAB7D'}
+  region vote: 414 regions; 44.2% of figure pixels (unsure ones) settled by region majority
+  local alignment: drift median 1.543 mm, p95 2.0 mm, max 2.0 mm; label agreement 0.8116 -> 0.8400; silhouette IoU 0.9663 -> 0.9683
+  CANNOT_JUDGE: hard mismatch 0.9845%, 46 patches, largest 15.616 mm², boundary offset median 0.0 mm 6.7% of approved pixels match no slot clearly; add --prototypes
