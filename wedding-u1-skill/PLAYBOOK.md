@@ -4,7 +4,7 @@ Read this before colouring any new model. The dated what/how/why/when record beh
 
 Sources so far:
 - the wedding couple (this repo),
-- the man-with-drink caricature (`jobs/man-with-drink/`),
+- the man-with-drink caricature (`claude works/man-with-drink/`),
 - the dropped family-portrait comparison,
 - the research note in `history/`,
 - the local figurines session ("Build setup and live test", repo tejassparky2/Figurine). It sent the filament stock list and slicer findings verified on real slices; its own playbook is `docs/COLORING_PLAYBOOK.md` there. Keep the two in step.
@@ -67,9 +67,9 @@ The owner hasn't yet said whether to use 0.2 mm or 0.4 mm nozzles. Keep painted 
 
 ## 3. Default pipeline (run in this order)
 
-Tools are in `coloring/` (generic) and `jobs/<model>/tools/` (as run, with model-specific coordinates).
+Tools are in `coloring/` (generic) and each agent's `<agent> works/<job>/tools/` (as run, with model-specific coordinates). The neutral brief and judge of every job are in `jobs/<job>/`.
 
-1. **Inputs.** Record hashes, triangle counts, texture size and whether the mesh is watertight (`jobs/*/tools/inspect_glb.py`). Render each candidate model from 6 sides and compare it with the photo (`texview.py`). Watch for colour bleeding onto the hidden back.
+1. **Inputs.** Record hashes, triangle counts, texture size and whether the mesh is watertight (`claude works/man-with-drink/tools/inspect_glb.py`). Render each candidate model from 6 sides and compare it with the photo (`texview.py`). Watch for colour bleeding onto the hidden back.
 2. **Printable mesh.** `coloring/make_printable.py`:
    - welds and repairs with PyMeshFix,
    - applies quadric decimation to about 1M triangles,
@@ -77,7 +77,7 @@ Tools are in `coloring/` (generic) and `jobs/<model>/tools/` (as run, with model
    - Do all colouring at the final size.
 3. **Straight paint lines.** `coloring/split_planes.py z1 z2 …` cuts the mesh exactly at horizontal paint lines (liquid levels, hems), keeping it watertight. For curved edges, the local session's **contour split** is the general version: see 4.4.
 4. **Texture per face.** `coloring/sample_texture.py`: the median of 4 barycentric samples per face, each projected onto the nearest source triangle with a compatible normal. Median error is about 0.04 mm.
-5. **Broad labels.** Use the toolkit's crease-aware alpha-expansion with several texture prototypes per material and region limits (`jobs/man-with-drink/tools/label.py`). Lit and shadowed versions of one material are separate prototypes of the same label, so there is no boundary cost between them.
+5. **Broad labels.** Use the toolkit's crease-aware alpha-expansion with several texture prototypes per material and region limits (`claude works/man-with-drink/tools/label.py`). Lit and shadowed versions of one material are separate prototypes of the same label, so there is no boundary cost between them.
 6. **Part locks, by geometry not texture.** See section 4.1.
 7. **Face details.** Use a 40 px/mm front camera with the glasses hidden (`facecam.py`):
    - Trace the eyes as shapes in mm.

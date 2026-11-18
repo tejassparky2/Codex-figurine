@@ -1,2 +1,8 @@
 __pycache__/
 *.pyc
+
+# Referee run outputs: keep report.json, camera.json and gate.txt; images and arrays are regenerated on demand
+scoreboard/runs/**/tiles/
+scoreboard/runs/**/patches/
+scoreboard/runs/**/*.png
+scoreboard/runs/**/*.npz

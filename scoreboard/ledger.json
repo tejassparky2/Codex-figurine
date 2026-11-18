@@ -1,0 +1,46 @@
+[
+ {
+  "kind": "gate",
+  "date": "2026-11-18 17:24 UTC",
+  "job": "wedding-couple",
+  "round": 1,
+  "agent": "codex",
+  "points": 0,
+  "would_be_points": 0,
+  "practice": true,
+  "reason": "gate FAIL",
+  "judge_hash": "7e377dbd3262377a",
+  "metrics": {
+   "verdict": "FAIL",
+   "guide": "codex works/Wedding-contours-guide.3mf",
+   "submission_round": 2,
+   "hard_mismatch_pct": 0.6953,
+   "largest_clear_error_mm2": 17.193,
+   "review_patches": 3,
+   "boundary_p95_mm": 0.604,
+   "silhouette_iou": 0.9513
+  }
+ },
+ {
+  "kind": "gate",
+  "date": "2026-11-18 17:26 UTC",
+  "job": "man-with-drink",
+  "round": 1,
+  "agent": "claude",
+  "points": 0,
+  "would_be_points": 0,
+  "practice": true,
+  "reason": "gate CANNOT_JUDGE",
+  "judge_hash": "fdb590e6c4f230cc",
+  "metrics": {
+   "verdict": "CANNOT_JUDGE",
+   "guide": "claude works/man-with-drink/out/Man-with-drink-220mm-finish-guide.3mf",
+   "submission_round": 4,
+   "hard_mismatch_pct": 0.9845,
+   "largest_clear_error_mm2": 15.616,
+   "review_patches": 17,
+   "boundary_p95_mm": 1.054,
+   "silhouette_iou": 0.9683
+  }
+ }
+]

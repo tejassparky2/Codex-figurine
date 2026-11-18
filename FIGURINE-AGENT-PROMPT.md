@@ -6,6 +6,12 @@ Paste everything below the line into any agent (Claude, Codex/GPT or another) th
 
 You are colouring a customer figurine for multicolour 3D printing. The customer has approved an image. Your job is to deliver print files whose **finished colours match that approved image 1:1**: every part the right colour, no colour leaks, no stray patches. You must **prove** it before you deliver. Never hand over output you have not checked yourself, at pixel level, from the exported file.
 
+**Your folder and the competition.**
+- You are agent [claude | codex | name]. Work only in `<agent> works/<job>/`.
+- The owner's neutral brief and judge are in `jobs/<job>/`; never edit the judge.
+- When ready, write `<agent> works/<job>/submission.json` (format in `scoreboard/RULES.md`). The referee (`python scoreboard/score.py run <job>`) scores every agent with the same gate and judge.
+- Points come from gate PASS, beating the other agents, and above all the owner accepting your delivery. Defects the owner has to find cost points; problems you report yourself don't.
+
 **Inputs for this job**
 - Approved image(s): [paths]. This is the image the customer said yes to. If the 3D model was generated from a different image, say so: the gate needs the image whose pose matches the model.
 - 3D models: [1–2 Tripo GLBs] and optionally [a Meshy GLB].
@@ -32,7 +38,7 @@ You are colouring a customer figurine for multicolour 3D printing. The customer 
 5. **Use only stock filaments** (PLAYBOOK §2), and say exactly what was substituted.
 6. **Never delete or overwrite earlier deliverables.** Write new files and keep the old ones for comparison.
 
-## 2. Intake (record everything in `jobs/<model>/README.md`)
+## 2. Intake (record everything in your own `<agent> works/<job>/README.md`)
 1. Hash every input. Record triangle counts, texture size and whether each mesh is watertight.
 2. Render each candidate GLB's texture unlit from 6 sides plus top and bottom, beside the approved image(s).
 3. Choose the model for geometry and the texture for hidden sides. Write down why.
@@ -51,7 +57,7 @@ You are colouring a customer figurine for multicolour 3D printing. The customer 
 3. Plan the physical heads and spool swaps with `scripts/layer_colors.py` before painting fine details. A detail no head can print is a hand-paint decision, so tell the owner early.
 
 ## 4. Paint
-Follow PLAYBOOK §3 (default pipeline) and §4 (techniques). Copy model-specific steps from the most similar `jobs/<model>/tools`. Trace faces, eyes and mouths as shapes in mm on gridded crops at ≥40 px/mm, following the eye and mouth rules in PLAYBOOK §1.
+Follow PLAYBOOK §3 (default pipeline) and §4 (techniques). Copy model-specific steps from the most similar job in your own folder. Learn from other agents' folders, but never edit them. Trace faces, eyes and mouths as shapes in mm on gridded crops at ≥40 px/mm, following the eye and mouth rules in PLAYBOOK §1.
 
 ## 5. Gate loop: repeat until PASS
 ```
@@ -86,7 +92,7 @@ python -I wedding-u1-skill/coloring/approved_match.py <finish-guide>.3mf <job>/g
 3. Run the slicer headless if available. Otherwise state that slicing was not verified. If a tilted orientation is used, recompute the swap heights.
 
 ## 8. Deliver
-Give the owner:
+Write `submission.json`, run `python scoreboard/score.py run <job>` (practice or official, as the judge says), and give the owner:
 - the files,
 - front previews,
 - the gate verdict per view (numbers from `report.json`),
@@ -100,7 +106,7 @@ Lead with problems, not praise.
 ## 9. Learn: every job and every review round
 1. Add a dated `LEARNING-LOG.md` entry: what, how, why, when, result. Update `PLAYBOOK.md` if best practice changed.
 2. **Every defect the owner finds becomes a regression case.**
-   - Save the approved crop, the camera, the bad and fixed labels, and a one-line expectation under `jobs/<model>/regression/`.
+   - Save the approved crop, the camera, the bad and fixed labels, and a one-line expectation under `<agent> works/<job>/regression/`.
    - Confirm the gate FAILs the bad version. If it doesn't, the gate missed it: improve the gate (or its defaults) until it does, and record that in the log.
 3. Move fixes that work without model-specific coordinates into `wedding-u1-skill/coloring/`. Re-run the self-test and the earlier jobs' regression cases.
 4. Commit and push the same day to your working branch. Never commit venvs, `__pycache__` or scratch arrays.

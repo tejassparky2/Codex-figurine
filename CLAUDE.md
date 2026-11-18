@@ -7,7 +7,7 @@ This repo turns textured 3D models and photos into multicolour figurine print fi
 0. Follow the mission prompt in `FIGURINE-AGENT-PROMPT.md` (shared with all agents through `AGENTS.md`). The core rule: nothing is delivered until `wedding-u1-skill/coloring/approved_match.py` reports PASS against every customer-approved view and you have reviewed every tile and patch crop yourself.
 1. Read `wedding-u1-skill/PLAYBOOK.md`: standing preferences, filament stock, the default pipeline, proven techniques and failures.
 2. Skim the latest entries in `wedding-u1-skill/LEARNING-LOG.md`.
-3. Use the generic tools in `wedding-u1-skill/coloring/`. Copy model-specific steps from the most similar job in `jobs/`.
+3. Use the generic tools in `wedding-u1-skill/coloring/`. Copy model-specific steps from the most similar job in `claude works/` (or learn from `codex works/`, without editing it).
 
 ## Standing preferences (details in the playbook)
 
@@ -22,9 +22,9 @@ This repo turns textured 3D models and photos into multicolour figurine print fi
 1. Add a dated entry to `wedding-u1-skill/LEARNING-LOG.md`: **what** the owner flagged, **how** it was fixed (tool and parameters), **why** it failed and why the fix works, **when** to reuse it, and the **result**.
 2. Update `wedding-u1-skill/PLAYBOOK.md` if best practice changed. That covers preferences, defaults, techniques, failures and the model log.
 3. Make a fix generic: move it into `wedding-u1-skill/coloring/` once it works without model-specific coordinates, and test it on the job that produced it.
-4. Keep the job complete in `jobs/<model>/`: scripts as run, `run_all.sh`, inputs, the verified 3MFs, previews and the record.
+4. Work only in `claude works/<job>/` (the neutral brief and judge are in `jobs/<job>/`; see `scoreboard/RULES.md`). Keep the job complete there: scripts as run, `run_all.sh`, inputs, the verified 3MFs, previews and the record.
 5. **Commit and push the same day** to the session's working branch. Never commit `__pycache__`, virtual environments or scratch arrays.
-6. Every defect the owner finds becomes a regression case under `jobs/<model>/regression/`, and the approval gate must FAIL the defective version.
+6. Every defect the owner finds becomes a regression case under `claude works/<job>/regression/`, and the approval gate must FAIL the defective version.
 7. When another agent shares findings, merge them into the playbook, note the source, and record any conflicts with how they were resolved.
 
 Be precise about verification. A decoded paint array, a rendered preview, a slicer preview, the G-code and a physical print are five different checks. Record which ones were actually done.

@@ -25,7 +25,7 @@ The [PLAYBOOK](PLAYBOOK.md) holds the current best practice distilled from this 
 ## 2026-11-18 · Choosing the generated model (family portrait, dropped)
 
 - **What:** compared one Meshy and three Tripo GLBs of the same family photo.
-- **How:** recorded hashes, triangle counts, texture size and whether each mesh is watertight. Rendered each unlit from 6 sides (`jobs/man-with-drink/tools/texview.py`).
+- **How:** recorded hashes, triangle counts, texture size and whether each mesh is watertight. Rendered each unlit from 6 sides (`claude works/man-with-drink/tools/texview.py`).
 - **Why it matters:** the generators invent the hidden back.
   - All three Tripo versions bled navy or lilac onto the back of the man's white T-shirt, and two were not closed.
   - Meshy was watertight, with an 8K texture and correct back colours.
@@ -123,7 +123,7 @@ The [PLAYBOOK](PLAYBOOK.md) holds the current best practice distilled from this 
 - **Failure found and fixed:** the exact plane-split liquid line went jagged, because vertices on the plane sit at 50/50.
   - Added `--keep mask`: kept faces are untouched, and cuts are blocked on any edge they touch, propagated until stable (no T-junctions).
   - The liquid line is straight again.
-  - Before/after images: `jobs/man-with-drink/renders/contour-split-ab.png` and `contour-split-without-keep-glass.png`.
+  - Before/after images: `claude works/man-with-drink/renders/contour-split-ab.png` and `contour-split-without-keep-glass.png`.
 - **When:** as the last colouring step on every model. Use `--keep` wherever an edge is already exact.
 - **Result:**
   - The man with the drink went to 1,022,958 faces.
@@ -166,6 +166,21 @@ The [PLAYBOOK](PLAYBOOK.md) holds the current best practice distilled from this 
   - Background matting for white-on-white art.
   - Segmentation-model masks (SAM family) to place anchors and part masks automatically.
   - Turn the man-with-drink owner findings into regression cases.
+
+## 2026-11-18 · Per-agent folders and a scored competition (owner request)
+
+- **What:** each agent works only in its own folder, and a referee awards points so the better method wins.
+- **How:**
+  - `gpt works/` was renamed `codex works/`, since Codex made it.
+  - `jobs/man-with-drink/` was moved to `claude works/man-with-drink/`. Its `run_all.sh` paths still resolve, since the folder depth is the same.
+  - `jobs/<job>/` now holds only the owner's neutral brief and `judge/` (approved views, referee anchors, masks).
+  - `scoreboard/score.py` runs the approval gate with the judge on every `<agent> works/<job>/submission.json`. It ranks the results (verdict tier, then clear disagreement, then the largest clear error) and appends points to `ledger.json`, storing the judge's hash with each result. It regenerates `SCOREBOARD.md`, and the owner's accept/defect verdicts are recorded with `score.py owner`. Rules are in `scoreboard/RULES.md`.
+  - The root wedding releases stay at the root because the replays read them there. They're credited to Codex in the job brief.
+- **Why:** no confusion over who changed what. One judge for everyone makes the comparison fair, and the owner's acceptance carries the most points because the customer is the real judge.
+- **Result:** two practice rounds (0 points, since neither judge is official yet):
+  - **wedding-couple, Codex** (`codex works/Wedding-contours-guide.3mf`): FAIL, 0.695% clear disagreement, largest 17.2 mm². The reviewed root release measured 0.86% on the same judge, so Codex's contact + contour round improved the match.
+  - **man-with-drink, Claude**: CANNOT_JUDGE. The anchor check showed the customer photo's skin, hair and glass differ from the owner's chosen filaments. The judge photo must be recoloured to the decisions before it can be official.
+- **When:** every job. Write `submission.json`, run the referee, and record the owner's verdicts.
 
 ---
 

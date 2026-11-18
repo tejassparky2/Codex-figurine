@@ -1,0 +1,4 @@
+{"official": false,
+ "note": "Practice judge: the customer photo with referee anchors picked by Claude. The glass is clear in the photo but the owner chose silver (clear is not stocked); edit the photo to match before this judge is made official.",
+ "views": [{"image": "approved-front.jpg"}],
+ "prototypes": "anchors.json"}

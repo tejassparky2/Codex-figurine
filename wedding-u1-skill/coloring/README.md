@@ -20,4 +20,4 @@ Conventions:
 | `approved_match_selftest.py guide.3mf workdir [--patch-faces N]` | Regression test for the gate: a hidden-camera shaded render must PASS, and a planted leak must FAIL at the right place. Run it after any gate change. | Wedding reviewed guide (30- and 1,500-face leaks) |
 | `front_preview.py model.3mf out_prefix [--preview SLOT=#HEX] [--crop-z z0:z1]` | Lit straight-front previews decoded from the exported file. **Send with every revision.** | Man with drink |
 
-Model-specific steps live with each job in `../../jobs/<model>/tools/`, kept exactly as run: broad labels with texture prototypes, eye tracing, the vessel/liquid rules and the export. Copy one as a template and replace the coordinates.
+Model-specific steps live with each job in the agent's own job folder, `../../<agent> works/<job>/tools/`, kept exactly as run: broad labels with texture prototypes, eye tracing, the vessel/liquid rules and the export. Copy one as a template and replace the coordinates.

@@ -1,0 +1,4 @@
+{"official": false,
+ "note": "Practice judge: the maroon portrait (inputs/reference/2.png) with 25 referee anchors checked by eye. It is not the image the mesh was generated from, so pose differences create patches for every agent alike. The owner should supply the generation image edited to the final colours before this becomes official.",
+ "views": [{"image": "approved-front.png"}],
+ "prototypes": "anchors.json"}
