@@ -207,6 +207,29 @@ The [PLAYBOOK](PLAYBOOK.md) holds the current best practice distilled from this 
   Recorded as trials on both Codex entries.
 - **When:** every job, at the start and at the end.
 
+## 2026-11-18 · Deepak base in Blender (owner: "make this base only in blender")
+
+- **What:** the two-tier display base with a curved gold nameplate and raised lettering, from the approved Deepak render. The output is one watertight multicolour 3MF.
+- **How:** `claude works/deepak-base/tools/make_base.py`, run headless in Blender 4.0.2 (apt).
+  - The body is lathed from a profile with ring quads and fans to the axis.
+  - The plate is a structured curved slab, so it follows the 57 mm tier radius exactly.
+  - Lettering: font curve → mesh, then each vertex is mapped onto the cylinder.
+  - Exact boolean union with `material_mode='TRANSFER'`, so each face keeps its material. Material index becomes the Orca paint code.
+  - Verified outside Blender with trimesh, `layer_colors.py` and `front_preview.py`.
+- **Why it failed at first, and the fixes:**
+  1. The distro Blender has no `wm.stl_export`, so binary STL is written directly.
+  2. Splitting long glyph edges with `subdivide_edges` corrupted glyph caps (edges shared by 128 faces), so it was removed. Straight chords on a 57 mm radius sag < 0.1 mm, well within the 0.3 mm embed.
+  3. A reversed ledge arc duplicated a profile ring (360 edges with 4 faces). Caught by the edge-incidence check.
+  4. Cycles needs `use_denoising=False`: the distro build has no OpenImageDenoise.
+  5. My first colour samples used coordinates from the *scaled* preview of the photo and hit the background. Re-sampling on a gridded crop of the full-resolution image also revealed the **two-tier** shape, which the thumbnail hid.
+- **When:** any parametric part (bases, nameplates, plaques). Run the edge-incidence and single-body checks after every boolean, and sample reference colours only on full-resolution gridded crops.
+- **Result:**
+  - 120 × 120 × 30.5 mm; one body; watertight; 34,920 triangles.
+  - 3 colours with no swaps (Tan base, Gold plate, Dark chocolate lettering).
+  - Matches the approved render by eye.
+  - Not sliced in Orca, and no gate run (the approved image is cropped and the figure occludes the base).
+- **Blender is now usable in the cloud container** (`apt-get install blender`): this supersedes "Blender not available" in the setup entry.
+
 ---
 
 ### How to add an entry
