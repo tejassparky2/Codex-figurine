@@ -1,0 +1,12 @@
+# Paint boundaries and printable toolpaths
+
+A patch visible in Prepare, a color change introduced in Preview and a color change caused by a spool swap require different fixes. Capture the view that reproduces the problem and compare the same physical region at all three stages.
+
+| Evidence | Finding | Application here |
+|---|---|---|
+| [OrcaSlicer painting documentation](https://github.com/OrcaSlicer/OrcaSlicer/wiki/prepare_color_painting) | Sphere painting reaches nearby hidden surfaces. Triangle painting depends on tessellation. | At a wrist against a garland, constrain edits by visible face ID and adjacency. Keep the back and underside views. |
+| [Prusa multimaterial painting documentation](https://help.prusa3d.com/article/multi-material-painting_262620) | Facets can be subdivided during brush painting. Thin color regions can merge with neighbors during slicing. | Subdivide jagged boundaries, then check the real nozzle and sliced outer-wall colors. Prusa's documentation describes its own slicer; Snapmaker behavior needs a separate test. |
+| [Grady, Random Walks for Image Segmentation](https://pubmed.ncbi.nlm.nih.gov/17063682/) | Labeled seeds on a weighted graph establish boundary conditions for assigning unknown regions. | An approved interior sample on each side of a disputed cuff is stronger evidence than an isolated RGB threshold. Seeded random walks are a future comparison, not the algorithm in this release. |
+| [Orca issue 785](https://github.com/OrcaSlicer/OrcaSlicer/issues/785) | A user reported paint visible before slicing and incomplete colors on sliced walls on Orca 1.6.1. | Keep the original project and a layer-level reproduction when opening a slicer issue. That report does not establish a bug in Snapmaker 2.4.1. |
+| [Reddit, January 2025](https://www.reddit.com/r/OrcaSlicer/comments/1iamz70/) | A user reported assigning filament to cut parts solved one troublesome model. | Try part assignments on genuinely separable geometry. This anecdote does not justify cutting a fused face or fingers. |
+| [Other agent's contour experiment](https://github.com/tejassparky2/Codex-figurine/blob/e12cef1ab8b6e3c67a86be167b898512408138d6/wedding-u1-skill/coloring/contour_split.py) | Shared edge cuts allow color transitions inside the original triangles. Its keep-mask protects existing exact boundaries. | Run after the texture-supported leak pass. Preserve small features and compare topology and material-interface length before adoption. |
