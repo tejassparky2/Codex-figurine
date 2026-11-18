@@ -230,6 +230,27 @@ The [PLAYBOOK](PLAYBOOK.md) holds the current best practice distilled from this 
   - Not sliced in Orca, and no gate run (the approved image is cropped and the figure occludes the base).
 - **Blender is now usable in the cloud container** (`apt-get install blender`): this supersedes "Blender not available" in the setup entry.
 
+## 2026-11-18 · Deepak base, round 2 (owner: darker chocolate base; add the espresso machine and coffee sack to print with the base)
+
+- **What:** the base is now Dark chocolate. The espresso machine and burlap sack (`claude works/deepak-base/tools/props.py`) are unioned onto the base top, and the figurine is glued on later.
+- **How:**
+  - Colours come from stock, six in all: Dark chocolate, Gold, Black, Silver, Apricot, White.
+  - The script plans the four heads itself: colours used at or below the base top on H1–H2; at z = 30.4 mm one pause swaps them for prop colours; H3–H4 are preloaded with the other prop colours.
+  - The base height is 30.4 mm, a whole number of both 0.08 and 0.2 mm layers, so the swap falls on a layer boundary.
+- **Failures and fixes:**
+  1. Joining all parts into one tool for a single self-intersecting exact union left 620 open and 1,996 doubled edges. Unioning one part at a time is clean.
+  2. A separate torus rim meeting the bean dome almost tangentially left open edges. The rim is now part of the sack's own lathe profile, and the dome starts inside the rim tube.
+  3. A ring of sack vertices lay exactly on the base top plane (degenerate). Sunk bottoms now put that plane mid-edge.
+  4. Overlapping beans leave zero-volume sliver shells. The build keeps only the main shell and asserts any dropped shell is under 2 mm².
+  5. The weave grooves were narrower than the mesh spacing and aliased into noise. They're now wider grooves (0.27 mm) on 400 segments.
+  6. My first head-plan check hard-coded the swap from an earlier run and reported 52,983 false mismatches. The check now derives each head's colour from the exported files.
+- **When:** any multi-part prop scene. Union sequentially, avoid near-tangent and coplanar contacts, check edge incidence and body count after every build, and derive swap plans from the files.
+- **Result:**
+  - One body, watertight, 156,364 triangles, 120 × 120 × 73 mm.
+  - At most 4 colours per 0.08 and 0.2 mm band; each head prints one colour per range.
+  - Matches the approved composition by eye. The handle is deliberately angled for printing.
+  - Not sliced in Orca.
+
 ---
 
 ### How to add an entry
