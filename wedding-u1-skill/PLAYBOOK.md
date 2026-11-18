@@ -212,6 +212,8 @@ Rules learned building it:
 - Shadowed cream and face skin can be the same colour in a render. Region voting and anchors resolve most of these. What's left is NEEDS_REVIEW and must be judged by eye, never auto-passed.
 - Ivory or white art on a white background loses its edge in the cut-out (braid, feather). Ask for a transparent PNG or pass `--mask`.
 
+**Cropped white-background references.** If the upper-left pixel is on the figurine and the inferred mask covers the entire frame, run the [white-margin mask helper](../codex%20works/experiments/2026-11-18-corner-matte/white_margin.py) and inspect the silhouette before using `--mask`. A clean partial-view regression recovered from 0.5244 to 0.9910 silhouette IoU. Full-frame controls retained the known 30-face and 1,500-face leak locations. Use this fallback on known white RGB art.
+
 ## 5. Failures — don't repeat
 
 - Colour thresholds for eyes, glasses frames or hand/clothes contacts. Each needed a geometric or traced replacement.

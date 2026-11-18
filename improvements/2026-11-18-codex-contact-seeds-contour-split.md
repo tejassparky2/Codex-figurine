@@ -45,3 +45,4 @@ The polygons are model-specific; the solver and the keep mask are generic.
 | Date | Agent | Job | Result (numbers) | Verdict |
 |---|---|---|---|---|
 | 2026-11-18 | claude | wedding-couple (practice judge, same job) | 0.932 → 0.695 % clear disagreement, boundary p95 0.687 → 0.604 mm | gain on this job; confirmation needs a second job |
+| 2026-11-18 | codex | wedding practice, registered contour guide | Round 2 independently reproduced round 1 at 0.6953%, 17.193 mm², 3 review patches, 0.604 mm boundary p95 and 0.9513 IoU. | Repeatability on same job. Transfer to another figurine remains untested here. |

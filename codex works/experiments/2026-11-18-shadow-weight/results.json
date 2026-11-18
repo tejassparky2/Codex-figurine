@@ -1,0 +1,48 @@
+{
+  "metrics": {
+    "before": {
+      "verdict": "FAIL",
+      "clear": 0.8594,
+      "largest": 16.229,
+      "review": 4,
+      "p95": 0.688,
+      "iou": 0.9516,
+      "ambiguous": 2.701,
+      "seconds": 7.09
+    },
+    "after": {
+      "verdict": "FAIL",
+      "clear": 0.8865,
+      "largest": 16.399,
+      "review": 4,
+      "p95": 0.715,
+      "iou": 0.9516,
+      "ambiguous": 2.529,
+      "seconds": 7.25
+    }
+  },
+  "selftests": {
+    "30": {
+      "returncode": 0,
+      "seconds": 133.26
+    },
+    "1500": {
+      "returncode": 0,
+      "seconds": 121.9
+    }
+  },
+  "synthetic_shadow": {
+    "L=.45": {
+      "pixels": 102832,
+      "wrong": 26348,
+      "unknown": 444,
+      "correct": 76040
+    },
+    "L=.25": {
+      "pixels": 102832,
+      "wrong": 26752,
+      "unknown": 6972,
+      "correct": 69108
+    }
+  }
+}

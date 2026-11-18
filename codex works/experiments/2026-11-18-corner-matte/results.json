@@ -1,0 +1,114 @@
+{
+  "metrics": {
+    "before": {
+      "verdict": "CANNOT_JUDGE",
+      "clear": 0.0,
+      "largest": 0.0,
+      "review": 0,
+      "p95": 0.156,
+      "iou": 0.5244,
+      "ambiguous": 0.144,
+      "seconds": 4.11
+    },
+    "after": {
+      "verdict": "PASS",
+      "clear": 0.0,
+      "largest": 0.0,
+      "review": 0,
+      "p95": 0.156,
+      "iou": 0.991,
+      "ambiguous": 0.243,
+      "seconds": 3.58
+    }
+  },
+  "crop_origin": [
+    288,
+    432
+  ],
+  "raw_fg_fraction": 1.0,
+  "padded_fg_fraction": 0.5282883986928104,
+  "practice": {
+    "practice-before": {
+      "verdict": "FAIL",
+      "clear": 0.8594,
+      "largest": 16.229,
+      "review": 4,
+      "p95": 0.688,
+      "iou": 0.9516,
+      "ambiguous": 2.701,
+      "seconds": 7.61
+    },
+    "practice-after": {
+      "verdict": "FAIL",
+      "clear": 0.8529,
+      "largest": 15.964,
+      "review": 2,
+      "p95": 0.688,
+      "iou": 0.9513,
+      "ambiguous": 2.715,
+      "seconds": 7.42
+    }
+  },
+  "controls": {
+    "30": {
+      "clean": {
+        "metrics": {
+          "verdict": "PASS",
+          "clear": 0.0,
+          "largest": 0.0,
+          "review": 0,
+          "p95": 0.156,
+          "iou": 0.9818,
+          "ambiguous": 0.235,
+          "seconds": 2.91
+        },
+        "identical_top_patches": true,
+        "same_verdict": true
+      },
+      "leaky": {
+        "metrics": {
+          "verdict": "FAIL",
+          "clear": 0.0342,
+          "largest": 3.296,
+          "review": 0,
+          "p95": 0.156,
+          "iou": 0.9818,
+          "ambiguous": 0.235,
+          "seconds": 2.84
+        },
+        "identical_top_patches": true,
+        "same_verdict": true
+      }
+    },
+    "1500": {
+      "clean": {
+        "metrics": {
+          "verdict": "PASS",
+          "clear": 0.0,
+          "largest": 0.0,
+          "review": 0,
+          "p95": 0.156,
+          "iou": 0.9818,
+          "ambiguous": 0.235,
+          "seconds": 3.26
+        },
+        "identical_top_patches": true,
+        "same_verdict": true
+      },
+      "leaky": {
+        "metrics": {
+          "verdict": "FAIL",
+          "clear": 1.0611,
+          "largest": 102.165,
+          "review": 0,
+          "p95": 0.156,
+          "iou": 0.9818,
+          "ambiguous": 0.235,
+          "seconds": 3.65
+        },
+        "identical_top_patches": true,
+        "same_verdict": true
+      }
+    }
+  }
+}

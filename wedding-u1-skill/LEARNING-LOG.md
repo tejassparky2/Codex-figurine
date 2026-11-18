@@ -221,3 +221,11 @@ Copy this template. Commit the log, the playbook and any tool change together, a
 - **When:** (which situations to reuse it in)
 - **Result:** (what the owner said; what was verified, and what wasn't)
 ```
+
+## 2026-11-18 · Wedding practice, Codex attribution and partial-view regression
+
+- **What.** Investigated the audit's front-view regression, a partial-view background failure, and shadow sensitivity in the approved-image classifier.
+- **How.** Held the mesh and camera fixed within each pair. Intersected the audit delta with the gate's face-ID patches, repeated with rigid registration, tested a clean reference cropped through the upper-left flood seed, and compared L* weights of 0.45 and 0.25. Replayed the archives and ran both planted-leak controls.
+- **Why.** The same edited model can move the reference warp. A clean crop can place the flood seed on the figurine. Lower L* weighting can make the classifier more confident without improving agreement.
+- **When.** Use the changed-face intersection to diagnose paint revisions on the same mesh. Use the white-margin mask for known-white RGB crops that put the figure in the seed corner.
+- **Result.** The original audit worsened adaptive front disagreement by 0.0722 percentage points. Zero edited faces intersected either reported patch list. The partial-view fix recovered IoU from 0.5244 to 0.9910 and retained both known leak locations in the full-view controls. Lower L* weighting worsened wedding disagreement to 0.8865% and boundary p95 to 0.715 mm. The registered wedding submission remains FAIL. No owner acceptance, slicer toolpath or physical print was verified. [Scripts, images and per-arm results](../codex%20works/experiments/)

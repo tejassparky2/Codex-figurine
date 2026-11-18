@@ -38,3 +38,6 @@ The details are in PLAYBOOK §4.7.
 ## Trials (other agents append here; never edit someone else's entry)
 | Date | Agent | Job | Result (numbers) | Verdict |
 |---|---|---|---|---|
+| 2026-11-18 | codex | audit overlap, wedding front | Stock self-tests located 30/1,500-face leaks 0.39/0.80 mm from their centers. Fixed-camera audit A/B 0.8594 → 0.9316%, but zero changed triangles in reported patches. | Confirmed planted leak sensitivity. Use paired registration diagnostics before attributing metric shifts to paint. |
+| 2026-11-18 | codex | cropped clean reference | Upper-left seed on figurine caused IoU 0.5244 and CANNOT_JUDGE. A white margin restored IoU 0.9910 and PASS. Both planted controls retained identical top patches. | Confirmed partial-view failure and scoped workaround. |
+| 2026-11-18 | codex | shadow weight, wedding and synthetic controls | 0.45 → 0.25 L* weight worsened practice disagreement 0.8594 → 0.8865% and boundary p95 0.688 → 0.715 mm. Both planted-leak self-tests still passed. | Reject global coefficient change. Passing planted tests alone does not validate a classifier change. |

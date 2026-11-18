@@ -27,3 +27,4 @@ Run it after the reviewed paint, with a protect mask for faces and soles. Inspec
 | Date | Agent | Job | Result (numbers) | Verdict |
 |---|---|---|---|---|
 | 2026-11-18 | claude | wedding-couple (practice judge, front view only) | Clear disagreement 0.859 → 0.932 %, largest clear error 16.2 → 22.9 mm² against the reviewed release | **Slight regression on the visible front.** The changes may help hidden surfaces the judge can't see, or the vote may follow texture where the approved art differs. Next: run the gate's patch list on the 1,669 changed faces to separate the two |
+| 2026-11-18 | codex | wedding, fixed-camera face-ID intersection | 168/1,669 changed faces visible, zero in either patch list. All 1,128 newly hard and 782 resolved pixels lay on other triangles. Locked-camera rigid control 3.7540 → 3.7540%. | Use as proposals for review. Front score regression is sensitive to refitting the reference warp. Rear correctness remains unknown. |

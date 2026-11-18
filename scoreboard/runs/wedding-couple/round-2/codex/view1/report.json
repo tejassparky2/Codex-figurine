@@ -1,0 +1,975 @@
+{
+ "image": "/dev/shm/sprint/jobs/wedding-couple/judge/approved-front.png",
+ "verdict": "FAIL",
+ "reasons": [
+  "clear colour errors: 0.682% of figure pixels, largest patch 17.19 mm2 (limits 0.25%, 0.6 mm2)",
+  "3 close-call patches (similar colours in the approved art) need a vision verdict; see patches/ marked REVIEW"
+ ],
+ "silhouette_iou": 0.9513,
+ "shape_drift_mm": {
+  "median": 1.479,
+  "p95": 2.0,
+  "max": 2.0
+ },
+ "px_per_mm": 7.271,
+ "edge_tolerance_mm": 0.35,
+ "figure_pixels": 484948,
+ "ambiguous_pct": 2.701,
+ "hard_mismatch_pct": 0.6953,
+ "consistent_close_call_pct": 0.9935,
+ "edge_band_mismatch_pct": 9.6291,
+ "boundary_offset_mm": {
+  "median": 0.0,
+  "p95": 0.604
+ },
+ "suspect_anchors": [
+  {
+   "anchor": "@525,1000,5",
+   "slot": 3,
+   "sampled": "#E3B278",
+   "nearest_palette_slot": 5
+  },
+  {
+   "anchor": "@160,700,4",
+   "slot": 3,
+   "sampled": "#FADDAD",
+   "nearest_palette_slot": 5
+  }
+ ],
+ "patches": 41,
+ "review_patches": 3,
+ "largest_patch_mm2": 17.193,
+ "largest_clear_error_mm2": 17.193,
+ "calibrated_prototypes": {
+  "1": "#FCC342",
+  "2": "#EC211A",
+  "3": "#F4D6AE",
+  "4": "#4F0305",
+  "5": "#FDB47D",
+  "6": "#25221F",
+  "7": "#F95E52"
+ },
+ "per_slot": [
+  {
+   "slot": 1,
+   "color": "#EFC13A",
+   "approved_mm2": 1385.2,
+   "model_mm2": 1607.0,
+   "iou": 0.7385
+  },
+  {
+   "slot": 2,
+   "color": "#DE1508",
+   "approved_mm2": 1313.6,
+   "model_mm2": 1406.3,
+   "iou": 0.872
+  },
+  {
+   "slot": 3,
+   "color": "#FFF9F0",
+   "approved_mm2": 1394.6,
+   "model_mm2": 1453.0,
+   "iou": 0.7695
+  },
+  {
+   "slot": 4,
+   "color": "#771020",
+   "approved_mm2": 2026.7,
+   "model_mm2": 1884.6,
+   "iou": 0.8689
+  },
+  {
+   "slot": 5,
+   "color": "#F6BCA2",
+   "approved_mm2": 2057.2,
+   "model_mm2": 1713.8,
+   "iou": 0.7626
+  },
+  {
+   "slot": 6,
+   "color": "#131213",
+   "approved_mm2": 930.2,
+   "model_mm2": 1029.6,
+   "iou": 0.8084
+  },
+  {
+   "slot": 7,
+   "color": "#D63D4F",
+   "approved_mm2": 65.0,
+   "model_mm2": 78.2,
+   "iou": 0.2865
+  }
+ ],
+ "confusion_rows_approved_cols_model": [
+  [
+   67200,
+   1514,
+   1249,
+   936,
+   546,
+   1790,
+   0
+  ],
+  [
+   2052,
+   66984,
+   25,
+   20,
+   313,
+   0,
+   54
+  ],
+  [
+   4740,
+   664,
+   65470,
+   588,
+   1223,
+   643,
+   402
+  ],
+  [
+   3601,
+   1354,
+   668,
+   96144,
+   1136,
+   3372,
+   877
+  ],
+  [
+   6447,
+   2670,
+   8324,
+   1689,
+   86260,
+   2313,
+   1061
+  ],
+  [
+   742,
+   27,
+   1019,
+   253,
+   767,
+   46317,
+   55
+  ],
+  [
+   179,
+   1138,
+   63,
+   8,
+   364,
+   0,
+   1687
+  ]
+ ],
+ "tiles": {
+  "total": 75,
+  "wrong": 29,
+  "sheets": 7
+ },
+ "top_patches": [
+  {
+   "id": 1,
+   "area_mm2": 17.193,
+   "pixels": 909,
+   "approved_slot": 5,
+   "model_slot": 3,
+   "needs_review": false,
+   "bbox_px": [
+    188,
+    659,
+    32,
+    97
+   ],
+   "centroid_mm": [
+    -27.2,
+    7.54,
+    56.47
+   ],
+   "face_count": 466
+  },
+  {
+   "id": 2,
+   "area_mm2": 7.698,
+   "pixels": 407,
+   "approved_slot": 5,
+   "model_slot": 3,
+   "needs_review": false,
+   "bbox_px": [
+    502,
+    1060,
+    56,
+    17
+   ],
+   "centroid_mm": [
+    16.24,
+    -1.44,
+    6.58
+   ],
+   "face_count": 112
+  },
+  {
+   "id": 3,
+   "area_mm2": 4.464,
+   "pixels": 236,
+   "approved_slot": 5,
+   "model_slot": 3,
+   "needs_review": false,
+   "bbox_px": [
+    183,
+    887,
+    16,
+    28
+   ],
+   "centroid_mm": [
+    -29.55,
+    4.62,
+    29.51
+   ],
+   "face_count": 120
+  },
+  {
+   "id": 4,
+   "area_mm2": 3.556,
+   "pixels": 188,
+   "approved_slot": 5,
+   "model_slot": 1,
+   "needs_review": false,
+   "bbox_px": [
+    177,
+    514,
+    17,
+    22
+   ],
+   "centroid_mm": [
+    -31.55,
+    -12.5,
+    82.5
+   ],
+   "face_count": 110
+  },
+  {
+   "id": 5,
+   "area_mm2": 3.499,
+   "pixels": 185,
+   "approved_slot": 4,
+   "model_slot": 1,
+   "needs_review": false,
+   "bbox_px": [
+    462,
+    631,
+    12,
+    36
+   ],
+   "centroid_mm": [
+    8.41,
+    1.14,
+    65.14
+   ],
+   "face_count": 59
+  },
+  {
+   "id": 6,
+   "area_mm2": 3.367,
+   "pixels": 178,
+   "approved_slot": 5,
+   "model_slot": 1,
+   "needs_review": false,
+   "bbox_px": [
+    346,
+    284,
+    30,
+    19
+   ],
+   "centroid_mm": [
+    -8.29,
+    -12.04,
+    113.64
+   ],
+   "face_count": 132
+  },
+  {
+   "id": 7,
+   "area_mm2": 2.478,
+   "pixels": 131,
+   "approved_slot": 5,
+   "model_slot": 3,
+   "needs_review": false,
+   "bbox_px": [
+    195,
+    758,
+    20,
+    18
+   ],
+   "centroid_mm": [
+    -27.46,
+    7.78,
+    47.8
+   ],
+   "face_count": 69
+  },
+  {
+   "id": 8,
+   "area_mm2": 2.364,
+   "pixels": 125,
+   "approved_slot": 3,
+   "model_slot": 1,
+   "needs_review": false,
+   "bbox_px": [
+    316,
+    280,
+    21,
+    10
+   ],
+   "centroid_mm": [
+    -13.21,
+    -16.49,
+    114.7
+   ],
+   "face_count": 90
+  },
+  {
+   "id": 9,
+   "area_mm2": 2.364,
+   "pixels": 125,
+   "approved_slot": 5,
+   "model_slot": 3,
+   "needs_review": false,
+   "bbox_px": [
+    605,
+    1079,
+    29,
+    7
+   ],
+   "centroid_mm": [
+    28.16,
+    -10.25,
+    6.21
+   ],
+   "face_count": 36
+  },
+  {
+   "id": 10,
+   "area_mm2": 1.532,
+   "pixels": 81,
+   "approved_slot": 3,
+   "model_slot": 1,
+   "needs_review": false,
+   "bbox_px": [
+    557,
+    220,
+    11,
+    9
+   ],
+   "centroid_mm": [
+    17.96,
+    -18.24,
+    122.86
+   ],
+   "face_count": 46
+  },
+  {
+   "id": 11,
+   "area_mm2": 1.4,
+   "pixels": 74,
+   "approved_slot": 5,
+   "model_slot": 3,
+   "needs_review": false,
+   "bbox_px": [
+    323,
+    583,
+    14,
+    10
+   ],
+   "centroid_mm": [
+    -11.18,
+    -1.82,
+    73.58
+   ],
+   "face_count": 63
+  },
+  {
+   "id": 12,
+   "area_mm2": 1.324,
+   "pixels": 70,
+   "approved_slot": 5,
+   "model_slot": 1,
+   "needs_review": false,
+   "bbox_px": [
+    314,
+    311,
+    14,
+    8
+   ],
+   "centroid_mm": [
+    -14.4,
+    -19.38,
+    110.66
+   ],
+   "face_count": 50
+  },
+  {
+   "id": 13,
+   "area_mm2": 1.286,
+   "pixels": 68,
+   "approved_slot": 5,
+   "model_slot": 3,
+   "needs_review": false,
+   "bbox_px": [
+    485,
+    957,
+    15,
+    14
+   ],
+   "centroid_mm": [
+    11.19,
+    -6.44,
+    22.16
+   ],
+   "face_count": 36
+  },
+  {
+   "id": 14,
+   "area_mm2": 1.173,
+   "pixels": 62,
+   "approved_slot": 1,
+   "model_slot": 6,
+   "needs_review": false,
+   "bbox_px": [
+    335,
+    273,
+    31,
+    8
+   ],
+   "centroid_mm": [
+    -9.25,
+    -10.59,
+    115.95
+   ],
+   "face_count": 51
+  },
+  {
+   "id": 15,
+   "area_mm2": 0.889,
+   "pixels": 47,
+   "approved_slot": 2,
+   "model_slot": 1,
+   "needs_review": false,
+   "bbox_px": [
+    379,
+    892,
+    10,
+    17
+   ],
+   "centroid_mm": [
+    -4.47,
+    -10.32,
+    31.53
+   ],
+   "face_count": 16
+  },
+  {
+   "id": 16,
+   "area_mm2": 0.757,
+   "pixels": 40,
+   "approved_slot": 2,
+   "model_slot": 5,
+   "needs_review": false,
+   "bbox_px": [
+    437,
+    719,
+    12,
+    8
+   ],
+   "centroid_mm": [
+    2.89,
+    -15.88,
+    56.12
+   ],
+   "face_count": 31
+  },
+  {
+   "id": 17,
+   "area_mm2": 0.719,
+   "pixels": 38,
+   "approved_slot": 1,
+   "model_slot": 4,
+   "needs_review": false,
+   "bbox_px": [
+    501,
+    935,
+    5,
+    18
+   ],
+   "centroid_mm": [
+    12.0,
+    -10.64,
+    25.39
+   ],
+   "face_count": 17
+  },
+  {
+   "id": 18,
+   "area_mm2": 0.681,
+   "pixels": 36,
+   "approved_slot": 5,
+   "model_slot": 4,
+   "needs_review": false,
+   "bbox_px": [
+    559,
+    269,
+    15,
+    6
+   ],
+   "centroid_mm": [
+    19.53,
+    -13.56,
+    116.53
+   ],
+   "face_count": 16
+  },
+  {
+   "id": 19,
+   "area_mm2": 0.681,
+   "pixels": 36,
+   "approved_slot": 3,
+   "model_slot": 1,
+   "needs_review": false,
+   "bbox_px": [
+    204,
+    555,
+    9,
+    5
+   ],
+   "centroid_mm": [
+    -28.76,
+    -15.67,
+    78.42
+   ],
+   "face_count": 20
+  },
+  {
+   "id": 20,
+   "area_mm2": 0.681,
+   "pixels": 36,
+   "approved_slot": 4,
+   "model_slot": 2,
+   "needs_review": false,
+   "bbox_px": [
+    458,
+    672,
+    6,
+    12
+   ],
+   "centroid_mm": [
+    7.31,
+    0.36,
+    60.96
+   ],
+   "face_count": 10
+  },
+  {
+   "id": 21,
+   "area_mm2": 0.586,
+   "pixels": 31,
+   "approved_slot": 5,
+   "model_slot": 4,
+   "needs_review": false,
+   "bbox_px": [
+    541,
+    267,
+    17,
+    5
+   ],
+   "centroid_mm": [
+    17.23,
+    -12.45,
+    116.95
+   ],
+   "face_count": 14
+  },
+  {
+   "id": 22,
+   "area_mm2": 0.454,
+   "pixels": 24,
+   "approved_slot": 5,
+   "model_slot": 1,
+   "needs_review": false,
+   "bbox_px": [
+    301,
+    304,
+    9,
+    6
+   ],
+   "centroid_mm": [
+    -16.22,
+    -18.6,
+    111.69
+   ],
+   "face_count": 16
+  },
+  {
+   "id": 23,
+   "area_mm2": 0.378,
+   "pixels": 20,
+   "approved_slot": 5,
+   "model_slot": 4,
+   "needs_review": true,
+   "bbox_px": [
+    544,
+    531,
+    9,
+    5
+   ],
+   "centroid_mm": [
+    19.06,
+    -0.66,
+    80.93
+   ],
+   "face_count": 16
+  },
+  {
+   "id": 24,
+   "area_mm2": 0.34,
+   "pixels": 18,
+   "approved_slot": 2,
+   "model_slot": 1,
+   "needs_review": false,
+   "bbox_px": [
+    234,
+    749,
+    4,
+    8
+   ],
+   "centroid_mm": [
+    -24.59,
+    -9.03,
+    51.52
+   ],
+   "face_count": 12
+  },
+  {
+   "id": 25,
+   "area_mm2": 0.34,
+   "pixels": 18,
+   "approved_slot": 5,
+   "model_slot": 3,
+   "needs_review": false,
+   "bbox_px": [
+    479,
+    778,
+    8,
+    4
+   ],
+   "centroid_mm": [
+    8.46,
+    -14.52,
+    48.28
+   ],
+   "face_count": 18
+  },
+  {
+   "id": 26,
+   "area_mm2": 0.322,
+   "pixels": 17,
+   "approved_slot": 5,
+   "model_slot": 3,
+   "needs_review": false,
+   "bbox_px": [
+    208,
+    646,
+    4,
+    6
+   ],
+   "centroid_mm": [
+    -26.81,
+    8.56,
+    64.31
+   ],
+   "face_count": 13
+  },
+  {
+   "id": 27,
+   "area_mm2": 0.322,
+   "pixels": 17,
+   "approved_slot": 5,
+   "model_slot": 3,
+   "needs_review": false,
+   "bbox_px": [
+    181,
+    842,
+    6,
+    9
+   ],
+   "centroid_mm": [
+    -30.91,
+    2.1,
+    37.43
+   ],
+   "face_count": 11
+  },
+  {
+   "id": 28,
+   "area_mm2": 0.284,
+   "pixels": 15,
+   "approved_slot": 5,
+   "model_slot": 1,
+   "needs_review": true,
+   "bbox_px": [
+    538,
+    538,
+    3,
+    8
+   ],
+   "centroid_mm": [
+    17.72,
+    -1.47,
+    79.8
+   ],
+   "face_count": 10
+  },
+  {
+   "id": 29,
+   "area_mm2": 0.265,
+   "pixels": 14,
+   "approved_slot": 4,
+   "model_slot": 6,
+   "needs_review": false,
+   "bbox_px": [
+    596,
+    502,
+    12,
+    7
+   ],
+   "centroid_mm": [
+    23.95,
+    -16.39,
+    85.35
+   ],
+   "face_count": 11
+  },
+  {
+   "id": 30,
+   "area_mm2": 0.246,
+   "pixels": 13,
+   "approved_slot": 5,
+   "model_slot": 1,
+   "needs_review": false,
+   "bbox_px": [
+    404,
+    603,
+    6,
+    5
+   ],
+   "centroid_mm": [
+    -0.77,
+    -3.4,
+    71.17
+   ],
+   "face_count": 7
+  },
+  {
+   "id": 31,
+   "area_mm2": 0.246,
+   "pixels": 13,
+   "approved_slot": 3,
+   "model_slot": 1,
+   "needs_review": false,
+   "bbox_px": [
+    415,
+    937,
+    5,
+    5
+   ],
+   "centroid_mm": [
+    0.01,
+    -11.21,
+    26.3
+   ],
+   "face_count": 11
+  },
+  {
+   "id": 32,
+   "area_mm2": 0.227,
+   "pixels": 12,
+   "approved_slot": 6,
+   "model_slot": 1,
+   "needs_review": false,
+   "bbox_px": [
+    247,
+    227,
+    9,
+    4
+   ],
+   "centroid_mm": [
+    -22.36,
+    -5.65,
+    122.25
+   ],
+   "face_count": 10
+  },
+  {
+   "id": 33,
+   "area_mm2": 0.227,
+   "pixels": 12,
+   "approved_slot": 5,
+   "model_slot": 1,
+   "needs_review": false,
+   "bbox_px": [
+    528,
+    788,
+    6,
+    4
+   ],
+   "centroid_mm": [
+    15.05,
+    -14.0,
+    46.67
+   ],
+   "face_count": 6
+  },
+  {
+   "id": 34,
+   "area_mm2": 0.208,
+   "pixels": 11,
+   "approved_slot": 5,
+   "model_slot": 1,
+   "needs_review": false,
+   "bbox_px": [
+    541,
+    786,
+    8,
+    3
+   ],
+   "centroid_mm": [
+    16.86,
+    -14.7,
+    47.37
+   ],
+   "face_count": 7
+  },
+  {
+   "id": 35,
+   "area_mm2": 0.151,
+   "pixels": 8,
+   "approved_slot": 1,
+   "model_slot": 3,
+   "needs_review": true,
+   "bbox_px": [
+    161,
+    618,
+    3,
+    3
+   ],
+   "centroid_mm": [
+    -33.84,
+    2.82,
+    68.82
+   ],
+   "face_count": 5
+  },
+  {
+   "id": 36,
+   "area_mm2": 0.151,
+   "pixels": 8,
+   "approved_slot": 5,
+   "model_slot": 2,
+   "needs_review": false,
+   "bbox_px": [
+    420,
+    642,
+    4,
+    5
+   ],
+   "centroid_mm": [
+    2.05,
+    2.45,
+    65.39
+   ],
+   "face_count": 5
+  },
+  {
+   "id": 37,
+   "area_mm2": 0.132,
+   "pixels": 7,
+   "approved_slot": 4,
+   "model_slot": 5,
+   "needs_review": false,
+   "bbox_px": [
+    455,
+    688,
+    3,
+    3
+   ],
+   "centroid_mm": [
+    6.64,
+    0.56,
+    59.16
+   ],
+   "face_count": 5
+  },
+  {
+   "id": 38,
+   "area_mm2": 0.113,
+   "pixels": 6,
+   "approved_slot": 1,
+   "model_slot": 3,
+   "needs_review": false,
+   "bbox_px": [
+    168,
+    884,
+    2,
+    5
+   ],
+   "centroid_mm": [
+    -32.87,
+    2.0,
+    32.05
+   ],
+   "face_count": 5
+  },
+  {
+   "id": 39,
+   "area_mm2": 0.095,
+   "pixels": 5,
+   "approved_slot": 4,
+   "model_slot": 6,
+   "needs_review": false,
+   "bbox_px": [
+    466,
+    305,
+    3,
+    4
+   ],
+   "centroid_mm": [
+    6.98,
+    -6.25,
+    111.94
+   ],
+   "face_count": 3
+  },
+  {
+   "id": 40,
+   "area_mm2": 0.076,
+   "pixels": 4,
+   "approved_slot": 6,
+   "model_slot": 3,
+   "needs_review": false,
+   "bbox_px": [
+    218,
+    583,
+    3,
+    3
+   ],
+   "centroid_mm": [
+    -26.55,
+    -6.11,
+    74.27
+   ],
+   "face_count": 4
+  }
+ ]
+}
