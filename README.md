@@ -1,9 +1,11 @@
-# Codex-figurine
+# Codex figurine
 
-## Reproduce the wedding figurine
+**For another figurine, give your agent the [A–Z agent prompt](wedding-u1-skill/NEW-MODEL-PROMPT.md).** It covers source alignment, paint-region cleanup, geometry repair, layer-color conflicts, spool swaps, multiview inspection and slicer verification. The [installable skill](wedding-u1-skill/SKILL.md) points agents to the toolkit and the worked example.
 
-Give your agent the [A–Z prompt](wedding-u1-skill/AGENT-PROMPT.md). The [skill](wedding-u1-skill/SKILL.md) includes the source model, references, working mesh, pinned Python environment, stage scripts and final verification targets. To download everything, use **Code → Download ZIP** and extract the `wedding-u1-skill` directory.
+## Reviewed wedding couple
 
-The replay matched both 3MF archives entry by entry and all four checked images pixel by pixel in the original Linux environment. [Verification results](wedding-u1-skill/VERIFICATION.txt)
+[150 mm U1 print project](Wedding-U1-150mm-reviewed.3mf) · [Finished-color guide](Wedding-150mm-reviewed-paint-guide.3mf) · [23-page color inspection](Wedding-color-inspection.pdf)
 
-[Final U1 print file](Wedding-U1-150mm-flat.3mf) · [Finished hero render](wedding-u1-skill/expected/Wedding-finished-hero.png)
+The [reviewed replay](wedding-u1-skill/reviewed/README.md) documents the final files, scripts and remaining print checks. The earlier [flat-stage replay](wedding-u1-skill/AGENT-PROMPT.md) covers registration, graph-cut segmentation, face tracing, smoothing and the hero render. Its [verification record](wedding-u1-skill/VERIFICATION.txt) applies to the flat release.
+
+Clone or download the full repository to use the reviewed replay, which reads both bundled inputs and root-level 3MF checkpoints.

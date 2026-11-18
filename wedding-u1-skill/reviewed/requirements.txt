@@ -1,0 +1,4 @@
+-r ../requirements.lock
+pymeshlab==2025.7.post1
+pymeshfix==0.18.1
+reportlab==4.4.9

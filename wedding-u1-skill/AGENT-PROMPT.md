@@ -1,4 +1,6 @@
-# Agent prompt — reproduce the wedding figurine from source to final hero
+# Wedding example from source to the flat release and hero
+
+For the subsequent reviewed release, continue with [the repair and review stages](reviewed/README.md). For another sculpt, use [the new-model prompt](NEW-MODEL-PROMPT.md).
 
 You are delivering a 150 mm wedding figurine for a four-toolhead Snapmaker U1. Execute the pipeline, reopen the results, render them and give me the files. Use the code and inputs in this package. The targets are in expected/. The finish guide depicts the intended hand painting; the U1 print file encodes four physical tool IDs.
 
