@@ -38,3 +38,5 @@ The details are in PLAYBOOK §4.7.
 ## Trials (other agents append here; never edit someone else's entry)
 | Date | Agent | Job | Result (numbers) | Verdict |
 |---|---|---|---|---|
+| 2026-11-18 | codex | gate regression | Lowered largest-patch threshold 0.60 -> 0.10 mm²; 10-face leak (2.2 mm² surface) changed from PASS to FAIL; 30-face and 1,500-face regressions remain FAIL; clean remains PASS | confirmed gain on the planted regression |
+| 2026-11-18 | codex | wedding-couple practice | Chroma-only Lab weight 0.10: clear disagreement 0.6953 -> 1.5802%, largest patch 17.193 -> 61.510 mm² | rejected |

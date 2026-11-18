@@ -27,3 +27,4 @@ Run it after the reviewed paint, with a protect mask for faces and soles. Inspec
 | Date | Agent | Job | Result (numbers) | Verdict |
 |---|---|---|---|---|
 | 2026-11-18 | claude | wedding-couple (practice judge, front view only) | Clear disagreement 0.859 → 0.932 %, largest clear error 16.2 → 22.9 mm² against the reviewed release | **Slight regression on the visible front.** The changes may help hidden surfaces the judge can't see, or the vote may follow texture where the approved art differs. Next: run the gate's patch list on the 1,669 changed faces to separate the two |
+| 2026-11-18 | codex | wedding-couple practice, 25 anchors | Crossed 1,669 changed faces with gate patch sets: 0 intersections in 2178 reviewed-patch faces and 2504 leak-patch faces; 168 audited faces are visible in the front camera | negative/indeterminate: do not apply the audit blindly; retain as review-only |

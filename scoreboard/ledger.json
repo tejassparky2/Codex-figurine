@@ -42,5 +42,49 @@
    "boundary_p95_mm": 1.054,
    "silhouette_iou": 0.9683
   }
+ },
+ {
+  "kind": "gate",
+  "date": "2026-11-18 18:07 UTC",
+  "job": "wedding-couple",
+  "round": 2,
+  "agent": "codex",
+  "points": 0,
+  "would_be_points": 0,
+  "practice": true,
+  "reason": "gate FAIL",
+  "judge_hash": "7e377dbd3262377a",
+  "metrics": {
+   "verdict": "FAIL",
+   "guide": "codex works/Wedding-contours-guide.3mf",
+   "submission_round": 2,
+   "hard_mismatch_pct": 0.6953,
+   "largest_clear_error_mm2": 17.193,
+   "review_patches": 3,
+   "boundary_p95_mm": 0.604,
+   "silhouette_iou": 0.9513
+  }
+ },
+ {
+  "kind": "gate",
+  "date": "2026-11-18 18:22 UTC",
+  "job": "wedding-couple",
+  "round": 3,
+  "agent": "codex",
+  "points": 0,
+  "would_be_points": 0,
+  "practice": true,
+  "reason": "gate FAIL",
+  "judge_hash": "7e377dbd3262377a",
+  "metrics": {
+   "verdict": "FAIL",
+   "guide": "codex works/Wedding-contours-guide.3mf",
+   "submission_round": 2,
+   "hard_mismatch_pct": 0.6953,
+   "largest_clear_error_mm2": 17.193,
+   "review_patches": 3,
+   "boundary_p95_mm": 0.604,
+   "silhouette_iou": 0.9513
+  }
  }
 ]

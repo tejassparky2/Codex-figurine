@@ -209,6 +209,21 @@ The [PLAYBOOK](PLAYBOOK.md) holds the current best practice distilled from this 
 
 ---
 
+## 2026-11-18 · Codex sprint: gate threshold, audit cross-check and negative labelling experiment
+
+- **What:** measured the wedding practice baseline and ran three focused experiments: crossing the leak audit's 1,669 changed faces with gate patches, lowering the approval gate's small-patch threshold, and reducing Lab lightness weight.
+- **How:** ran replay and verify baselines, both approved-match planted-leak sizes, reviewed/replay, and the practice score. Crossed 3MF face labels and gate `patch_faces.npz`. Changed only the gate's default largest-patch threshold from 0.60 to 0.10 mm², then ran 10-, 30-, and 1,500-face planted regressions.
+- **Why:** a 10-face planted leak (2.2 mm² surface) projected to 0.171 mm² and passed under the old threshold. It is larger than the playbook's 0.16 mm² minimum paintable island and should not pass. The audit cross-check found 168 of 1,669 changed faces visible in the judge camera but zero intersections with either gate patch set. The chroma-heavy weight `[0.10,1,1]` moved from 0.6953% to 1.5802% disagreement and raised largest clear error from 17.193 to 61.510 mm².
+- **When:** the threshold change applies to every approved-match gate run. The audit remains review-only rather than an automatic front-face rewrite. Do not use the 0.10 Lab-lightness weight.
+- **Result:**
+  - 10-face planted leak: PASS → FAIL, 0.171 mm² patch, 0.14 mm centroid offset.
+  - 30-face planted leak: still FAIL, 3.296 mm² patch.
+  - 1,500-face planted leak: still FAIL, 102.165 mm² patch.
+  - Practice wedding gate remains FAIL at 0.6953%, 17.193 mm², 3 review patches, 0.9513 silhouette IoU.
+  - Scripts replay/verify and reviewed replay passed; pip check was clean.
+  - No running slicer, G-code, or physical print was verified.
+- **Files:** `codex works/experiments/2026-11-18-*`, `wedding-u1-skill/coloring/approved_match.py`.
+
 ### How to add an entry
 
 Copy this template. Commit the log, the playbook and any tool change together, and push the same day.

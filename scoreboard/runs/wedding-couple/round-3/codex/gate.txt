@@ -1,0 +1,11 @@
+FAIL
+view 1: /root/copilot-worktrees/Codex-figurine/jobs/wedding-couple/judge/approved-front.png
+  coarse camera: yaw 5, pitch 5, IoU 0.9160
+  refined camera: soft IoU 0.9395 after 276 renders
+  camera {"yaw": 6.7, "pitch": 3.4732, "roll": 0.3136, "s": 7.2711, "tx": 409.6301, "ty": 575.8136, "k": 0.0018}  silhouette IoU 0.9426
+  CHECK ANCHOR @525,1000,5 for slot 3: sampled #E3B278 is nearer slot 5 (#F6BCA2)
+  CHECK ANCHOR @160,700,4 for slot 3: sampled #FADDAD is nearer slot 5 (#F6BCA2)
+  calibrated shaded prototypes: {'1': '#FCC342', '2': '#EC211A', '3': '#F4D6AE', '4': '#4F0305', '5': '#FDB47D', '6': '#25221F', '7': '#F95E52'}
+  region vote: 732 regions; 24.3% of figure pixels (unsure ones) settled by region majority
+  local alignment: drift median 1.479 mm, p95 2.0 mm, max 2.0 mm; label agreement 0.7206 -> 0.8223; silhouette IoU 0.9426 -> 0.9513
+  FAIL: hard mismatch 0.6953%, 41 patches, largest 17.193 mm², boundary offset median 0.0 mm clear colour errors: 0.682% of figure pixels, largest patch 17.19 mm2 (limits 0.25%, 0.1 mm2); 3 close-call patches (similar colours in the approved art) need a vision verdict; see patches/ marked REVIEW

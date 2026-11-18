@@ -199,6 +199,7 @@ Measured (`approved_match_selftest.py`, reviewed wedding guide, hidden camera wi
 - Camera recovered within 0.1°.
 - The clean model PASSes.
 - A planted 30-face skin→ivory leak (6.8 mm² of surface) FAILs, located within 0.4 mm. A 1,500-face leak is located within 0.8 mm.
+- The patch limit is 0.10 mm²; a planted 10-face leak (2.2 mm² surface) FAILs, so tiny brush patches are not silently accepted.
 
 Run on a real image (the maroon portrait, which is *not* the image the mesh was generated from):
 - Silhouette IoU 0.943 rigid, 0.952 after drift correction.

@@ -514,7 +514,7 @@ def main():
     p.add_argument('--edge-tol-mm', type=float, default=.35)
     p.add_argument('--margin', type=float, default=4., help='Lab gap below which an approved pixel is ambiguous')
     p.add_argument('--max-hard-pct', type=float, default=.25)
-    p.add_argument('--max-blob-mm2', type=float, default=.6)
+    p.add_argument('--max-blob-mm2', type=float, default=.1)
     p.add_argument('--min-iou', type=float, default=.95)
     p.add_argument('--max-ambiguous', type=float, default=.05)
     p.add_argument('--min-blob-px', type=int, default=4)
