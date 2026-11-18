@@ -40,3 +40,5 @@ From the wedding-u1-skill directory on Linux with Python 3.12 and Mesa EGL:
 The toolkit handles source sampling and graph-cut segmentation. The reviewed directory contains the actual face-ID renderer, texture mapping, graph refinement, manual tracing, export and PDF code used on the wedding example. For a new job, keep its masks, palette, camera poses, scale, tool mapping and review notes together. Hand another agent those job-specific files along with the reusable workflow.
 
 [Worked example and commands](reviewed/README.md) · [Original graph-cut and facial tracing stages](AGENT-PROMPT.md)
+
+For paint spill across a sculpted edge or a saved Orca correction, run the [surface leak audit and approved-paint comparison](reviewed/LEAK-CHECK.md). Recheck the physical tool mapping after editing the finish guide.
