@@ -1,4 +1,5 @@
 """Compare encoded facet paint on corresponding meshes, including Orca split brush strokes."""
+from array import array
 import argparse
 import csv
 import sys
@@ -6,29 +7,45 @@ import zipfile
 from pathlib import Path
 
 import numpy as np
-from lxml import etree
+from xml.parsers import expat
 
 
 def read_mesh(path):
-    result = None
+    vertices = array('d')
+    indices = array('I')
+    paint = []
+    meshes = 0
+    in_mesh = False
+
+    def start(tag, attrs):
+        nonlocal meshes, in_mesh
+        local = tag.rsplit('}',1)[-1]
+        if local=='mesh':
+            meshes += 1
+            if meshes>1:
+                raise ValueError('Expected exactly one mesh across project parts')
+            in_mesh = True
+        elif in_mesh and local=='vertex':
+            vertices.extend(float(attrs[k]) for k in ('x','y','z'))
+        elif in_mesh and local=='triangle':
+            indices.extend(int(attrs[k]) for k in ('v1','v2','v3'))
+            paint.append(attrs.get('paint_color',''))
+
+    def end(tag):
+        nonlocal in_mesh
+        if tag.rsplit('}',1)[-1]=='mesh':
+            in_mesh = False
+
     with zipfile.ZipFile(path) as archive:
         for member in archive.namelist():
-            if not member.lower().endswith('.model'):
-                continue
-            with archive.open(member) as stream:
-                document = etree.parse(stream,etree.XMLParser(resolve_entities=False,no_network=True,collect_ids=False))
-                for mesh in document.iterfind('.//{*}mesh'):
-                    if result is not None:
-                        raise ValueError('Expected one mesh across the project parts')
-                    vertices = np.array([[float(v.get(axis)) for axis in 'xyz'] for v in mesh.find('{*}vertices')])
-                    faces = mesh.find('{*}triangles')
-                    indices = np.array([[int(f.get(k)) for k in ('v1','v2','v3')] for f in faces])
-                    paint = [f.get('paint_color','') for f in faces]
-                    result = vertices, indices, paint
-                    mesh.clear()
-    if result is None:
-        raise ValueError('No mesh in project')
-    return result
+            if member.lower().endswith('.model'):
+                parser = expat.ParserCreate(namespace_separator='}')
+                parser.StartElementHandler, parser.EndElementHandler = start, end
+                with archive.open(member) as stream:
+                    parser.ParseFile(stream)
+    if not meshes or not paint:
+        raise ValueError('No painted mesh triangles in project')
+    return np.asarray(vertices).reshape(-1,3), np.asarray(indices).reshape(-1,3), paint
 
 
 def main():
