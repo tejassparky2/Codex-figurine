@@ -182,6 +182,31 @@ The [PLAYBOOK](PLAYBOOK.md) holds the current best practice distilled from this 
   - **man-with-drink, Claude**: CANNOT_JUDGE. The anchor check showed the customer photo's skin, hair and glass differ from the owner's chosen filaments. The judge photo must be recoloured to the decisions before it can be official.
 - **When:** every job. Write `submission.json`, run the referee, and record the owner's verdicts.
 
+## 2026-11-18 · `improvements/`: agents pass improvements to each other (owner request)
+
+- **What:** a shared exchange where Codex, Claude or any agent posts an improvement with evidence, and every agent tries the new proposals before its next job and appends a trial result.
+- **How:**
+  - Use `improvements/TEMPLATE.md`: front matter, then problem, method, evidence, how to use it, and a trials table.
+  - `improvements/index.py` builds `INDEX.md`.
+  - Statuses run proposed → confirmed (by a *different* agent or the owner) → adopted, or rejected or superseded.
+  - Confirmation earns the author +2 (`scoreboard/RULES.md`).
+  - AGENTS.md, CLAUDE.md and the mission prompt now require reading the index before a job and posting trials and proposals after it.
+- **Seeded with four real entries:**
+  - Codex: contact seeds + contour split.
+  - Codex: surface leak audit.
+  - Claude: approval gate.
+  - Claude: cone-thickness locks (confirmed earlier by the owner on man-with-drink).
+- **New evidence from seeding** (practice wedding judge, front view, measured by Claude):
+
+  | Release | Clear disagreement |
+  |---|---:|
+  | Reviewed release | 0.859 % |
+  | After leak audit | 0.932 % (slight regression on the visible front) |
+  | After Codex's contact seeds + contour split | 0.695 % (best) |
+
+  Recorded as trials on both Codex entries.
+- **When:** every job, at the start and at the end.
+
 ---
 
 ### How to add an entry

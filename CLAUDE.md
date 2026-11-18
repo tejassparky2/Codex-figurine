@@ -25,6 +25,7 @@ This repo turns textured 3D models and photos into multicolour figurine print fi
 4. Work only in `claude works/<job>/` (the neutral brief and judge are in `jobs/<job>/`; see `scoreboard/RULES.md`). Keep the job complete there: scripts as run, `run_all.sh`, inputs, the verified 3MFs, previews and the record.
 5. **Commit and push the same day** to the session's working branch. Never commit `__pycache__`, virtual environments or scratch arrays.
 6. Every defect the owner finds becomes a regression case under `claude works/<job>/regression/`, and the approval gate must FAIL the defective version.
-7. When another agent shares findings, merge them into the playbook, note the source, and record any conflicts with how they were resolved.
+7. **Exchange improvements through `improvements/`** (see its README). Before every job, read `improvements/INDEX.md` and add trials to the proposals you test. After a gain, post a proposal with gate evidence and run `python improvements/index.py`.
+8. When another agent shares findings, merge them into the playbook, note the source, and record any conflicts with how they were resolved.
 
 Be precise about verification. A decoded paint array, a rendered preview, a slicer preview, the G-code and a physical print are five different checks. Record which ones were actually done.

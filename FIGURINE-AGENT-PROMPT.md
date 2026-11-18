@@ -19,8 +19,9 @@ You are colouring a customer figurine for multicolour 3D printing. The customer 
 
 ## 0. Before you start
 1. Read `wedding-u1-skill/PLAYBOOK.md` in full: standing preferences, filament stock, the default pipeline, proven techniques and failures. Then read the latest entries of `wedding-u1-skill/LEARNING-LOG.md`.
-2. Set up the pinned environment: see the newest "Environment setup" entry in the log. You need Mesa EGL and `libopengl0`, plus `pip install -r wedding-u1-skill/reviewed/requirements.txt`.
-3. Run `python -I wedding-u1-skill/coloring/approved_match_selftest.py Wedding-150mm-reviewed-paint-guide.3mf <scratch>`. It must end with both checks `ok`. If it doesn't, fix the gate before trusting it.
+2. Read `improvements/INDEX.md` and every proposal posted since your last job. Plan which ones to try on this job; you'll record a trial for each.
+3. Set up the pinned environment: see the newest "Environment setup" entry in the log. You need Mesa EGL and `libopengl0`, plus `pip install -r wedding-u1-skill/reviewed/requirements.txt`.
+4. Run `python -I wedding-u1-skill/coloring/approved_match_selftest.py Wedding-150mm-reviewed-paint-guide.3mf <scratch>`. It must end with both checks `ok`. If it doesn't, fix the gate before trusting it.
 
 ## 1. Non-negotiable rules
 1. **The approved image is the colour truth.** The GLB texture is only evidence.
@@ -109,7 +110,11 @@ Lead with problems, not praise.
    - Save the approved crop, the camera, the bad and fixed labels, and a one-line expectation under `<agent> works/<job>/regression/`.
    - Confirm the gate FAILs the bad version. If it doesn't, the gate missed it: improve the gate (or its defaults) until it does, and record that in the log.
 3. Move fixes that work without model-specific coordinates into `wedding-u1-skill/coloring/`. Re-run the self-test and the earlier jobs' regression cases.
-4. Commit and push the same day to your working branch. Never commit venvs, `__pycache__` or scratch arrays.
+4. **Share what you learned in `improvements/`:**
+   - Add a trial (with numbers) to every proposal you tested.
+   - Post a new proposal (`improvements/TEMPLATE.md`) for any method that beat the previous result on the gate. Include the evidence, then run `python improvements/index.py`.
+   - Never edit another agent's entry except to append a trial.
+5. Commit and push the same day to your working branch. Never commit venvs, `__pycache__` or scratch arrays.
 
 ## 10. Keep the toolbox current (time-box to about 20 minutes per job, and log what you checked)
 Look for releases and methods that would remove a manual step or a known failure:

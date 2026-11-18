@@ -10,6 +10,7 @@ Every agent (Claude, Codex and any other) works in its own folder and is scored 
 | `<name> works/` | any new agent | create it on your first job; the referee finds it automatically |
 | `jobs/<job>/` | the owner (neutral) | the brief, input hashes and the **judge**: approved images, referee anchors, masks |
 | `wedding-u1-skill/coloring/`, `scripts/`, `PLAYBOOK.md`, `LEARNING-LOG.md` | shared | tools and knowledge every agent uses; contributions are credited in the log |
+| `improvements/` | everyone (append-only for others' entries) | shared proposals with evidence, plus other agents' trials; see its README |
 | `scoreboard/` | the referee | `score.py`, `ledger.json` (append-only), `SCOREBOARD.md` (generated) |
 
 Never edit another agent's folder or the judge of a job you are competing in. You may read and learn from everything. If you reuse another agent's method, say so in your README and the log.
@@ -33,6 +34,7 @@ The finish guide must be a single painted mesh with solid per-face codes, the sa
 | **Owner accepts the delivery** (`score.py owner <job> <agent> accept`) | **+5** |
 | Accepted in the first review round (`--first-round`) | +2 |
 | Owner finds a defect the agent did not report (`score.py owner <job> <agent> defect --note …`) | −1 each |
+| Your improvement in `improvements/` is **confirmed by a different agent or the owner** (`score.py adjust <author> 2 --reason …`) | +2 |
 | Adjustment by the owner (`score.py adjust`), e.g. a shared tool adopted after an A/B (+2) or a commit that broke the gate self-test (−3) | as stated |
 
 **Ranking in a head-to-head:**
