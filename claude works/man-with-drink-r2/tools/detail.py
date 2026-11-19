@@ -48,8 +48,9 @@ mouth = win(-17, 11.5, 147.5, 156)
 cls[mouth] = 0
 # r2: the left teeth sit in shadow (L 41-51, darker than the mouth gap at 58), so teeth are TRACED as a polygon on
 # renders/mouth-grid.png and intersected with low chroma (lip chroma ~50, teeth ~21-32) so the lip in front stays skin.
-TEETH = [(-11.33,151.92),(-10,151.58),(-8,151.5),(-4.67,151.67),(-1.33,152.08),(2,152.67),(5,153.33),(5.3,152.6),(5,152.17),
-         (3.17,151.92),(0.33,150.83),(-1.33,150.0),(-4.67,149.75),(-8,149.75),(-9.67,150.0),(-11,150.67)]
+TEETH = [(-11.33,151.92),(-10,151.58),(-8,151.5),(-4.67,151.67),(-1.33,152.08),(2,152.67),(5,153.33),(5.3,152.6),(5,151.9),
+         (4,151.55),(3.17,151.2),(2,150.65),(1,150.42),(0.33,150.42),(-1.33,149.95),(-4.67,149.75),(-8,149.75),(-9.67,150.0),(-11,150.67)]
+# review 4: the right-hand upper teeth reach lower than first traced (front texture, renders/tex-mouth-hi.png)
 tpoly = np.zeros((H, W), 'u1'); cv2.fillPoly(tpoly, [px(TEETH)], 1)
 cls[solid(tpoly.astype(bool) & (chroma < 40) & (L > 30), close_mm=.3, min_mm2=.3)] = 3   # teeth; lips and mouth gap stay skin
 np.save('views/face_cls.npy', cls)

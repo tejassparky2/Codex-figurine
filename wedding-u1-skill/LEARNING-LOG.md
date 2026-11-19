@@ -260,3 +260,17 @@ Copy this template. Commit the log, the playbook and any tool change together, a
   question, not a request. I treated it as a request.
 - **When:** lower teeth are a per-model choice. Default to the **upper row only**, and ask before adding the lower row.
   The traced-opening method (review 2 entry) stays available for when it is wanted.
+
+## 2026-11-19 · Man with drink r2, review 4 (owner: "there is Tripo lower teeth clay, I don't want that too")
+- **What:** with only the upper row white, the sculpted lower teeth still print as skin-coloured bumps. The owner wants the shape gone, not just unpainted.
+- **How:** `claude works/man-with-drink-r2/tools/remove_lower_teeth.py`.
+  - Find the feature in side cross-sections. Here it was a 1 mm step behind the upper teeth.
+  - Select it by position (below the upper-teeth edge, behind the lip front) and by low texture chroma (lips are ≥ 45).
+  - Smooth with a uniform Laplacian, boundary fixed, 80 rounds.
+  - Check self-intersections with pymeshlab before and after. Re-sample the texture afterwards.
+- **Why:** smoothing with the boundary fixed is the smallest edit that removes a feature. It moves only interior
+  vertices, so topology stays the same, the mesh stays watertight, and the face count is unchanged. Labels can be re-derived on the same pipeline.
+- **When:** any small unwanted sculpt the owner calls "clay": lower teeth, stray hair, moles. Paint alone doesn't remove a shape.
+  - This fixes it after Tripo. The cheaper fix is in the art before Tripo (local session rule "solid hair, no dots").
+  - Candidate for `coloring/`: a generic "flatten patch" tool that takes a face mask.
+- **Result:** max move 0.56 mm, 0 self-intersections, both 3MFs verified. Not sliced, not printed.

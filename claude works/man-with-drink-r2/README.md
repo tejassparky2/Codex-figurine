@@ -81,3 +81,16 @@ As round 1 noted, the photo must be recoloured to the decisions before this judg
 - Reverted `tools/detail.py` to the upper-row teeth trace (the first round-2 commit). The export is identical to the
   pre-review-2 version: 1,021,838 faces, white 0.28% of faces, white from 149.68 mm.
 - Kept for reference: `renders/cmp-lowerteeth.png` shows the rejected both-rows version.
+
+## Review 4 (owner, 2026-11-19): "there is Tripo lower teeth clay, I don't want that too"
+- The sculpted lower teeth are a ~1 mm step, tucked ~1 mm behind the upper teeth, on top of the lower lip
+  (`renders/mouth-sections.png`, side cross-sections at x -8, -4, 0, 3).
+- **`tools/remove_lower_teeth.py`** (runs after the first `sample_texture.py`, then texture is re-sampled):
+  - **Selection:** faces in the mouth box below the upper teeth's bottom edge, behind the lip front, with low texture chroma: 2052 faces, 42.5 mm².
+  - **Smoothing:** 80 rounds of Laplacian smoothing with the patch boundary fixed, so the step relaxes into a smooth membrane.
+  - **Result:** max vertex move 0.56 mm, median 0.23 mm. Topology unchanged, watertight, 0 self-intersecting faces before and after.
+  - The original mesh is kept as `printable-with-lower-teeth.npz`.
+- The upper-teeth trace was extended on the right, where those teeth reach lower than first traced, which removes the jagged skin bottoms.
+- **Result:** `renders/cmp-flatten.png` (patch, before and after, from below) and `renders/cmp-r4.png` (front, below, bridge).
+  - White is 0.34% of faces and starts at 149.67 mm.
+  - At most 4 colours per band at 0.08 and 0.2 mm.

@@ -5,6 +5,8 @@ P=${P:-python}; G=inputs-raw/man-with-drink.glb
 $P -I tools/make_printable.py $G 220 1000000
 $P -I tools/split_planes.py 102.3 95.7
 $P -I tools/sample_texture.py $G
+$P -I tools/remove_lower_teeth.py        # owner: no Tripo lower-teeth clay
+$P -I tools/sample_texture.py $G
 $P -I -c 'import numpy as np; np.save("glass_axis.npy", np.array([-8.05, -31.6]))'
 $P -I tools/label.py 5
 $P -I tools/views.py
