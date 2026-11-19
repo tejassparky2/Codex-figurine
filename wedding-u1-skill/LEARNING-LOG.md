@@ -299,6 +299,37 @@ The [PLAYBOOK](PLAYBOOK.md) holds the current best practice distilled from this 
   - The front hero was re-rendered from the exported guide.
 - **Owner question answered:** where to buy a skin filament like the photo's orange-tan skin (lit face ≈ #F99A5E; Apricot prints ≈ #DEA485).
 
+## 2026-11-19 · Man with drink v2 (owner: "the head position seems different from the photo"; new Tripo model)
+
+- **What:** the owner noticed the v1 head was turned. They regenerated in Tripo; v2 is coloured in `claude works/man-with-drink-v2/`.
+- **How:**
+  - **Measured head pose**, not judged by eye. `tools/head_pose.py` finds the pupils on a straight-front texture render and reads their 3-D positions, giving turn, tilt and side shift. It was validated on v1, reproducing the paint-based measurement (12.4° vs 12.7°).
+
+    | | Turn | Tilt | Side shift |
+    |---|---:|---:|---:|
+    | Photo | ~0° | ~5.4° | ~0 mm |
+    | v1 | 12.4° | 7.1° | 7.6 mm |
+    | v2 | 6.0° | 6.8° | 3.4 mm |
+
+    The tilt is in the photo itself.
+  - Pipeline re-run with the v1 tools, with these changes:
+    - new `glass_axis.py` (RANSAC + Kasa circle fit; the v2 tumbler radius is 7.56 mm against v1's 6.69);
+    - **all glass radius limits are relative to the fitted radius**;
+    - liquid line re-measured at 99.0 mm;
+    - eyes, brows and mouth re-traced on 0.5 mm grids;
+    - `framemask.py` runs from scratch (`final.npy` optional).
+- **Why:** model-specific constants (glass radius, liquid line, eye traces, windows) were the only parts that didn't carry over. Everything else did.
+- **When:** for any regenerated model:
+  - measure the head pose against the photo before colouring;
+  - fit geometry constants rather than copying them;
+  - re-trace the face on the new mesh.
+- **Result:**
+  - Both 3MFs are watertight: 1,018,452 triangles, 22 islands, the smallest 0.73 mm².
+  - No layer has more than 4 colours, and the 120 mm swap is clean (orange 87.6–99.0 mm, white from 148.2 mm).
+  - Reviewed by eye.
+  - Gate: CANNOT_JUDGE until the judge photo is recoloured to the owner's decisions.
+  - Not sliced.
+
 ---
 
 ### How to add an entry

@@ -1,2 +1,6 @@
-{"finish_guide": "out/Man-with-drink-220mm-finish-guide.3mf", "printer_project": "out/Man-with-drink-U1-220mm.3mf", "round": 4,
- "notes": "Claude's delivered revision 4 (glasses lock, thumb part lock, contour split), files unchanged."}
+{
+ "finish_guide": "../man-with-drink-v2/out/Man-with-drink-220mm-finish-guide.3mf",
+ "printer_project": "../man-with-drink-v2/out/Man-with-drink-U1-220mm.3mf",
+ "round": 6,
+ "notes": "v2: regenerated Tripo model (head turn 12.4 -> 6.0 deg), recoloured with the same decisions; drink fills the glass from the bottom."
+}
