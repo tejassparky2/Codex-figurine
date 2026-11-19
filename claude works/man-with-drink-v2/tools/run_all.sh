@@ -27,7 +27,7 @@ PY
 $P -I ../../wedding-u1-skill/coloring/contour_split.py printable.npz final.npy cs.npz --keep cs_keep.npy
 # owner round 7: irises and lash lines painted at sub-triangle resolution from the traced 2-D design (round sides)
 $P -I ../../wedding-u1-skill/coloring/decal_refine.py cs.npz views/face_cls.npy views/face_id.npy cs2.npz --cam -28 204 40 \
-   --win -21.5 -7.5 166.6 171.4 --win 1.5 13.4 169.4 173.6 --levels 2 --lock frame_full.npy
+   --win -21.5 -7.5 166.6 171.4 --win 1.5 13.4 169.4 173.6 --win -14 11.5 146 155 --levels 2 --lock frame_full.npy
 MESH=cs2.npz $P -I tools/export.py
 $P -I tools/render_outputs.py
 $P -I regression/check_round6.py out/Man-with-drink-220mm-finish-guide.3mf

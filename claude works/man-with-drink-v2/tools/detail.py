@@ -50,7 +50,36 @@ for nm, e in EYES.items():
     cls[ring] = 0; cls[opening] = 3; cls[iris] = 1; cls[liner] = 1; eyes |= ring      # realistic: no catchlight
 mouth = win(-12, 9, 146.5, 154.5)   # v2 position
 cls[mouth] = 0
-cls[solid(mouth & (L > 68) & (chroma < 40), close_mm=.25, min_mm2=.3)] = 3   # teeth; lips and mouth gap stay skin
+# Owner round 8 ("the smile is not matching"): the sculpt and texture smile match the art, but thresholded teeth came out
+# thin with a ragged lower edge. Teeth (and the whole mouth opening) are now smooth traced crescents: per column the top and
+# bottom of the solid mask, each fitted with a degree-4 curve in x, filled between. MOUTH_LINE=1 additionally paints the
+# opening outside the teeth (the dark gap under the teeth and the corners, ~0.3-0.6 mm) black, as in the art; default
+# off, because the standing rule says no black inside a mouth.
+import os
+def curves(mask, deg=4):
+    """Top and bottom of a crescent mask per column, each fitted with a degree-`deg` curve that is pinned (weight 50)
+    to the two corner points, so both curves meet and the crescent tapers to a point at each end."""
+    cols = np.flatnonzero(mask.any(0))
+    top = np.array([np.flatnonzero(mask[:, c])[0] for c in cols]); bot = np.array([np.flatnonzero(mask[:, c])[-1] for c in cols])
+    k = max(3, len(cols) // 40); rl, rr = (top[:k] + bot[:k]).mean() / 2, (top[-k:] + bot[-k:]).mean() / 2
+    x = np.r_[cols, cols[0], cols[-1]]; w = np.r_[np.ones(len(cols)), 50, 50]
+    return cols[0], cols[-1], np.polyfit(x, np.r_[top, rl, rr], deg, w=w), np.polyfit(x, np.r_[bot, rl, rr], deg, w=w)
+def fill(c0, c1, pt, pb, cap=None, start=None):
+    out = np.zeros((H, W), bool)
+    for c in range(c0, c1 + 1):
+        t, b_ = np.polyval(pt, c), np.polyval(pb, c)
+        if cap is not None: t = max(t, b_ - cap)          # band hugging the lower edge, thinning to the corners
+        if start is not None and start[c] >= 0: t = max(t, start[c])
+        if b_ > t: out[int(round(t)):int(round(b_)) + 1, c] = True
+    return out
+tc0, tc1, tpt, tpb = curves(solid(mouth & (L > 68) & (chroma < 40), close_mm=.25, min_mm2=.3))
+teeth = fill(tc0, tc1, tpt, tpb)
+if os.environ.get('MOUTH_LINE') == '1':
+    oc0, oc1, opt, opb = curves(solid(mouth & (((L > 68) & (chroma < 40)) | (L < 45)), close_mm=.3, min_mm2=.3))
+    # one band along the lower lip, at most 0.4 mm thick, never over the teeth; it tapers where the lips meet
+    start = np.full(W, -1.0); cc = np.arange(tc0, tc1 + 1); start[cc] = np.polyval(tpb, cc)
+    cls[fill(oc0, oc1, opt, opb, cap=.4 * PPM, start=start) & ~teeth] = 1
+cls[teeth] = 3   # teeth; lips stay skin
 np.save('views/face_cls.npy', cls)
 # Triangle vote.
 sel = (ids >= 0) & (cls >= 0); t = ids[sel]; k = cls[sel]

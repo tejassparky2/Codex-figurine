@@ -141,6 +141,7 @@ Colour-based masks fail wherever two materials touch, because the texture is blu
   - **Iris size and placement (man-with-drink v2, round 7):** measure the art. A realistic iris is a big circle cut by both lids, with its equator at mid-opening, so both sides are convex arcs. Use r ≈ 1.05× the opening height (~45 % of the eye width) and put the centre at mid-opening, lower it where the upper lid slopes. A centre near the upper lid gives a bowl; a small circle inside the opening gives a square bar.
   - **Paint it at design resolution:** run `coloring/decal_refine.py` on the eye windows after `contour_split`. At ~0.35 mm triangles, an iris only ~10 triangles across loses its round sides.
   - Add catchlights or wings only if a stylised look is requested.
+- **Smile / teeth (man-with-drink v2, round 8):** trace the teeth as a smooth crescent (corner-pinned degree-4 curves for top and bottom) and paint it with `decal_refine.py`. Thresholded teeth come out thin and ragged. The art's smile is defined by the dark crescent under the teeth; if the owner allows it, a ≤ 0.4 mm black band along the lower lip (`MOUTH_LINE=1`) restores it. **Before regenerating for an expression complaint, compare the Tripo texture with the art:** usually the sculpt matches and only the paint is off.
 - **The sclera can be mid-grey in the texture** (L* about 62). It is separated from skin by its very low chroma, not by brightness.
 - **Brows and teeth.** Threshold inside a window, then:
   - close the gaps, keep the large pieces,

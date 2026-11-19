@@ -388,6 +388,23 @@ The [PLAYBOOK](PLAYBOOK.md) holds the current best practice distilled from this 
   - Reviewed by eye: the hero, face, eye comparison with the art, hand crops and the 12-view turnaround.
   - Not sliced or printed. The gate still can't judge this job (judge photo not recoloured).
 
+## 2026-11-19 · Man with drink v2, round 8 (owner, from the customer: "the smile is not matching"; asked whether to regenerate in Tripo)
+- **What:** the customer said the smile doesn't match the approved art.
+- **Diagnosis, no regenerate:** a side-by-side of the art, the Tripo texture and the delivered print showed that the sculpted smile (and the texture on it) already matches the art's crescent. The mismatch was in the paint:
+  1. the thresholded teeth were thin, with a ragged lower edge;
+  2. the art's smile outline is the dark gap under the teeth and at the corners, and the standing rule ("never black inside a mouth") had turned it skin.
+- **How:** `detail.py` mouth section.
+  - Teeth are now a smooth traced crescent: top and bottom of the solid mask, each fitted with a degree-4 curve in x and pinned to the corners so they taper.
+  - The mouth window (−14..11.5, 146..155) is added to `decal_refine.py`.
+  - `MOUTH_LINE=1` adds one black band along the lower lip, ≤ 0.4 mm thick, never over the teeth, tapering where the lips meet. It stays off by default because of the standing rule; the owner chooses.
+  - On the way: an unpinned fit left square-cut ends, and a "start at the upper lip" rule split the line into 3 pieces. Both were fixed (corner-pinned fits; the band hugs the lower edge).
+- **Why:** with only skin, black, silver and white available, a smile reads by its outline. Without the dark crescent, only a white sliver of teeth remains, and it looks shorter and flatter than the art.
+- **When:** check the source texture before regenerating a model for an expression complaint; the sculpt is usually fine, and the paint loses the outline.
+- **Result:** comparison sheet `claude works/man-with-drink-v2/out/round8-smile-options.png`, Option A (default, committed) vs Option B, waiting for the owner's choice.
+  - Option A: 1,267,674 triangles, watertight, 23 islands; layer bands clean.
+  - Round 6 and round 7 regression checks PASS.
+  - Not sliced.
+
 ---
 
 ### How to add an entry
