@@ -142,7 +142,7 @@ Colour-based masks fail wherever two materials touch, because the texture is blu
   - **Paint it at design resolution:** run `coloring/decal_refine.py` on the eye windows after `contour_split`. At ~0.35 mm triangles, an iris only ~10 triangles across loses its round sides.
   - Add catchlights or wings only if a stylised look is requested.
 - **Mouth: never any black (owner, confirmed again 2026-11-19, round 9).** Lips and the mouth gap are always skin; only the teeth are white. Don't offer a black lip line.
-- **Two-tone grey hair (round 9):** silver base, Pure White on the tuft crests, chosen by crest offset plus a little key-light facing (`claude works/man-with-drink-v2/tools/hair_tone.py`, `--frac .18 --up .25`). That gives about 14 % white, strips ≥ 0.9 mm and islands ≥ 2 mm², with silver kept along the hairline and frame. Never copy the texture's strand stripes; they print as speckle.
+- **Two-tone grey hair: don't paint it with white (round 9 rejected, round 10).** Silver + white crests looked blotchy (hard FDM edges, too much contrast). Print one grey and suggest dry-brushing light highlights by hand. Only consider painted two-tone with two close greys.
 - **Smile / teeth (man-with-drink v2, round 8):** trace the teeth as a smooth crescent (corner-pinned degree-4 curves for top and bottom) and paint it with `decal_refine.py`. Thresholded teeth come out thin and ragged. The art's smile is defined by the dark crescent under the teeth; the owner refused a black lower-lip line (round 9), so the gap stays skin. **Before regenerating for an expression complaint, compare the Tripo texture with the art:** usually the sculpt matches and only the paint is off.
 - **The sclera can be mid-grey in the texture** (L* about 62). It is separated from skin by its very low chroma, not by brightness.
 - **Brows and teeth.** Threshold inside a window, then:
@@ -244,6 +244,7 @@ Rules learned building it:
 - Delivering on rendered previews alone. The owner found every man-with-drink leak by eye over 4 rounds; the approval gate exists so the agent finds them first.
 - Sampling approved-image colours with boxes, or skipping a `CHECK ANCHOR` warning (approval-gate build).
 - Judging a model against an approved image it wasn't generated from, and reading pose differences as paint errors.
+- Two-tone hair as silver + Pure White patches on the tuft crests (man-with-drink v2, round 9): it looked weird; dry-brush instead.
 - Painting a small curved feature (iris) by per-triangle vote on a 1M mesh: the round sides become straight lines. Use `decal_refine.py`.
 - An iris centred near the upper lid (only its lower cap visible) or so small it fits inside the opening: neither reads as round in flat colour.
 - Held-glass rules that only look at the wall band: fingers tucked under the base have up-facing faces *below* the underside plane, which the glass never has.

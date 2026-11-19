@@ -427,6 +427,16 @@ The [PLAYBOOK](PLAYBOOK.md) holds the current best practice distilled from this 
   - Note: Pure White is brighter than the art's light grey; stock has no light grey.
   - Not sliced or printed.
 
+## 2026-11-19 · Man with drink v2, round 10 (owner: "the hair looking very weird"; "will try to paint, revert the hair")
+- **What:** the owner rejected the round-9 two-tone hair (white crests on silver).
+- **How:** `hair_tone.py` was removed from `run_all.sh` (the tool is kept for the record). The hair is plain Simply Silver again; 0 white faces above 175 mm. The owner will dry-brush highlights by hand.
+- **Why it failed:** the art's hair is a soft blend of light and dark grey. FDM per-face paint gives hard edges, and Pure White next to silver is too much contrast, so it reads as blotches, not highlights.
+- **When:** for salt-and-pepper or two-tone grey hair, **print one grey and recommend dry-brushing** (light grey or white acrylic, optionally a dark wash in the grooves first). Only paint two hair tones when two close greys are available (e.g. charcoal + silver).
+- **Result:**
+  - 1,267,674 triangles, watertight, one body, 22 islands (1 under 0.1 mm², at the locked frame).
+  - Layer bands clean; round 6 and round 7 regression checks PASS.
+  - 4-side renders refreshed. Not sliced or printed.
+
 ---
 
 ### How to add an entry

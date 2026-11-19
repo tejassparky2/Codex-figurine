@@ -17,8 +17,7 @@ $P -I tools/part_lock.py leak.npy leak.npy 14 42 -12 26 44 80 0 1 7 10 10 3.0
 $P -I tools/finalize.py
 # owner round 6: sculpted hair strands at the hairline are hair (silver), found by surface roughness
 $P -I tools/hairline.py final.npy final.npy
-# owner round 9: two-tone hair, silver base with white highlights on the tuft crests (white is on T4 above the swap)
-$P -I tools/hair_tone.py final.npy final.npy
+# (round 9 two-tone hair, tools/hair_tone.py, was rejected by the owner as weird: hair stays plain silver, highlights are dry-brushed by hand)
 # contour split: smooth cut edges through triangles; the glass zone keeps its exact plane-split liquid line
 $P -I - <<'PY'
 import numpy as np, trimesh
