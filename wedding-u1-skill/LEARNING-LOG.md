@@ -330,6 +330,36 @@ The [PLAYBOOK](PLAYBOOK.md) holds the current best practice distilled from this 
   - Gate: CANNOT_JUDGE until the judge photo is recoloured to the owner's decisions.
   - Not sliced.
 
+## 2026-11-19 · Man with drink v2, round 6 (owner: "colour leaks on finger and hair edges not coloured")
+
+- **What:** orange/silver on the fingers holding the glass, and the sculpted hair strands at the hairline painted skin.
+- **Why:**
+  1. The glass radius tolerances came from v1 (6.7 mm glass). On v2's 7.56 mm glass they reached into the fingers.
+  2. At the hairline the texture is skin with thin grey strokes, so texture colour can't see the strands.
+- **How:**
+  - **Glass by geometry** in `detail.py`:
+    - inside the fitted radius = glass (the solid tumbler's recessed top and rim lip included);
+    - the wall = within 0.25 mm and facing out;
+    - the rim bead and its underside ring = glass;
+    - anything else near the glass = finger skin.
+  - **Hairline lock** (`tools/hairline.py`): skin within 1.8 mm of the hair with a normal deviation over 6° is a strand, and becomes silver (256 mm²).
+  - Mistakes caught on the way by close-up renders and per-height profiles:
+    - the first geometric rule turned the inward-facing rim lip skin;
+    - the second missed the rim bead (it protrudes 0.25–1 mm);
+    - the third left its underside ring.
+  - A 0.6 mm smoothing pass didn't change the hair edge. Its notches are the sculpted strand tips, so they were kept.
+- **Regression test:** `regression/check_round6.py` (geometric; the gate can't judge this job yet).
+  - The pre-round-6 delivery FAILs: finger band 41.4, rim 14.7, ridged hairline skin 64.3 mm².
+  - This release PASSes: 0.0 / 0.0 / 3.1 mm².
+  - The hairline check ignores the 0.35 mm step band at the hair edge, which is always ridged; that was confirmed visually, not tuned.
+- **When:**
+  - any model with sculpted hair over a skin-coloured texture;
+  - any held object (define it by fitted geometry, never by copied tolerances).
+- **Result:**
+  - Both 3MFs are watertight: 1,016,750 triangles, 20 islands, the smallest 0.52 mm².
+  - No band has more than 4 colours, and the swap is clean.
+  - Not sliced.
+
 ---
 
 ### How to add an entry

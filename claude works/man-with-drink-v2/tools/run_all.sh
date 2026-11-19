@@ -15,6 +15,8 @@ $P -I tools/leakfix.py 6 12
 # part lock: his left thumb/hand (thin) against the trouser leg (thick)
 $P -I tools/part_lock.py leak.npy leak.npy 14 42 -12 26 44 80 0 1 7 10 10 3.0
 $P -I tools/finalize.py
+# owner round 6: sculpted hair strands at the hairline are hair (silver), found by surface roughness
+$P -I tools/hairline.py final.npy final.npy
 # contour split: smooth cut edges through triangles; the glass zone keeps its exact plane-split liquid line
 $P -I - <<'PY'
 import numpy as np, trimesh

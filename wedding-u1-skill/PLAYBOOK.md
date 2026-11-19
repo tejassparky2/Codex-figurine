@@ -213,6 +213,16 @@ Rules learned building it:
 - Shadowed cream and face skin can be the same colour in a render. Region voting and anchors resolve most of these. What's left is NEEDS_REVIEW and must be judged by eye, never auto-passed.
 - Ivory or white art on a white background loses its edge in the cut-out (braid, feather). Ask for a transparent PNG or pass `--mask`.
 
+### 4.8 Hair strands at the hairline: lock by surface roughness (man-with-drink v2, round 6)
+
+- Generated textures often paint fine grey strokes over skin at the hairline, so per-face colour calls the sculpted strands skin.
+- The strands are ridged at sub-millimetre scale; forehead skin is smooth. Measured on v2: median 12–18° near the hair vs ~1.5° on the forehead.
+- `claude works/man-with-drink-v2/tools/hairline.py`, run after `finalize.py`:
+  - **Which faces:** skin within 1.8 mm of the hair whose 0.5 mm-averaged normal deviation from the 0.7 mm neighbourhood exceeds 6°.
+  - **Grow and clean:** grow whole strands, then clean islands.
+  - **Exclusions:** the frame, and the face centre below the brows.
+- Check with a straight-front close-up. The edge follows the strand tips, so a slightly irregular line is expected.
+
 ## 5. Failures — don't repeat
 
 - Colour thresholds for eyes, glasses frames or hand/clothes contacts. Each needed a geometric or traced replacement.
@@ -228,6 +238,7 @@ Rules learned building it:
 - Delivering on rendered previews alone. The owner found every man-with-drink leak by eye over 4 rounds; the approval gate exists so the agent finds them first.
 - Sampling approved-image colours with boxes, or skipping a `CHECK ANCHOR` warning (approval-gate build).
 - Judging a model against an approved image it wasn't generated from, and reading pose differences as paint errors.
+- Copying geometric tolerances (glass radius limits) from one model to the next. v1's limits leaked whisky orange onto v2's fingers. Fit the geometry, and define parts by it (inside the radius = glass; just outside = glass only if it faces out).
 
 ## 6. Choosing among generated models
 

@@ -40,10 +40,20 @@ Same stages as v1. What changed for this mesh:
 7. `leakfix.py 6 12`, `part_lock.py … 14 42 -12 26 44 80 0 1 7 10 10 3.0` (the hand against the trousers), `finalize.py`. The frame lock is applied last.
 8. `contour_split.py --keep` (glass zone kept), `export.py` and `render_outputs.py` (hero **straight front**).
 
+## Round 6 (owner: "colour leaks on finger and hair edges not coloured")
+- **Finger leak:** the radius tolerances inherited from v1 (tuned for its 6.7 mm glass) reached into fingers pressed against this 7.56 mm glass.
+  - `detail.py` now defines the glass by geometry alone: everything inside the fitted radius, the cylinder wall (within 0.25 mm, facing out), and the rim lip including its thicker bead and underside ring.
+  - Silver or orange near the glass that fails this test returns to skin.
+  - Result: finger contact band 41.4 → 0.0 mm² of orange/silver; rim lip all silver (it had a 14.7 mm² skin band and dark specks).
+- **Hair edges:** the texture paints thin grey strokes over skin at the hairline, so the sculpted strands came out skin.
+  - New `tools/hairline.py` finds them by shape: skin within 1.8 mm of the hair whose normals deviate more than 6° (0.5 mm average) from their 0.7 mm neighbourhood. It turns them silver, grows whole strands and cleans islands. The frame and the face centre below the brows are excluded.
+  - Runs after `finalize.py`: 10,351 faces (256 mm²).
+- **Regression test** (`regression/check_round6.py`, with the owner's crops): the delivered pre-round-6 file FAILs (41.4 / 14.7 / 64.3 mm²); this release PASSes (0.0 / 0.0 / 3.1 mm²).
+
 ## Verified / not verified
 - **Verified:**
-  - Both 3MFs reopen and decode: 1,018,452 triangles, watertight, consistent winding, one body, 76.4 × 79.7 × 220 mm. Every decoded label matches the arrays.
-  - 22 colour islands; the smallest is 0.73 mm².
+  - Both 3MFs reopen and decode: 1,016,750 triangles, watertight, consistent winding, one body, 76.4 × 79.7 × 220 mm. Every decoded label matches the arrays.
+  - 20 colour islands; the smallest is 0.52 mm².
   - `layer_colors.py` at 0.08 and 0.2 mm: no band over 4 colours, and no band with both orange and white, so the 120 mm swap is clean.
   - Hero, face close-up, front previews and the 12-view turnaround were reviewed by eye (face, glasses, both hands, glass, back).
 - **Approval gate: CANNOT_JUDGE**, the same as v1 (6.7 % ambiguous). The judge photo still has the photo's colours (orange skin, brownish hair, clear glass) rather than the owner's choices. It must be recoloured to the decisions before the gate can PASS or FAIL this job (`jobs/man-with-drink/README.md`).

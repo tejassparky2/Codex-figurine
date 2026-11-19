@@ -83,7 +83,24 @@ lab[wall] = 2; zone |= wall                                          # outward-f
 # Inside 7.32 mm of the axis is glass: seam fins and ridge specks; finger triangles that close are pressed against the glass.
 inner_glass = (c[:,2] > 87.6) & (c[:,2] < 104.9) & (rad < ax[2] + .63) & np.isin(lab, [0, 4]); lab[inner_glass] = 2; zone |= inner_glass
 print('glass faces recovered from skin', inner_glass.sum())
-cup = zone & np.isin(lab, [2, 4])
+# v2 (owner round 6: "colour leaks on finger"): the old radius tolerances (tuned for v1's 6.7 mm glass) reached into
+# fingers pressed against this wider glass. The glass is now defined by geometry alone: the fitted cylinder (within
+# 0.25 mm of the radius, facing out) plus the underside and top discs, inside the wall's own height range. Silver or
+# orange near the glass that fails this test is a finger -> skin.
+r = ax[2]; radial2 = radial
+wall_z = c[(np.abs(rad - r) < .25) & (radial2 > .6) & (c[:,2] > 80) & (c[:,2] < 112), 2]
+GB, GT = np.percentile(wall_z, 1), np.percentile(wall_z, 99)
+zin = (c[:,2] > GB - .4) & (c[:,2] < GT + .4)
+inside = (rad < r - .05) & zin            # nothing but glass lies inside the glass's own radius (incl. the recessed top and rim lip)
+# The thicker top lip and its underside ring (fingertips stop ~1.5 mm lower and reach further out).
+rim_bead = (((rad < r + 1.0) & (c[:,2] > GT - 1.2)) | ((rad < r + .45) & (c[:,2] > GT - 1.8))) & (c[:,2] < GT + .6)
+glass_geo = inside | rim_bead | ((rad < r + .25) & zin & ((radial2 > .3) | (np.abs(nz) > .5)))
+near = (c[:,2] > GB - 4) & (c[:,2] < GT + 2) & (rad < r + 1.5)
+fingers = near & ~glass_geo & np.isin(lab, [2, 4])
+lab[fingers] = 0; zone = glass_geo
+print(f'glass by geometry: bottom {GB:.2f} top {GT:.2f} mm, {glass_geo.sum()} faces | finger faces returned to skin {fingers.sum()}')
+rim_up = rim_bead & ((nz > .3) | (radial2 > .3))  # dark texture specks on the rim, but never the shirt behind the glass
+cup = zone & (np.isin(lab, [0, 2, 4]) | inside | rim_up)   # inside the radius even dark texture specks are glass
 # Owner, 2026-11-19: "for cup down fill with orange" -- the drink fills the glass from its bottom (outer base band,
 # underside and inner floor) up to the liquid line; only the rim above the liquid stays silver.
 drink = cup & (c[:,2] < LIQUID)
