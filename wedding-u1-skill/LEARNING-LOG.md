@@ -284,3 +284,13 @@ Copy this template. Commit the log, the playbook and any tool change together, a
 - **When:** every Tripo head with sculpted hair. Run the hair-edge snap by default and check the sideburns from the front and at 45°.
   - Candidate for `coloring/`: generalise `hairedge.py` to any (raised label, base label) pair.
 - **Result:** all three fixed in the export. Not sliced, not printed. Regression cases not yet added.
+
+## 2026-11-19 · Man with drink, round 4 (customer: "resemblance is very less ... tilt of head is wrong ... gap between teeth and gums")
+- **What:** the coloured model came from a different art than the one the customer approved. The fix was a new 4-view Tripo run from a printable edit of the customer's own image.
+- **How:**
+  - ChatGPT: minimal printable edit of the approved art, then one fresh chat per side and back view.
+  - The side views squinted, and Tripo sculpted the eyes shut (round 3). Editing the side views to "eye clearly open, smooth skin around the eye" removed the deep wrinkles and gave a wide toothy smile (round 4).
+  - Tripo Studio's multi-view tab has Front/Left/Right/Back slots, 55 cr. The "Batch" tab is 4 separate models at 220 cr.
+- **Why:** with one view Tripo guesses the depth of the face. Side views pin the face shape and tilt, but whatever they show (a squint) is sculpted.
+- **When:** every likeness complaint. First check that the model came from the exact image the customer approved (compare sha256). Then compare candidates as lit grey geometry beside the art (`likeness_rounds*.png` in the figurines repo).
+- **Result:** owner picked round 4. Coloured with a black gap line under the upper teeth (customer request). Not sliced or printed.
