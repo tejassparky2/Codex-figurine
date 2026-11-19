@@ -32,3 +32,4 @@ MESH=cs2.npz $P -I tools/export.py
 $P -I tools/render_outputs.py
 $P -I regression/check_round6.py out/Man-with-drink-220mm-finish-guide.3mf
 $P -I regression/check_round7.py out/Man-with-drink-220mm-finish-guide.3mf
+$P -I tools/render_4sides.py                # customer 4-side presentation
