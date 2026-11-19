@@ -41,7 +41,24 @@ for k, nm in enumerate(['skin','black','silver','white','orange']):
 # r2: the tumbler foot flares to r 6.9 mm at z 94-96, outside the glass zone, and its shadow labelled 1268 faces black.
 # Nothing black is within 7.5 mm of the glass axis (the shirt is at y -12.8 there): the foot is glass.
 foot = (lab == 1) & (c[:,2] > 92) & (c[:,2] < 112) & (rad < 7.5); lab[foot] = 2; print('glass foot black -> silver', int(foot.sum()))
+# r2 review 5: no white below the upper teeth's bottom edge (the gap and the flattened lower-teeth patch are skin).
+XS = [-12.5, -12, -8, -4, -1, 0, 1, 2, 3, 4, 5, 6.5]; ZS = [150.9, 150.4, 149.85, 149.85, 149.8, 150.42, 150.42, 150.65, 151.22, 151.6, 152.0, 152.6]
+mouthbox = (c[:,0] > -13) & (c[:,0] < 7) & (c[:,2] > 147) & (c[:,2] < 154) & (c[:,1] < -18)
+gapw = mouthbox & (lab == 3) & (c[:,2] < np.interp(c[:,0], XS, ZS) - 0.02)
+try: gapw |= np.load('lower_teeth_patch.npy') & (lab == 3)
+except FileNotFoundError: pass
+lab[gapw] = 0; print('white below the upper teeth -> skin', int(gapw.sum()))
+nc, cc, ar = comps(lab); wm = mouthbox & (lab == 3) & (ar[cc] < 2.0)          # specks apart from the teeth row
+lab[wm] = 0; print('small white specks in the mouth -> skin', int(wm.sum()), 'faces')
 frame = np.load('frame_full.npy')
+# r2 review 5: stray silver on the face (e.g. a sliver under the brow end): non-frame silver pieces under 3 mm2 on the
+# face take their neighbours' majority colour. The hair mass is one big piece and is unaffected.
+nc, cc, ar = comps(lab); d = lab[a] != lab[b]; A, B = a[d], b[d]
+nbs = coo_matrix((np.r_[L[d], L[d]], (np.r_[cc[A], cc[B]], np.r_[lab[B], lab[A]])), shape=(nc, 5)).toarray()
+face_zone = (c[:,2] > 150) & (c[:,2] < 186) & (c[:,1] < -12)
+stray = (lab == 2) & ~frame & face_zone & (ar[cc] < 3.0)
+nb = nbs.copy(); nb[:, 2] = 0; tgt = nb.argmax(1)[cc]
+ok = stray & (nb.sum(1)[cc] > 0); lab[ok] = tgt[ok]; print('stray face silver -> neighbour colour', int(ok.sum()), 'faces')
 # r2: the lower bridge bar is fused into the nose at x -8.2..-6.1, so its cone thickness exceeds the wire threshold and
 # a skin notch is left on the bar. Paint the bar band there by measured geometry: the bar's lower edge runs from z 171.43
 # (x -8) to 171.86 (x -6), its top at ~172.65 (frame faces either side, see LEARNING-LOG r2). Generic growth was tried

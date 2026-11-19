@@ -274,3 +274,13 @@ Copy this template. Commit the log, the playbook and any tool change together, a
   - This fixes it after Tripo. The cheaper fix is in the art before Tripo (local session rule "solid hair, no dots").
   - Candidate for `coloring/`: a generic "flatten patch" tool that takes a face mask.
 - **Result:** max move 0.56 mm, 0 self-intersections, both 3MFs verified. Not sliced, not printed.
+
+## 2026-11-19 · Man with drink r2, review 5 (owner: hair edges not painted, silver sliver at a brow, white in the teeth gap)
+- **What and how:**
+  - **Hair side walls painted skin:** Tripo bakes skin colour onto the walls of a raised hair mass. Fixed with `hairedge.py`: a binary graph cut in a wide band around the hair boundary, with an almost-zero texture term and a strong concave-crease prior. The edge moves from the hair's rim into the crease at its base.
+  - **Stray silver on the face:** non-frame silver pieces under 3 mm² take their neighbours' colour.
+  - **White in the teeth gap:** none below the traced upper-teeth edge, and no white pieces under 2 mm² in the mouth box.
+- **Why:** where texture and sculpt disagree, the sculpt decides. A raised part's whole wall belongs to that part (PLAYBOOK: shape decides parts).
+- **When:** every Tripo head with sculpted hair. Run the hair-edge snap by default and check the sideburns from the front and at 45°.
+  - Candidate for `coloring/`: generalise `hairedge.py` to any (raised label, base label) pair.
+- **Result:** all three fixed in the export. Not sliced, not printed. Regression cases not yet added.

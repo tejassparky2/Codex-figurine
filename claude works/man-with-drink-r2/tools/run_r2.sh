@@ -14,6 +14,7 @@ $P -I tools/framemask.py
 $P -I tools/facecam.py
 $P -I tools/detail.py
 $P -I tools/leakfix.py 6 12
+$P -I tools/hairedge.py 14 6            # owner review 5: hair side walls silver
 $P -I tools/part_lock.py leak.npy leak.npy 14 42 -14 28 44 80 0 1 7 10 10 3.0
 $P -I tools/finalize.py
 $P -I - <<'PY'

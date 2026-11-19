@@ -94,3 +94,20 @@ As round 1 noted, the photo must be recoloured to the decisions before this judg
 - **Result:** `renders/cmp-flatten.png` (patch, before and after, from below) and `renders/cmp-r4.png` (front, below, bridge).
   - White is 0.34% of faces and starts at 149.67 mm.
   - At most 4 colours per band at 0.08 and 0.2 mm.
+
+## Review 5 (owner, 2026-11-19): "hair edges not painted, eyebrow has silver, little teeth gap has white, should be skin"
+1. **Hair edges.** Tripo's texture paints the side walls of the hair mass (sideburns) skin, so the paint edge sat on
+   the hair's top rim.
+   - **Fix:** `tools/hairedge.py 14 6`, run after leakfix. It re-solves skin/silver in a 14-ring band around the hair
+     boundary on the head, with a near-zero texture term and a strong concave-crease prior (θc 12°), so the edge drops
+     into the crease where hair meets skin. The frame and its 4-ring surroundings are fixed.
+   - **Result:** 3772 faces skin→silver, 182 silver→skin.
+2. **Silver sliver under the outer brow end.** Gone after (1); `finalize.py` also turns non-frame silver pieces under 3 mm² on the face into their neighbours' colour (0 left).
+3. **White in the teeth gap.** `finalize.py`:
+   - turns white below the upper teeth's bottom edge, or on the flattened lower-teeth patch, into skin (82 faces);
+   - turns white pieces in the mouth under 2 mm² into skin (203 faces).
+- **Result:** `renders/cmp-r5.png` (hair edge, brow, mouth, other sideburn) and `renders/cmp-r5-mouth.png`
+  (teeth gap from both sides, 15° below).
+  - White is 0.29% of faces; skin 26.86%, silver 38.58%.
+  - At most 4 colours per band.
+  - Regression cases under `regression/` were NOT added for reviews 2-5.
