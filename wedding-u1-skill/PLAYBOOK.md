@@ -14,7 +14,7 @@ Sources so far:
 | Topic | Preference | Learned from |
 |---|---|---|
 | Eyes | **Depends on the style.**<br>• Realistic models: no catchlight, no eyeliner wing. Use the eye white, a dark iris and a 0.40 mm lash line.<br>• Stylised (Pixar/chibi): socket-shaped white, big round iris, one catchlight dot and a lash outline (see `projects/style_reference/printed_eyes_example*.jpg` in the Figurine repo).<br>• Rejected: ellipse-fit "goggle" eyes, and eyes that just follow the texture.<br>• Blank white eyes painted in the slicer are also acceptable. | Man-with-drink review 2; local session |
-| Mouth | **Never black inside a mouth.** Teeth are white, **both rows when the smile shows them** (trace the whole opening; man-with-drink r2). The lips are skin. "Maroon will be bad for face": lips and bindi print skin or white and are hand-painted red. | Man-with-drink review 2; local session |
+| Mouth | **Never black inside a mouth.** Teeth are white: **upper row only by default**. Lower teeth are a per-model choice, so ask first (man-with-drink r2: rejected). The lips and the gap are skin. "Maroon will be bad for face": lips and bindi print skin or white and are hand-painted red. | Man-with-drink review 2; local session |
 | Eyebrows | Solid, hole-free shapes with smooth edges. No patchy texture threshold. | Man-with-drink, review 2 |
 | Glasses | **The whole frame is one colour, locked**: rims, bridge, nose pads and temple arms. No skin patches anywhere on the frame. | Man-with-drink, reviews 2–3 |
 | Leaks | No colour spill at contacts (hand against clothes, sleeve hems, collar, hairline). Edges must follow the sculpt. | Man-with-drink, reviews 2–4 |

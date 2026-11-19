@@ -76,3 +76,8 @@ As round 1 noted, the photo must be recoloured to the decisions before this judg
 - **Result:** `renders/cmp-lowerteeth.png` (front, and 20° below) and `out/Man-with-drink-front-face.png`.
   - White covers 0.55% of faces and starts at 148.89 mm, still above the 120 mm swap.
   - Seen from 20° below, a thin skin line remains between the rows (it is not enclosed). Not visible from the front.
+
+## Review 3 (owner, 2026-11-19): "I don't want lower teeth for this model"
+- Reverted `tools/detail.py` to the upper-row teeth trace (the first round-2 commit). The export is identical to the
+  pre-review-2 version: 1,021,838 faces, white 0.28% of faces, white from 149.68 mm.
+- Kept for reference: `renders/cmp-lowerteeth.png` shows the rejected both-rows version.

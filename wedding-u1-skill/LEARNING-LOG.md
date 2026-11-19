@@ -253,3 +253,10 @@ Copy this template. Commit the log, the playbook and any tool change together, a
 - **When:** every open smile. Standing preference: **show both rows of teeth in white**. Never black and never skin
   between the rows.
 - **Result:** fixed in the export. Not sliced, not printed.
+
+## 2026-11-19 · Man with drink r2, review 3 (owner: "I don't want lower teeth for this model")
+- **What:** the both-rows version from review 2 was rejected for this model. It was reverted to the upper row only.
+- **Why:** the owner's question in review 2 ("the old model had teeth in lower side too, is this model same?") was a
+  question, not a request. I treated it as a request.
+- **When:** lower teeth are a per-model choice. Default to the **upper row only**, and ask before adding the lower row.
+  The traced-opening method (review 2 entry) stays available for when it is wanted.
