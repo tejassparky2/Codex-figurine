@@ -50,8 +50,14 @@ cls[mouth] = 0
 # renders/mouth-grid.png and intersected with low chroma (lip chroma ~50, teeth ~21-32) so the lip in front stays skin.
 TEETH = [(-11.33,151.92),(-10,151.58),(-8,151.5),(-4.67,151.67),(-1.33,152.08),(2,152.67),(5,153.33),(5.3,152.6),(5,152.17),
          (3.17,151.92),(0.33,150.83),(-1.33,150.0),(-4.67,149.75),(-8,149.75),(-9.67,150.0),(-11,150.67)]
+# Owner (r2 review): the lower teeth must show, as on the round-1 model. They are only tips under the upper row, ragged
+# in the texture, so the whole mouth opening is white from the upper lip down to the lower-lip edge (traced on
+# renders/tex-mouth-hi.png); the chroma test below keeps both lips skin. Nothing inside the mouth is black.
+LOWER_LIP = [(-11.33,151.92),(-12,150.6),(-11,149.85),(-10,149.5),(-8,149.2),(-6,149.0),(-4,148.95),(-2,149.0),(0,149.15),
+             (2,149.5),(4,150.1),(5.3,150.7),(5.3,152.6),(5,153.33)]
+TEETH = [p for p in TEETH[:7]] + LOWER_LIP[::-1][:-1]
 tpoly = np.zeros((H, W), 'u1'); cv2.fillPoly(tpoly, [px(TEETH)], 1)
-cls[solid(tpoly.astype(bool) & (chroma < 40) & (L > 30), close_mm=.3, min_mm2=.3)] = 3   # teeth; lips and mouth gap stay skin
+cls[solid(tpoly.astype(bool) & (chroma < 40), close_mm=.3, min_mm2=.3)] = 3   # teeth and the opening between them; lips stay skin
 np.save('views/face_cls.npy', cls)
 # Triangle vote.
 sel = (ids >= 0) & (cls >= 0); t = ids[sel]; k = cls[sel]
@@ -59,6 +65,14 @@ votes = coo_matrix((np.ones(len(t)), (t, k)), shape=(n, 4)).toarray(); tot = np.
 touched = votes.sum(1) > 0; win_lab = votes.argmax(1); share = votes.max(1) / np.maximum(tot, 1)
 apply = touched & (share > 0.45) & ~frame
 lab[apply] = win_lab[apply]
+# Mouth interior the front camera can't see (tops of the lower teeth, the gap between the rows): skin pieces fully
+# enclosed by white inside the mouth box become white. Pieces touching the box edge are lips and stay skin.
+mbox = (c[:,0] > -12.5) & (c[:,0] < 6.5) & (c[:,2] > 148.5) & (c[:,2] < 153.6) & (c[:,1] < -18)
+a0, b0 = m.face_adjacency.T; sk = mbox & (lab == 0); e0 = sk[a0] & sk[b0]
+nc0, cc0 = connected_components(coo_matrix((np.ones(e0.sum()), (a0[e0], b0[e0])), shape=(n, n)), directed=False)
+edge_comp = np.zeros(nc0, bool); out_nb = (sk[a0] & ~mbox[b0]); edge_comp[cc0[a0[out_nb]]] = True; out_nb = (sk[b0] & ~mbox[a0]); edge_comp[cc0[b0[out_nb]]] = True
+nonwhite_nb = np.zeros(nc0, bool); q = sk[a0] & ~sk[b0] & mbox[b0] & (lab[b0] != 3); nonwhite_nb[cc0[a0[q]]] = True; q = sk[b0] & ~sk[a0] & mbox[a0] & (lab[a0] != 3); nonwhite_nb[cc0[b0[q]]] = True
+encl = sk & ~edge_comp[cc0] & ~nonwhite_nb[cc0]; lab[encl] = 3; print('mouth interior enclosed skin -> white', int(encl.sum()))
 # Inside the feature windows, faces the front camera cannot see (eyelid undersides etc.) take skin unless already set.
 # Elsewhere on the head black/white are not allowed: dark hair shadows -> silver/skin by neighbour vote.
 head = c[:,2] > 135

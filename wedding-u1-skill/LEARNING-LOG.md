@@ -244,3 +244,12 @@ Copy this template. Commit the log, the playbook and any tool change together, a
   - Both 3MFs are verified (decode, watertight, `verify_3mf.py`, `render_3mf.py`).
   - Practice gate FAIL (1.87%), dominated by the owner's decisions (silver glass, thick frame) and by hair streaks the same colour as the brows.
   - Not sliced, not printed.
+
+## 2026-11-19 · Man with drink r2, review 2 (owner: "the old model had teeth in lower side too")
+- **What:** the lower teeth were skin.
+- **How:** trace the whole mouth opening (upper lip to lower-lip edge) as the teeth area, ∩ chroma < 40 to keep the lips.
+- **Why:** lower-teeth tips are thin and ragged in the texture, and half hidden from the front camera. A threshold or
+  a below-camera vote leaves a ragged strip; a traced opening is clean.
+- **When:** every open smile. Standing preference: **show both rows of teeth in white**. Never black and never skin
+  between the rows.
+- **Result:** fixed in the export. Not sliced, not printed.

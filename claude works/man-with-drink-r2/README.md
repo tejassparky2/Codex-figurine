@@ -64,3 +64,15 @@ As round 1 noted, the photo must be recoloured to the decisions before this judg
 
 ## Run
 `P=<venv python> bash tools/run_r2.sh` from this folder.
+
+## Review 2 (owner, 2026-11-19): "the old model had teeth in lower side too"
+- **Cause:** only the upper row was traced. The lower teeth are just tips under the upper row: ragged in the texture,
+  and partly hidden from the straight-front camera.
+- **Tried and dropped:** whitening light, low-chroma faces seen from a camera 30° below the mouth. It gave a ragged
+  strip and left the sculpted lower teeth skin.
+- **Fix (`detail.py`):** the traced area is the whole mouth opening, from the upper lip to the lower-lip edge (traced
+  on `renders/tex-mouth-hi.png`), with chroma < 40 so both lips stay skin. Skin pieces fully enclosed by white inside
+  the mouth box also become white.
+- **Result:** `renders/cmp-lowerteeth.png` (front, and 20° below) and `out/Man-with-drink-front-face.png`.
+  - White covers 0.55% of faces and starts at 148.89 mm, still above the 120 mm swap.
+  - Seen from 20° below, a thin skin line remains between the rows (it is not enclosed). Not visible from the front.
