@@ -221,3 +221,26 @@ Copy this template. Commit the log, the playbook and any tool change together, a
 - **When:** (which situations to reuse it in)
 - **Result:** (what the owner said; what was verified, and what wasn't)
 ```
+
+## 2026-11-19 · Man with drink, round 2: new Tripo model, pipeline re-run (owner: "run colors pipeline updated from repo")
+- **What:** new approved art and a new Tripo model (d3a4cb08) for the same customer. The round-1 pipeline was re-run
+  in `claude works/man-with-drink-r2/` with every model-specific coordinate re-measured.
+- **How:**
+  - glass axis by circle fit on mesh sections above the fingers;
+  - plane splits and face windows from mm-grid renders (`tools/gridview.py`, new);
+  - eyes and teeth re-traced at 60 px/mm.
+  - Three review fixes:
+    - **Teeth traced as a polygon** (∩ chroma < 40) instead of an L threshold: the left teeth were in shadow, darker than the mouth gap.
+    - **Bridge bar fused into the nose** painted by measured geometry.
+    - **Black on the flared tumbler foot** made silver: nothing black is within 7.5 mm of the glass axis.
+- **Why:**
+  - Colour thresholds fail where a sculpted part is shadowed in the texture; a traced shape does not.
+  - Cone thickness stops working where a thin part fuses into a thick one. Growing the frame by distance + normal was tried: it spread over the nose (1713 faces) and was rejected.
+- **When:**
+  - Teeth in a smile with shadowed corners: trace them.
+  - Glasses on any Tripo caricature: check the bridge where it touches the nose.
+  - Tumblers: check whether the model is solid or hollow (vertical ray down the axis) before choosing where the drink goes.
+- **Result:**
+  - Both 3MFs are verified (decode, watertight, `verify_3mf.py`, `render_3mf.py`).
+  - Practice gate FAIL (1.87%), dominated by the owner's decisions (silver glass, thick frame) and by hair streaks the same colour as the brows.
+  - Not sliced, not printed.

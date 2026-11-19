@@ -1,0 +1,17 @@
+FAIL
+view 1: claude works/man-with-drink-r2/reference/photo-front.jpg
+  coarse camera: yaw 20, pitch 5, IoU 0.9345
+  refined camera: soft IoU 0.9561 after 364 renders
+  camera {"yaw": 16.0457, "pitch": -0.8185, "roll": 0.1308, "s": 6.6136, "tx": 360.9332, "ty": 796.8913, "k": 0.0029}  silhouette IoU 0.9676
+  CHECK ANCHOR @260,470,5 for slot 1: sampled #E5743F is nearer slot 4 (#F9A800)
+  CHECK ANCHOR @160,900,6 for slot 1: sampled #F18E4B is nearer slot 4 (#F9A800)
+  CHECK ANCHOR @540,1110,4 for slot 1: sampled #DE773C is nearer slot 4 (#F9A800)
+  CHECK ANCHOR @300,95,3 for slot 3: sampled #C3B3A6 is nearer slot 5 (#F1ECE1)
+  CHECK ANCHOR @520,300,3 for slot 3: sampled #AF9B8C is nearer slot 1 (#E6BAA8)
+  CHECK ANCHOR @370,880,3 for slot 4: sampled #5C2903 is nearer slot 1 (#E6BAA8)
+  CHECK ANCHOR @360,505,2 for slot 5: sampled #E2C8AF is nearer slot 1 (#E6BAA8)
+  calibrated shaded prototypes: {'1': '#DB7E48', '2': '#2F2722', '3': '#A59386', '4': '#5C2903', '5': '#E2C8AF'}
+  region vote: 455 regions; 12.4% of figure pixels (unsure ones) settled by region majority
+  local alignment: drift median 1.799 mm, p95 2.0 mm, max 2.0 mm; label agreement 0.8631 -> 0.8547; silhouette IoU 0.9676 -> 0.9590
+  local alignment rejected: it did not improve label agreement
+  FAIL: hard mismatch 1.9978%, 103 patches, largest 32.487 mm², boundary offset median 0.0 mm clear colour errors: 1.868% of figure pixels, largest patch 32.49 mm2 (limits 0.25%, 0.6 mm2); 21 close-call patches (similar colours in the approved art) need a vision verdict; see patches/ marked REVIEW
