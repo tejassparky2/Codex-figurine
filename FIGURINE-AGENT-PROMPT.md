@@ -79,7 +79,7 @@ python -I wedding-u1-skill/coloring/approved_match.py <finish-guide>.3mf <job>/g
 
 ## 6. Pixel-level vision review (mandatory, even on PASS)
 1. Open **every** `tiles/sheet-NN.png` for every view. Each tile shows the approved image beside the model. In `review.md`, give each tile a status: ok, fixed, or accepted with a reason. Zoom further with crops wherever you're unsure.
-2. Inspect the 12-view unlit turnaround, top and underside, and lit front previews (full figure and face; `coloring/front_preview.py`). Look for:
+2. Inspect the 12-view unlit turnaround, top and underside, and lit front previews (full figure and face; `coloring/front_preview.py`). **The hero render is always straight front.** Look for:
    - leaks at hands, cuffs, collars, hems and hairlines,
    - specks on flowers and jewellery,
    - eyes, mouths and brows,

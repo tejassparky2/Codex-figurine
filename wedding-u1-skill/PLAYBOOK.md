@@ -19,6 +19,7 @@ Sources so far:
 | Glasses | **The whole frame is one colour, locked**: rims, bridge, nose pads and temple arms. No skin patches anywhere on the frame. | Man-with-drink, reviews 2–3 |
 | Leaks | No colour spill at contacts (hand against clothes, sleeve hems, collar, hairline). Edges must follow the sculpt. | Man-with-drink, reviews 2–4 |
 | Previews | **Always send straight-front previews** (full figure and face) with every revision, rendered from the exported file. | Man-with-drink, review 3 |
+| Hero render | **Always straight front**: the camera faces the figure's front with no turn. Angled views go only in the turnaround or close-ups. | Owner, 2026-11-19 |
 | Colours | Pick print colours only from the stock list in section 2. Say clearly when a requested colour (clear glass, brown iris) isn't stocked and what replaces it. | Filament list |
 | Details | Beads and bracelets get 1–2 colours at most (customers accept this). The owner zooms in on faces, brows and beards, so edges there must be clean. | Local session |
 | Face dots | **No raised bindis, moles or dots.** Remove them from the art before Tripo ("plain smooth skin" in ChatGPT), then paint them flat on the model. Tripo turns every dark dot into a bump. | Local session, customer rule |
@@ -89,7 +90,7 @@ Tools are in `coloring/` (generic) and each agent's `<agent> works/<job>/tools/`
    - **Re-apply part locks last.**
 10. **Contour split** (`coloring/contour_split.py`), the last colouring step. It replaces the 0.3 mm triangle sawtooth with smooth cuts. Pass `--keep` for areas whose edges are already exact (plane-split liquid lines). Without it, vertices on the plane sit at 50/50 and the straight line turns jagged.
 11. **Export and verify.** `export.py` writes a finish guide (one slot per final colour) and a printer project (tool IDs). Reopen both, decode every triangle and compare it with the arrays. Run `scripts/layer_colors.py` at both 0.08 and 0.2 mm bands. Check the swap margins.
-12. **Previews.** `coloring/front_preview.py` (always), a 12-view unlit turnaround with an exact palette check, and a lit hero. Decode all of them from the exported file.
+12. **Previews.** `coloring/front_preview.py` (always), a 12-view unlit turnaround with an exact palette check, and a lit hero **rendered straight front**. Decode all of them from the exported file.
 13. **Approval gate (required before delivery).** `coloring/approved_match.py <finish-guide>.3mf <out> --approved <image> --prototypes anchors.json` for every approved view. Loop on fixes until PASS, then review every tile sheet and patch crop by eye (section 4.7). The mission prompt `/FIGURINE-AGENT-PROMPT.md` has the full loop.
 
 ## 4. Techniques that worked

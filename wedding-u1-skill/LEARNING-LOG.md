@@ -281,6 +281,24 @@ The [PLAYBOOK](PLAYBOOK.md) holds the current best practice distilled from this 
   - One body, watertight; at most 4 colours per band; head plan as before (pause at 30.4 mm: H1 → Apricot, H2 → White).
   - Not sliced.
 
+## 2026-11-19 · Man with drink, round 5 (owner: "hero render is always front side"; "for cup down fill with orange")
+
+- **What:**
+  1. The hero was turned 24°. The owner wants the hero **always straight front**. This is now a standing rule (PLAYBOOK §1 and §3 step 12, CLAUDE.md, the mission prompt).
+  2. The silver band at the bottom of the tumbler should be orange: the drink fills the glass from the bottom to the liquid line.
+- **How:**
+  - `tools/render_outputs.py`: hero rotation set to 0, and the face crop re-framed for the front view.
+  - `tools/detail.py`: the whisky rule is now "every cup face below 97.4 mm".
+  - New `tools/fill_glass.py` applies that same rule to the approved, exported 3MFs. Glass is identified by the fitted axis, radius < 7.6 mm and 86.5–105.5 mm. It changed 7,356 silver faces (358 mm², z 87.6–97.4) and nothing else.
+  - The step is added to `run_all.sh` after `export.py`.
+- **Why a post-step rather than a full rerun:** `run_all.sh` doesn't run from scratch. `framemask.py` reads `final.npy`, which only `finalize.py` creates later, because the original session ran the stages in pieces. A full rebuild could also have shifted the glasses and hand the owner had already accepted. **Open fix:** make `framemask.py`'s debug highlight optional and re-verify a clean run.
+- **Result:**
+  - Both 3MFs are still watertight. No glass face below the liquid line is silver.
+  - Orange 87.6–97.5 mm and white 147.8–172.5 mm, so the T4 swap at 120 mm still works (no band has both).
+  - At most 4 colours per band at 0.08 and 0.2 mm.
+  - The front hero was re-rendered from the exported guide.
+- **Owner question answered:** where to buy a skin filament like the photo's orange-tan skin (lit face ≈ #F99A5E; Apricot prints ≈ #DEA485).
+
 ---
 
 ### How to add an entry

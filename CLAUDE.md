@@ -12,6 +12,7 @@ This repo turns textured 3D models and photos into multicolour figurine print fi
 ## Standing preferences (details in the playbook)
 
 - Send **straight-front previews** (full figure and face), rendered from the exported file, with **every** revision.
+- **The hero render is always straight front** (camera facing the figure's front, no turn). Angled views go only in the turnaround or close-ups.
 - Realistic models: no catchlight dot and no eyeliner wing. **Never black inside a mouth.**
 - Glasses and other thin parts are locked to one colour by geometry, applied as the last step.
 - No colour leaks at contacts: hands, hems, collars, hairlines.

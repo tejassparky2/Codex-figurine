@@ -22,7 +22,7 @@
   - Brows are solid, hole-free shapes with smoothed edges.
   - The glasses frames are found by geometry and locked silver: rims, double top bar, bridge, nose pads and temple arms.
   - Colour boundaries are snapped to sculpted creases.
-- The tumbler is silver: the user asked for a clear glass, but clear isn't stocked. The drink is orange on the outer and inner wall from the base band (91.0 mm) up to the liquid line (97.4 mm), and on the inner floor.
+- The tumbler is silver: the user asked for a clear glass, but clear isn't stocked. The drink is orange from the **bottom of the glass** (outer band, underside and inner floor) up to the liquid line (97.4 mm); only the rim above it is silver (owner, 2026-11-19: "for cup down fill with orange", applied by `tools/fill_glass.py`).
 
 ## Pipeline (tools/, run in order in this folder; `P=<venv>/bin/python tools/run_all.sh` does all of it)
 1. `make_printable.py <glb> 220 1000000`: welds the mesh, repairs it with PyMeshFix, applies quadric decimation to 1.0M triangles, and places it Z-up, front toward -Y, feet at z=0. The result is watertight, has consistent winding, is a valid volume, and is 1 body.
@@ -53,7 +53,7 @@
 | T1 | Apricot (skin) | unchanged |
 | T2 | Black | unchanged |
 | T3 | Simply Silver | unchanged |
-| T4 | Orange (whisky, used 89.2–97.6 mm) | **Pure White** (teeth and eyes, used 147.7–172.6 mm) |
+| T4 | Orange (whisky, used 87.6–97.5 mm) | **Pure White** (teeth and eyes, used 147.7–172.6 mm) |
 
 `scripts/layer_colors.py` on the finish guide, at both 0.08 mm and 0.2 mm bands, finds no band with more than 4 colours and no band with both orange and white.
 

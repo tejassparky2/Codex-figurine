@@ -23,4 +23,6 @@ np.save('cs_keep.npy', (c[:,2] > 86.5) & (c[:,2] < 105.5) & (rad < 7.6))
 PY
 $P -I ../../wedding-u1-skill/coloring/contour_split.py printable.npz final.npy cs.npz --keep cs_keep.npy
 MESH=cs.npz $P -I tools/export.py
+# owner 2026-11-19: the drink fills the glass from its bottom up to the liquid line
+$P -I tools/fill_glass.py
 $P -I tools/render_outputs.py

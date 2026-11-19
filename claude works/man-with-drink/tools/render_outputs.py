@@ -26,19 +26,19 @@ for ang in range(0, 360, 30):
 sheet = Image.new('RGB', (300*6, 770*2), 'white'); d = ImageDraw.Draw(sheet)
 for i, im in enumerate(views): sheet.paste(im, ((i % 6)*300, (i//6)*770+20)); d.text(((i % 6)*300+8, (i//6)*770+4), f'{i*30} degrees', fill='black')
 sheet.save('out/Finish-all-sides.png')
-# 2) lit hero (presentation only; the file's labels stay flat)
+# 2) lit hero, ALWAYS straight front (owner, 2026-11-19); presentation only, the file's labels stay flat
 W, H = 1600, 3000; fb = ctx.simple_framebuffer((W, H)); fb.use(); fb.clear(.90, .88, .85, 1, depth=1)
 m = trimesh.Trimesh(v, f, process=False); nrm = m.vertex_normals.astype('f4')
 pr = ctx.program(vertex_shader="""#version 330
 in vec3 pos; in vec3 normal; in vec3 rgb; out vec3 co; out vec3 N;
-void main(){float c=cos(.42),s=sin(.42); float x=c*pos.x+s*pos.y, y=-s*pos.x+c*pos.y; gl_Position=vec4(x/62.,(pos.z-110.+.03*y)/116.,y/160.,1); N=vec3(c*normal.x+s*normal.y,-s*normal.x+c*normal.y,normal.z); co=rgb;}""",
+void main(){float c=cos(0.),s=sin(0.); float x=c*pos.x+s*pos.y, y=-s*pos.x+c*pos.y; gl_Position=vec4(x/62.,(pos.z-110.+.03*y)/116.,y/160.,1); N=vec3(c*normal.x+s*normal.y,-s*normal.x+c*normal.y,normal.z); co=rgb;}""",
 fragment_shader="""#version 330
 in vec3 co; in vec3 N; out vec4 o; void main(){vec3 n=normalize(N); vec3 L=normalize(vec3(-.5,-.75,.6)); vec3 H=normalize(L+vec3(0,-1,.05));
 float d=.74+.30*max(0.,dot(n,L)); float sp=.05*pow(max(0.,dot(n,H)),30.); o=vec4(co*d+sp,1);}""")
 vao = ctx.vertex_array(pr, [(ctx.buffer(v[f].tobytes()), '3f', 'pos'), (ctx.buffer(nrm[f].tobytes()), '3f', 'normal'), (ctx.buffer(np.repeat(cols[l], 3, 0).tobytes()), '3f', 'rgb')])
 ctx.enable(gl.DEPTH_TEST); vao.render()
 hero = Image.frombytes('RGB', (W, H), fb.read()).transpose(Image.Transpose.FLIP_TOP_BOTTOM).resize((800, 1500), Image.Resampling.LANCZOS)
-hero.save('out/Man-with-drink-hero.png'); hero.crop((150, 0, 650, 520)).resize((1000, 1040), Image.Resampling.LANCZOS).save('out/Man-with-drink-face.png')
+hero.save('out/Man-with-drink-hero.png'); hero.crop((140, 20, 660, 620)).resize((1000, 1154), Image.Resampling.LANCZOS).save('out/Man-with-drink-face.png')   # whole face, front
 # 3) straight front preview (always delivered): full figure and face, same lighting, no rotation
 W, H = 1400, 3000; fb = ctx.simple_framebuffer((W, H)); fb.use(); fb.clear(.90, .88, .85, 1, depth=1)
 pr = ctx.program(vertex_shader="""#version 330

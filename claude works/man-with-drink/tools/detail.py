@@ -83,7 +83,9 @@ lab[wall] = 2; zone |= wall                                          # outward-f
 inner_glass = (c[:,2] > 87.6) & (c[:,2] < 104.9) & (rad < 7.32) & np.isin(lab, [0, 4]); lab[inner_glass] = 2; zone |= inner_glass
 print('glass faces recovered from skin', inner_glass.sum())
 cup = zone & np.isin(lab, [2, 4])
-drink = cup & (((c[:,2] > 91.0) & (c[:,2] < 97.4)) | ((rad < 6.05) & (c[:,2] > 89.0) & (c[:,2] < 91.0) & (nz > 0.6)))
+# Owner, 2026-11-19: "for cup down fill with orange" -- the drink fills the glass from its bottom (outer base band,
+# underside and inner floor) up to the liquid line; only the rim above the liquid stays silver.
+drink = cup & (c[:,2] < 97.4)
 lab[cup] = 2; lab[drink] = 4
 lab[(lab == 4) & ~drink] = 0       # orange only where the glass rule puts it; elsewhere it is a fingertip
 np.save('detail.npy', lab.astype('u1'))
