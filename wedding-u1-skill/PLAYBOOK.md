@@ -18,7 +18,7 @@ Sources so far:
 | Eyebrows | Solid, hole-free shapes with smooth edges. No patchy texture threshold. | Man-with-drink, review 2 |
 | Glasses | **The whole frame is one colour, locked**: rims, bridge, nose pads and temple arms. No skin patches anywhere on the frame. | Man-with-drink, reviews 2–3 |
 | Leaks | No colour spill at contacts (hand against clothes, sleeve hems, collar, hairline). Edges must follow the sculpt. | Man-with-drink, reviews 2–4 |
-| Previews | **Always send straight-front previews** (full figure and face) with every revision, rendered from the exported file. | Man-with-drink, review 3 |
+| Previews | **Always send straight-front previews** (full figure and face) with every revision, rendered from the exported file. **"Hero render" means the straight-front full figure** (owner, 2026-11-19), never a rotated or three-quarter view; `render_outputs.py` writes it as `out/<name>-front.png`. | Man-with-drink, review 3 |
 | Colours | Pick print colours only from the stock list in section 2. Say clearly when a requested colour (clear glass, brown iris) isn't stocked and what replaces it. | Filament list |
 | Details | Beads and bracelets get 1–2 colours at most (customers accept this). The owner zooms in on faces, brows and beards, so edges there must be clean. | Local session |
 | Face dots | **No raised bindis, moles or dots.** Remove them from the art before Tripo ("plain smooth skin" in ChatGPT), then paint them flat on the model. Tripo turns every dark dot into a bump. | Local session, customer rule |
