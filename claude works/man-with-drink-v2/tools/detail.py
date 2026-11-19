@@ -28,12 +28,16 @@ def curve(pts, step=.05):
     pts = np.asarray(pts, float); xs = np.arange(pts[0,0], pts[-1,0]+1e-9, step*np.sign(pts[-1,0]-pts[0,0]))
     o = np.argsort(pts[:,0]); return np.c_[xs, np.interp(xs, pts[o,0], pts[o,1])]
 EYES = {  # v2 mesh, traced on renders/face-tex.png (40 px/mm, 0.5 mm grid). Lids listed in increasing x, sharing corners.
+  # Round 7 (owner: "make both sides of the pupil round as in the art photo"). Measured on the art: the iris is ~45 % of
+  # the eye width (~2.2x the opening height), a big circle cut by BOTH lids with its equator at mid-opening, so each side
+  # is a convex arc. Tried and rejected: r 1.9 with the centre near the upper lid (sides taper into a bowl) and r 1.25
+  # nearly inside the opening (a narrow square bar). Rule: r ~1.05x opening height, centre at mid-opening.
  'his right': dict(up=[(-20.1,167.7),(-19.3,168.6),(-18.5,169.25),(-17.0,169.7),(-15.0,170.0),(-13.0,170.0),(-11.5,169.9),(-10.0,169.45),(-8.8,168.9)],
                    lo=[(-20.1,167.7),(-18.5,167.85),(-17.0,167.9),(-15.0,167.8),(-13.0,167.95),(-12.0,168.3),(-11.0,168.5),(-10.0,168.75),(-8.8,168.9)],
-                   iris=(-14.0,169.3,2.45), glint=(-13.75,169.65,.36), tail=[(-20.1,167.7),(-20.6,167.5)]),
+                   iris=(-14.0,168.95,2.2), glint=(-13.75,169.4,.3), tail=[(-20.1,167.7),(-20.6,167.5)]),
  'his left':  dict(up=[(2.06,170.06),(3.0,170.9),(4.0,171.75),(5.0,172.25),(6.0,172.56),(7.5,172.65),(9.0,172.6),(10.5,172.4),(11.75,172.15),(12.3,171.9)],
                    lo=[(2.06,170.06),(3.75,170.1),(5.25,170.19),(7.0,170.38),(8.75,170.69),(10.25,171.06),(11.5,171.5),(12.3,171.9)],
-                   iris=(7.0,171.9,2.45), glint=(7.6,172.35,.36), tail=[(12.3,171.9),(12.8,171.95)])}
+                   iris=(6.8,171.3,2.1), glint=(7.4,171.95,.3), tail=[(12.3,171.9),(12.8,171.95)])}
 eyes = np.zeros((H, W), bool)
 for nm, e in EYES.items():
     up, lo = curve(e['up']), curve(e['lo']); opening = np.zeros((H, W), 'u1'); cv2.fillPoly(opening, [px(np.r_[up, lo[::-1]])], 1); opening = opening.astype(bool)
@@ -92,9 +96,22 @@ wall_z = c[(np.abs(rad - r) < .25) & (radial2 > .6) & (c[:,2] > 80) & (c[:,2] < 
 GB, GT = np.percentile(wall_z, 1), np.percentile(wall_z, 99)
 zin = (c[:,2] > GB - .4) & (c[:,2] < GT + .4)
 inside = (rad < r - .05) & zin            # nothing but glass lies inside the glass's own radius (incl. the recessed top and rim lip)
+# ...except the little finger pressing up under the base (round 7): near the base, up-facing faces, and sideways faces
+# well inside the wall, belong to the finger (the solid glass bottom only faces down there).
+finger_in = (rad < r - .35) & (c[:,2] < GB + .7) & (nz > -.2)   # well inside the wall only; the wall itself stays glass
+# At the wall near the base, glass faces point outward (wall) or down (base edge); an up-facing, not-outward face there is
+# the top of the little finger.
+finger_in |= (rad >= r - .35) & (rad < r + .6) & (c[:,2] < GB + .7) & (nz > .3) & (radial2 < .3)
+# ...and just outside the wall near the base nothing of the solid glass faces up: up-facing faces there are the finger
+# even when they also lean outward (the up-facing ridge that IS glass sits inside the radius).
+finger_in |= (rad > r) & (rad < r + .6) & (c[:,2] < GB + .7) & (nz > .3)
+# Below the underside plane the glass has no up-facing surface at all: those faces are the top of the little finger.
+finger_in |= (rad < r + .6) & (c[:,2] < GB - .05) & (nz > .2)
+inside &= ~finger_in
 # The thicker top lip and its underside ring (fingertips stop ~1.5 mm lower and reach further out).
 rim_bead = (((rad < r + 1.0) & (c[:,2] > GT - 1.2)) | ((rad < r + .45) & (c[:,2] > GT - 1.8))) & (c[:,2] < GT + .6)
-glass_geo = inside | rim_bead | ((rad < r + .25) & zin & ((radial2 > .3) | (np.abs(nz) > .5)))
+base_bead = (rad < r + .6) & (c[:,2] > GB - .5) & (c[:,2] < GB + .5) & (nz < -.2)   # the slightly protruding base edge
+glass_geo = (inside | rim_bead | base_bead | ((rad < r + .25) & zin & (radial2 > .3))) & ~finger_in
 near = (c[:,2] > GB - 4) & (c[:,2] < GT + 2) & (rad < r + 1.5)
 fingers = near & ~glass_geo & np.isin(lab, [2, 4])
 lab[fingers] = 0; zone = glass_geo
@@ -106,5 +123,19 @@ cup = zone & (np.isin(lab, [0, 2, 4]) | inside | rim_up)   # inside the radius e
 drink = cup & (c[:,2] < LIQUID)
 lab[cup] = 2; lab[drink] = 4
 lab[(lab == 4) & ~drink] = 0       # orange only where the glass rule puts it; elsewhere it is a fingertip
+# Round 7: Tripo fused the little finger into the glass base, leaving long sliver triangles that bridge the two; painted by
+# centroid they show as orange spikes on the finger. Majority vote over edge neighbours at the base contact: an orange
+# face with >= 2 skin neighbours -> skin, a skin face inside the radius with >= 2 orange neighbours -> orange.
+fa, fb = m.face_adjacency.T
+base_zone = (c[:,2] > GB - .8) & (c[:,2] < GB + 1.2) & (rad > r - 2.0) & (rad < r + 1.2)
+for _ in range(4):
+    sk_n = np.bincount(fa[lab[fb] == 0], minlength=n) + np.bincount(fb[lab[fa] == 0], minlength=n)
+    or_n = np.bincount(fa[lab[fb] == 4], minlength=n) + np.bincount(fb[lab[fa] == 4], minlength=n)
+    to_skin = base_zone & (lab == 4) & (sk_n >= 2)
+    to_or = base_zone & (lab == 0) & (or_n >= 2) & (rad < r - .05) & ~finger_in
+    if not (to_skin.any() or to_or.any()):
+        break
+    lab[to_skin] = 0; lab[to_or] = 4
+print('base contact slivers: orange->skin / skin->orange settled')
 np.save('detail.npy', lab.astype('u1'))
 print('applied', apply.sum(), {nm: int((lab == i).sum()) for i, nm in enumerate(['skin','black','silver','white','orange'])})

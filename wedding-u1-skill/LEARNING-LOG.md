@@ -360,6 +360,34 @@ The [PLAYBOOK](PLAYBOOK.md) holds the current best practice distilled from this 
   - No band has more than 4 colours, and the swap is clean.
   - Not sliced.
 
+## 2026-11-19 · Man with drink v2, round 7 (owner: "hand still there and make both sides of the pupil round as in the art photo")
+- **What:**
+  1. A small orange tooth (~0.4 × 0.45 mm) was still on top of the little finger where it tucks under the glass base.
+  2. The irises read as bars or bowls, not round discs as in the approved art.
+- **How:**
+  - **Finger:** one more rule in `detail.py`'s glass-by-geometry: up-facing faces (nz > 0.2) below the glass underside plane (z < GB − 0.05 mm, inside r + 0.6 mm) are finger skin. The tooth faces sat at z 88.03–88.27 (GB 88.42), rad 7.23–7.48, nz +0.22..+0.45, which the earlier rules missed (they needed radial < 0.3 or rad > r).
+  - **Iris geometry:** I measured the art. The iris is ~45 % of the eye width (~2.2× the opening height): a big circle cut by **both** lids with its equator at mid-opening, so each side is a convex arc. New rule: r ≈ 1.05× the opening height, centre at mid-opening. His right iris is (−14.0, 168.95, r 2.2); his left is (6.8, 171.3, r 2.1), shifted down because that upper lid slopes.
+    - Tried and rejected, judged on renders: r 1.9 with the centre near the upper lid made a tapering bowl (the delivered shape); r 1.25 almost inside the opening made a narrow square bar.
+  - **New generic tool `coloring/decal_refine.py`:** even with the right 2-D design, the 3-D paint lost the round sides, because ~0.35 mm triangles plus contour_split turned the arcs into straight slanted lines.
+    - Faces inside the eye windows are refined with conforming red-green midpoint subdivision (2 levels, so 0.09 mm edges; no T-junctions; area unchanged).
+    - Each sub-face takes the design-map class at its own centroid, but only where the face camera's ID map shows that sub-face's source face, so hidden faces are never painted through.
+    - Specks under 0.08 mm² inside the windows merge into their longest-border neighbour (763 specks before this pass, 0 after).
+    - Command: `decal_refine.py cs.npz views/face_cls.npy views/face_id.npy cs2.npz --cam -28 204 40 --win … --levels 2 --lock frame_full.npy`. Runs after `contour_split`.
+- **Why:** a feature only ~10 triangles across can't hold a curve through per-triangle votes. A round shape needs the paint resolution of the design, not of the mesh. And a flat-colour iris reads as round only when its widest line is visible inside the opening, away from the lids.
+- **When:**
+  - any small traced feature, such as irises, lash lines, eye whites, small logos or buttons: trace in 2-D, then `decal_refine` the window;
+  - any held object where fingers tuck under the base.
+- **Regression test:** `regression/check_round7.py`.
+  - (1) Up-facing orange/silver below the glass underside: delivered round-6 file 2.71 mm² → now 0.002 mm².
+  - (2) Iris shape, from a front orthographic render of the decoded 3MF labels: the iris must be widest between 20 % and 80 % of its height and ≥ 2 % narrower in both its top and bottom quarters. Delivered round-6 file: widest at 0.00 (bowl) → FAIL. Now: 0.57 and 0.56 → PASS.
+  - `check_round6.py` still PASSes (0.0 / 0.0 / 3.1 mm²).
+- **Result:**
+  - Both 3MFs: 1,125,860 triangles, watertight, consistent winding, one body.
+  - 26 colour islands. The 4 under 0.1 mm² (0.009–0.036 mm²) come from contour_split's three-colour corners and were there before this round.
+  - Layer bands at 0.08 and 0.2 mm: no band over 4 colours, and no band with both orange and white.
+  - Reviewed by eye: the hero, face, eye comparison with the art, hand crops and the 12-view turnaround.
+  - Not sliced or printed. The gate still can't judge this job (judge photo not recoloured).
+
 ---
 
 ### How to add an entry

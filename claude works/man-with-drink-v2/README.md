@@ -38,7 +38,8 @@ Same stages as v1. What changed for this mesh:
 5. `framemask.py`: 26,598 frame faces. Its debug highlight no longer needs `final.npy`, so the script now runs start to finish.
 6. `facecam.py`, then **`detail.py` with eyes, brows and mouth re-traced on this face** at 40 px/mm on a 0.5 mm grid. Evidence: `renders/eye-his-*-grid.png`, `eyes-traced.png`, `mouth-traced.png`.
 7. `leakfix.py 6 12`, `part_lock.py … 14 42 -12 26 44 80 0 1 7 10 10 3.0` (the hand against the trousers), `finalize.py`. The frame lock is applied last.
-8. `contour_split.py --keep` (glass zone kept), `export.py` and `render_outputs.py` (hero **straight front**).
+8. `contour_split.py --keep` (glass zone kept), then **`decal_refine.py`** on the two eye windows (round 7), `export.py` (from `cs2.npz`) and `render_outputs.py` (hero **straight front**).
+9. `regression/check_round6.py` and `regression/check_round7.py` must both PASS.
 
 ## Round 6 (owner: "colour leaks on finger and hair edges not coloured")
 - **Finger leak:** the radius tolerances inherited from v1 (tuned for its 6.7 mm glass) reached into fingers pressed against this 7.56 mm glass.
@@ -50,11 +51,26 @@ Same stages as v1. What changed for this mesh:
   - Runs after `finalize.py`: 10,351 faces (256 mm²).
 - **Regression test** (`regression/check_round6.py`, with the owner's crops): the delivered pre-round-6 file FAILs (41.4 / 14.7 / 64.3 mm²); this release PASSes (0.0 / 0.0 / 3.1 mm²).
 
+## Round 7 (owner: "hand still there and make both sides of the pupil round as in the art photo")
+- **Little finger under the glass:**
+  - A ~0.4 mm orange tooth remained where the finger tucks under the base.
+  - New rule in `detail.py`: up-facing faces below the glass underside plane are finger skin (the glass has no up-facing surface there).
+  - Result: 2.71 → 0.002 mm².
+- **Round irises:**
+  - Measured on the art, the iris is a big circle (~45 % of the eye width) cut by both lids, with its centre at mid-opening. Now his right is (−14.0, 168.95) r 2.2 mm and his left is (6.8, 171.3) r 2.1 mm.
+  - Rejected on renders: r 1.9 near the lid (bowl, the delivered shape) and r 1.25 (square bar).
+  - New generic `decal_refine.py` paints the eye windows at 0.09 mm resolution from the traced design. Without it the 0.35 mm triangles turned the round sides into straight lines.
+  - Evidence: `out/round7-eyes-and-hand.png`.
+- **Regression test** `regression/check_round7.py`:
+  - The delivered round-6 file FAILs: finger 2.71 mm²; irises widest at the top lid (bowl).
+  - This release PASSes: 0.002 mm²; irises widest at 0.57 / 0.56 of their height.
+
 ## Verified / not verified
 - **Verified:**
-  - Both 3MFs reopen and decode: 1,016,750 triangles, watertight, consistent winding, one body, 76.4 × 79.7 × 220 mm. Every decoded label matches the arrays.
-  - 20 colour islands; the smallest is 0.52 mm².
+  - Both 3MFs reopen and decode (round 7): 1,125,860 triangles, watertight, consistent winding, one body, 76.4 × 79.7 × 220 mm. Every decoded label matches the arrays.
+  - 26 colour islands. The 4 under 0.1 mm² (0.009–0.036 mm²) are contour_split three-colour corners, present before round 7.
   - `layer_colors.py` at 0.08 and 0.2 mm: no band over 4 colours, and no band with both orange and white, so the 120 mm swap is clean.
-  - Hero, face close-up, front previews and the 12-view turnaround were reviewed by eye (face, glasses, both hands, glass, back).
+  - Hero, face close-up, front previews, the eye comparison with the art, the hand crops and the 12-view turnaround were reviewed by eye.
+  - `check_round6.py` and `check_round7.py` PASS.
 - **Approval gate: CANNOT_JUDGE**, the same as v1 (6.7 % ambiguous). The judge photo still has the photo's colours (orange skin, brownish hair, clear glass) rather than the owner's choices. It must be recoloured to the decisions before the gate can PASS or FAIL this job (`jobs/man-with-drink/README.md`).
 - **Not verified:** Snapmaker Orca slice, G-code, physical print.

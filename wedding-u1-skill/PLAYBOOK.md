@@ -89,6 +89,7 @@ Tools are in `coloring/` (generic) and each agent's `<agent> works/<job>/tools/`
    - Enclosed specks take the colour around them.
    - **Re-apply part locks last.**
 10. **Contour split** (`coloring/contour_split.py`), the last colouring step. It replaces the 0.3 mm triangle sawtooth with smooth cuts. Pass `--keep` for areas whose edges are already exact (plane-split liquid lines). Without it, vertices on the plane sit at 50/50 and the straight line turns jagged.
+10b. **Small traced features** (irises, lash lines, logos): `coloring/decal_refine.py` refines the faces in the feature windows (2 levels, 0.09 mm edges, conforming, watertight) and paints each sub-face from the 2-D design where the face camera sees it.
 11. **Export and verify.** `export.py` writes a finish guide (one slot per final colour) and a printer project (tool IDs). Reopen both, decode every triangle and compare it with the arrays. Run `scripts/layer_colors.py` at both 0.08 and 0.2 mm bands. Check the swap margins.
 12. **Previews.** `coloring/front_preview.py` (always), a 12-view unlit turnaround with an exact palette check, and a lit hero **rendered straight front**. Decode all of them from the exported file.
 13. **Approval gate (required before delivery).** `coloring/approved_match.py <finish-guide>.3mf <out> --approved <image> --prototypes anchors.json` for every approved view. Loop on fixes until PASS, then review every tile sheet and patch crop by eye (section 4.7). The mission prompt `/FIGURINE-AGENT-PROMPT.md` has the full loop.
@@ -137,6 +138,8 @@ Colour-based masks fail wherever two materials touch, because the texture is blu
 - **Eyes.** Don't threshold by colour: the brown iris and the shadowed lid share a colour.
   - Trace in mm on a gridded crop at 120 px/mm: upper lid, lower lid, iris circle.
   - The opening is white, the iris inside the opening is black, plus a 0.40 mm lash line.
+  - **Iris size and placement (man-with-drink v2, round 7):** measure the art. A realistic iris is a big circle cut by both lids, with its equator at mid-opening, so both sides are convex arcs. Use r ≈ 1.05× the opening height (~45 % of the eye width) and put the centre at mid-opening, lower it where the upper lid slopes. A centre near the upper lid gives a bowl; a small circle inside the opening gives a square bar.
+  - **Paint it at design resolution:** run `coloring/decal_refine.py` on the eye windows after `contour_split`. At ~0.35 mm triangles, an iris only ~10 triangles across loses its round sides.
   - Add catchlights or wings only if a stylised look is requested.
 - **The sclera can be mid-grey in the texture** (L* about 62). It is separated from skin by its very low chroma, not by brightness.
 - **Brows and teeth.** Threshold inside a window, then:
@@ -238,6 +241,9 @@ Rules learned building it:
 - Delivering on rendered previews alone. The owner found every man-with-drink leak by eye over 4 rounds; the approval gate exists so the agent finds them first.
 - Sampling approved-image colours with boxes, or skipping a `CHECK ANCHOR` warning (approval-gate build).
 - Judging a model against an approved image it wasn't generated from, and reading pose differences as paint errors.
+- Painting a small curved feature (iris) by per-triangle vote on a 1M mesh: the round sides become straight lines. Use `decal_refine.py`.
+- An iris centred near the upper lid (only its lower cap visible) or so small it fits inside the opening: neither reads as round in flat colour.
+- Held-glass rules that only look at the wall band: fingers tucked under the base have up-facing faces *below* the underside plane, which the glass never has.
 - Copying geometric tolerances (glass radius limits) from one model to the next. v1's limits leaked whisky orange onto v2's fingers. Fit the geometry, and define parts by it (inside the radius = glass; just outside = glass only if it faces out).
 
 ## 6. Choosing among generated models
@@ -270,3 +276,4 @@ Always render the back before choosing.
 | Wedding couple (150 mm) | Many (see reviewed/) | Jewellery, flowers, cuffs, gaze | Graph cut, traced eyes, material locks, leak audit |
 | Garland couple and others (local session) | — | Black in mouths, goggle eyes, tilt broke the swap gap, silk gold adhesion, one re-save repainted 50k faces | Contour split, M600 any-head swaps, G-code truth check, supports on white |
 | Man with drink (220 mm) | 4 | 1. Leaks, Pixar eyes, black mouth, specs patches, brows. 2. Specs patches. 3. Hand patch | Crease snap, realistic eyes, teeth-only mouth, solid brows, glasses lock (cone thickness), hand part lock, front previews |
+| Man with drink v2 (220 mm, new Tripo) | 6–7 | 6. Finger leak at the glass, hair edges skin. 7. Little finger under the glass base, irises not round | Glass by fitted geometry, hairline roughness lock, below-base finger rule, iris rule + `decal_refine.py` |
