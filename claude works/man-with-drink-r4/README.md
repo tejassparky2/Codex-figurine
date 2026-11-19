@@ -39,3 +39,11 @@ wrong"). Their image is `reference/photo-front.jpg` (= round 1's). Round 2 had b
 - **Not verified:**
   - No slicer, no G-code, no print. Practice gate not run this round.
   - From 10° below, a few thin skin lines remain inside the gap.
+
+## Review (owner, 2026-11-19): "paint pink in place of black so it looks like mouth/tongue"
+- The mouth gap is now Pink Cotton Candy #F2B3C0: label 5, code 3C, a 6th finish slot. This replaces the black gap line.
+- **Physical plan:** pink rides on T2 between two extra pauses (the export asserts no black/pink band overlap):
+  - at 148.0 mm, T2 Black → Pink (body black ends 142.2, pink starts 153.8);
+  - at 165.0 mm, T2 Pink → Black (pink ends 157.9, face black starts 172.7);
+  - plus the T4 Orange → White pause at 120 mm, as before.
+- At most 4 colours per band at 0.08 and 0.2 mm. `renders/cmp-r4-mouth-pink.png`.

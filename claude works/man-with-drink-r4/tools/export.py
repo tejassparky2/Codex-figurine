@@ -4,11 +4,11 @@ import json, re, zipfile, numpy as np, trimesh
 import os
 z = np.load(os.environ.get('MESH', 'printable.npz')); V, F = z['v'], z['f']
 lab = (z['l'] if 'l' in z.files else np.load('final.npy')).astype(int)   # cs.npz carries its own labels
-CODES = np.array(['4', '8', '0C', '1C', '2C'])
-FINISH = ['#E6BAA8', '#0E0E10', '#8C979D', '#F9A800', '#F1ECE1']        # Apricot, Black, Simply Silver, Orange, Pure White
-NAMES = ['Apricot (skin)', 'Black', 'Simply Silver', 'Orange (whisky)', 'Pure White']
-finish = np.array([0, 1, 2, 4, 3])[lab]                                 # slot order: skin, black, silver, orange, white
-tools = np.array([0, 1, 2, 3, 3])[lab]                                  # T4 prints orange, then white after the swap
+CODES = np.array(['4', '8', '0C', '1C', '2C', '3C'])
+FINISH = ['#E6BAA8', '#0E0E10', '#8C979D', '#F9A800', '#F1ECE1', '#F2B3C0']   # Apricot, Black, Simply Silver, Orange, Pure White, Pink
+NAMES = ['Apricot (skin)', 'Black', 'Simply Silver', 'Orange (whisky)', 'Pure White', 'Pink Cotton Candy (mouth)']
+finish = np.array([0, 1, 2, 4, 3, 5])[lab]                                 # slot order: skin, black, silver, orange, white
+tools = np.array([0, 1, 2, 3, 3, 1])[lab]                               # T2 prints black, pink between two pauses                                  # T4 prints orange, then white after the swap
 SWAP = 120.0
 TOOLS = ['#E6BAA8', '#0E0E10', '#8C979D', '#F9A800']                    # start-of-print spools
 BED = (135.0, 135.0)                                                     # Snapmaker U1 270 x 270 bed centre
@@ -49,6 +49,8 @@ print_notes = ('Snapmaker U1 project, 220 mm tall, scale 100%. Four tool heads:\
                'T1 Apricot #E6BAA8 (skin)  T2 Black #0E0E10  T3 Simply Silver #8C979D (hair, glasses, glass)  T4 Orange #F9A800 (whisky)\n'
                f'MANUAL SWAP (not embedded): add a pause at the first layer at or above {SWAP:.2f} mm and swap T4 Orange -> Pure White #F1ECE1 '
                '(teeth, eye whites, catchlights). Orange is only used up to 109.0 mm; white starts above 150 mm.\n'
+               'PAUSE at the first layer at or above 148.00 mm: swap T2 Black -> Pink Cotton Candy #F2B3C0 (mouth). Black body ends 142.2 mm, pink starts 153.8 mm.\n'
+               'PAUSE at the first layer at or above 165.00 mm: swap T2 Pink -> Black #0E0E10 (eyes, brows). Pink ends 157.9 mm, black starts 172.7 mm.\n'
                'Select your real U1 printer, nozzle and PLA+ presets in Snapmaker Orca before slicing.\n')
 np.save('out/finish_slots.npy', finish.astype('u1')); np.save('out/tool_ids.npy', tools.astype('u1'))
 write('out/Man-with-drink-220mm-finish-guide.3mf', finish, FINISH, 'Man with drink - finish guide', guide_notes)
@@ -57,3 +59,9 @@ write('out/Man-with-drink-U1-220mm.3mf', tools, TOOLS, 'Man with drink - Snapmak
 h = V[F][:,:,2]
 assert h[lab == 4].max() < SWAP and h[lab == 3].min() > SWAP, 'orange/white straddle the swap height'
 print('T4 orange top %.2f mm < swap %.1f mm < white bottom %.2f mm' % (h[lab == 4].max(), SWAP, h[lab == 3].min()))
+
+# T2 swap safety: black below PA, pink between PA and PB, black above PB.
+hz = V[F][:,:,2]; blk = lab == 1; pk = lab == 5
+blo = hz[blk].max(1) <= hz[pk].min()  # black faces below the mouth
+print('T2 plan: black (body) top %.2f | pink %.2f..%.2f | black (face) bottom %.2f' % (hz[blk & (hz.max(1) < hz[pk].min())].max(), hz[pk].min(), hz[pk].max(), hz[blk & (hz.min(1) > hz[pk].max())].min()))
+assert not (blk & (hz.max(1) >= hz[pk].min()) & (hz.min(1) <= hz[pk].max())).any(), 'black and pink share a height band'

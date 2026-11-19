@@ -84,4 +84,6 @@ notch = np.zeros(n, bool) & (x > -8.2) & (x < -6.1)   # r4: r2 coordinates disab
 print('bridge notch faces -> frame', int(notch.sum())); frame = frame | notch; np.save('frame_final.npy', frame)
 print('frame lock: faces forced silver', int((lab[frame] != 2).sum())); lab[frame] = 2
 assert np.all(lab[frame] == 2)
+# r4 owner review: the mouth gap is PINK (Cotton Candy #F2B3C0, label 5) so it reads as mouth/tongue, not black.
+pink = mouthbox & (lab == 1); lab[pink] = 5; print('mouth gap black -> pink', int(pink.sum()), 'faces, z %.2f..%.2f' % (c[pink,2].min(), c[pink,2].max()))
 np.save('final.npy', lab.astype('u1'))

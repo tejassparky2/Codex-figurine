@@ -5,7 +5,7 @@ with zipfile.ZipFile('out/Man-with-drink-220mm-finish-guide.3mf') as z:
     s = z.read('3D/3dmodel.model'); pal = json.loads(z.read('Metadata/project_settings.config'))['filament_colour']
 v = np.array(re.findall(rb'<vertex x="([^"]+)" y="([^"]+)" z="([^"]+)"/>', s), 'f4')
 f = np.array(re.findall(rb'<triangle v1="(\d+)" v2="(\d+)" v3="(\d+)"', s), 'i4')
-codes = {c: i for i, c in enumerate([b'4', b'8', b'0C', b'1C', b'2C'])}
+codes = {c: i for i, c in enumerate([b'4', b'8', b'0C', b'1C', b'2C', b'3C'])}
 l = np.array([codes[c] for c in re.findall(rb'paint_color="([^"]+)"', s)])
 preview = list(pal); preview[0] = '#DEA485'                     # Apricot prints darker than its swatch
 cols = np.array([[int(h[i:i+2], 16) for i in (1, 3, 5)] for h in preview], 'f4')/255
