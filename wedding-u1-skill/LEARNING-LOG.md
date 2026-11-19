@@ -405,6 +405,28 @@ The [PLAYBOOK](PLAYBOOK.md) holds the current best practice distilled from this 
   - Round 6 and round 7 regression checks PASS.
   - Not sliced.
 
+## 2026-11-19 · Man with drink v2, round 9 (owner: smile decision "I don't want black ever in mouth, just replace black with skin colour"; customer: "two colours hair as in the art")
+- **What:**
+  1. The owner chose Option A for the smile. The `MOUTH_LINE` black-lip option was **removed from the code**, so it can't come back.
+  2. The customer asked for two-tone hair like the art (grey with light streaks).
+- **How (hair):** new `tools/hair_tone.py`, run after `hairline.py` and before contour split.
+  - Silver base; **Pure White** on the tuft crests.
+  - Score per hair face = crest offset (face centre above the 1.5 mm mean surface, along its normal, normalised) + 0.25 × facing the key light.
+  - The top 18 % of hair area by score becomes white, giving 14.2 % after cleanup.
+  - Cleanup: opening by 0.45 mm, so no strip is under ~0.9 mm wide; islands ≥ 2 mm²; silver holes < 1 mm² filled. A 1 mm silver band stays along the hairline and around the frame.
+  - The white is on T4, which is loaded with white above the 120 mm swap, so there's no new filament and no new head. Heights 148–182 mm still hold at most 4 colours.
+  - contour_split broke thin necks into ~30 slivers under 0.1 mm². `decal_refine.py --clean-everywhere --min-mm2 .1` (new flag) merges them; 1 remains, inside the locked frame.
+- **Why shape and not texture:** the Tripo texture stripes every tuft with fine light/dark strands, which would print as speckle. The art reads as light crests over darker grooves. Putting the colour edges in the grooves also hides them on FDM.
+- **Trials (renders):** 35 % white with a strong up-facing term made whole tuft tops white ("white hair"). 14 % with crest-led scoring matched the art. Without the up term it was similar but sparser at the front.
+- **When:** grey or salt-and-pepper hair on any job where a white or light head is free at hair height.
+- **Result:**
+  - 1,298,626 triangles, watertight, consistent winding, one body.
+  - Layer bands at 0.08 and 0.2 mm: no band over 4 colours, no band with both orange and white.
+  - Round 6 and round 7 regression checks PASS.
+  - Evidence: `out/round9-hair-vs-art.png` and `out/customer-4-sides.png`.
+  - Note: Pure White is brighter than the art's light grey; stock has no light grey.
+  - Not sliced or printed.
+
 ---
 
 ### How to add an entry

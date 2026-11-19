@@ -17,6 +17,8 @@ $P -I tools/part_lock.py leak.npy leak.npy 14 42 -12 26 44 80 0 1 7 10 10 3.0
 $P -I tools/finalize.py
 # owner round 6: sculpted hair strands at the hairline are hair (silver), found by surface roughness
 $P -I tools/hairline.py final.npy final.npy
+# owner round 9: two-tone hair, silver base with white highlights on the tuft crests (white is on T4 above the swap)
+$P -I tools/hair_tone.py final.npy final.npy
 # contour split: smooth cut edges through triangles; the glass zone keeps its exact plane-split liquid line
 $P -I - <<'PY'
 import numpy as np, trimesh
@@ -27,7 +29,7 @@ PY
 $P -I ../../wedding-u1-skill/coloring/contour_split.py printable.npz final.npy cs.npz --keep cs_keep.npy
 # owner round 7: irises and lash lines painted at sub-triangle resolution from the traced 2-D design (round sides)
 $P -I ../../wedding-u1-skill/coloring/decal_refine.py cs.npz views/face_cls.npy views/face_id.npy cs2.npz --cam -28 204 40 \
-   --win -21.5 -7.5 166.6 171.4 --win 1.5 13.4 169.4 173.6 --win -14 11.5 146 155 --levels 2 --lock frame_full.npy
+   --win -21.5 -7.5 166.6 171.4 --win 1.5 13.4 169.4 173.6 --win -14 11.5 146 155 --levels 2 --lock frame_full.npy --min-mm2 .1 --clean-everywhere
 MESH=cs2.npz $P -I tools/export.py
 $P -I tools/render_outputs.py
 $P -I regression/check_round6.py out/Man-with-drink-220mm-finish-guide.3mf

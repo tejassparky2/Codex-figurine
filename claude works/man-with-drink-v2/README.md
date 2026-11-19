@@ -22,8 +22,8 @@ The tilt is mostly in the photo itself. v2 halves the turn and the side shift. S
 |---|---|---|
 | T1 | Apricot #E6BAA8: skin | unchanged |
 | T2 | Black #0E0E10: shirt, trousers, shoes, brows, irises, lash lines | unchanged |
-| T3 | Simply Silver #8C979D: hair, glasses frame, glass rim | unchanged |
-| T4 | Orange #F9A800: whisky, used **87.6–99.0 mm** | **Pure White #F1ECE1**: teeth and eye whites, used 148.2–172.5 mm |
+| T3 | Simply Silver #8C979D: hair base, glasses frame, glass rim | unchanged |
+| T4 | Orange #F9A800: whisky, used **87.6–99.0 mm** | **Pure White #F1ECE1**: teeth, eye whites and hair highlights, used 148.3–220 mm |
 
 - The drink fills the glass **from its bottom to the liquid line at 99.0 mm** (owner, round 5). Only the rim is silver.
 - Eyes are realistic: white, black iris, 0.40 mm lash line, no catchlight. The mouth is white teeth only; lips and the gap are skin.
@@ -65,10 +65,16 @@ Same stages as v1. What changed for this mesh:
   - The delivered round-6 file FAILs: finger 2.71 mm²; irises widest at the top lid (bowl).
   - This release PASSes: 0.002 mm²; irises widest at 0.57 / 0.56 of their height.
 
+## Round 8 (customer: "the smile is not matching") and round 9 (owner: no black in the mouth; customer: two-tone hair)
+- **Smile:** the sculpt and texture already match the art; the paint lost the outline. Teeth are now a smooth traced crescent with corner-pinned curves, painted at decal resolution. A black lower-lip line was offered (`out/round8-smile-options.png`) and **refused by the owner**: lips and gap stay skin, and the option was removed from the code.
+- **Hair:** `tools/hair_tone.py` puts Pure White on the tuft crests over the silver base (14.2 % of the hair, strips ≥ 0.9 mm, islands ≥ 2 mm²). The white comes from T4 after the 120 mm swap, so there's no new filament. Comparison: `out/round9-hair-vs-art.png`.
+- `decal_refine.py --clean-everywhere --min-mm2 .1` merges the contour-split slivers at the new hair edges.
+- **Customer renders:** `tools/render_4sides.py` writes `out/customer-4-sides.png` and one PNG per side.
+
 ## Verified / not verified
 - **Verified:**
-  - Both 3MFs reopen and decode (round 7): 1,125,860 triangles, watertight, consistent winding, one body, 76.4 × 79.7 × 220 mm. Every decoded label matches the arrays.
-  - 26 colour islands. The 4 under 0.1 mm² (0.009–0.036 mm²) are contour_split three-colour corners, present before round 7.
+  - Both 3MFs reopen and decode (round 9): 1,298,626 triangles, watertight, consistent winding, one body, 76.4 × 79.7 × 220 mm. Every decoded label matches the arrays.
+  - 113 colour islands (the white hair streaks included). Only 1 is under 0.1 mm² (0.036 mm², at the locked frame).
   - `layer_colors.py` at 0.08 and 0.2 mm: no band over 4 colours, and no band with both orange and white, so the 120 mm swap is clean.
   - Hero, face close-up, front previews, the eye comparison with the art, the hand crops and the 12-view turnaround were reviewed by eye.
   - `check_round6.py` and `check_round7.py` PASS.

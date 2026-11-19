@@ -52,9 +52,9 @@ mouth = win(-12, 9, 146.5, 154.5)   # v2 position
 cls[mouth] = 0
 # Owner round 8 ("the smile is not matching"): the sculpt and texture smile match the art, but thresholded teeth came out
 # thin with a ragged lower edge. Teeth (and the whole mouth opening) are now smooth traced crescents: per column the top and
-# bottom of the solid mask, each fitted with a degree-4 curve in x, filled between. MOUTH_LINE=1 additionally paints the
-# opening outside the teeth (the dark gap under the teeth and the corners, ~0.3-0.6 mm) black, as in the art; default
-# off, because the standing rule says no black inside a mouth.
+# bottom of the solid mask, each fitted with a degree-4 curve in x (pinned at the corners), filled between. Lips and the
+# mouth gap are always skin: the owner chose this over a thin black lower-lip line (round 8: "I don't want black ever in
+# mouth, just replace black with skin colour").
 import os
 def curves(mask, deg=4):
     """Top and bottom of a crescent mask per column, each fitted with a degree-`deg` curve that is pinned (weight 50)
@@ -74,11 +74,6 @@ def fill(c0, c1, pt, pb, cap=None, start=None):
     return out
 tc0, tc1, tpt, tpb = curves(solid(mouth & (L > 68) & (chroma < 40), close_mm=.25, min_mm2=.3))
 teeth = fill(tc0, tc1, tpt, tpb)
-if os.environ.get('MOUTH_LINE') == '1':
-    oc0, oc1, opt, opb = curves(solid(mouth & (((L > 68) & (chroma < 40)) | (L < 45)), close_mm=.3, min_mm2=.3))
-    # one band along the lower lip, at most 0.4 mm thick, never over the teeth; it tapers where the lips meet
-    start = np.full(W, -1.0); cc = np.arange(tc0, tc1 + 1); start[cc] = np.polyval(tpb, cc)
-    cls[fill(oc0, oc1, opt, opb, cap=.4 * PPM, start=start) & ~teeth] = 1
 cls[teeth] = 3   # teeth; lips stay skin
 np.save('views/face_cls.npy', cls)
 # Triangle vote.

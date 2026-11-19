@@ -16,6 +16,7 @@ Inputs:
   --levels N        subdivision levels (2 -> edges /4, e.g. 0.35 -> 0.09 mm)
   --lock mask.npy   printable faces never repainted (e.g. the glasses frame)
   --min-mm2 A       islands under A mm2 inside the windows merge into their longest-border neighbour (default 0.08)
+  --clean-everywhere  apply that island merge to the whole mesh (contour_split slivers at thin necks)
 usage: decal_refine.py cs.npz views/face_cls.npy views/face_id.npy out.npz --cam -28 204 40 --win -21.5 -7.5 166.3 171.8 [--win ...]
 Asserts: 0 open edges, surface area unchanged (1e-9 relative).
 """
@@ -30,6 +31,7 @@ p.add_argument('--win', type=float, nargs=4, action='append', required=True)
 p.add_argument('--levels', type=int, default=2)
 p.add_argument('--lock')
 p.add_argument('--min-mm2', type=float, default=.08, help='islands smaller than this inside the windows are merged')
+p.add_argument('--clean-everywhere', action='store_true', help='merge islands under --min-mm2 anywhere on the mesh (e.g. contour_split slivers)')
 A = p.parse_args()
 z = np.load(A.mesh); v = np.asarray(z['v'], float); f = np.asarray(z['f'], np.int64)
 l = np.asarray(z['l']).astype(np.int64); par = np.asarray(z['parent'] if 'parent' in z.files else np.arange(len(f)), np.int64)
@@ -91,7 +93,7 @@ m = trimesh.Trimesh(v, f, process=False)
 from scipy.sparse import coo_matrix
 from scipy.sparse.csgraph import connected_components
 fa, fb = m.face_adjacency.T; ev = m.face_adjacency_edges; EL = np.linalg.norm(v[ev[:, 0]] - v[ev[:, 1]], axis=1)
-inw = in_win(cen); fixed = 0; K = int(new.max()) + 1
+inw = np.ones(len(f), bool) if A.clean_everywhere else in_win(cen); fixed = 0; K = int(new.max()) + 1
 for _ in range(6):
     same = new[fa] == new[fb]
     nc, cc = connected_components(coo_matrix((np.ones(same.sum()), (fa[same], fb[same])), shape=(len(f),) * 2), directed=False)
