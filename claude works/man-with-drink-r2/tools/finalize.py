@@ -41,6 +41,11 @@ for k, nm in enumerate(['skin','black','silver','white','orange']):
 # r2: the tumbler foot flares to r 6.9 mm at z 94-96, outside the glass zone, and its shadow labelled 1268 faces black.
 # Nothing black is within 7.5 mm of the glass axis (the shirt is at y -12.8 there): the foot is glass.
 foot = (lab == 1) & (c[:,2] > 92) & (c[:,2] < 112) & (rad < 7.5); lab[foot] = 2; print('glass foot black -> silver', int(foot.sum()))
+# r2 review 6 (owner: "fill the glass till down"): whisky from the liquid line (102.3) all the way down to the bottom
+# of the tumbler: base ring, groove and underside (a full glass seen from below shows the drink). Fingers untouched.
+nz = m.face_normals[:,2]
+fill = (lab == 2) & (c[:,2] > 92.9) & (c[:,2] < 102.3) & (rad < 7.5)   # whole bottom incl. underside and ring groove
+lab[fill] = 4; print('glass filled down to the bottom: silver -> orange', int(fill.sum()))
 # r2 review 5: no white below the upper teeth's bottom edge (the gap and the flattened lower-teeth patch are skin).
 XS = [-12.5, -12, -8, -4, -1, 0, 1, 2, 3, 4, 5, 6.5]; ZS = [150.9, 150.4, 149.85, 149.85, 149.8, 150.42, 150.42, 150.65, 151.22, 151.6, 152.0, 152.6]
 mouthbox = (c[:,0] > -13) & (c[:,0] < 7) & (c[:,2] > 147) & (c[:,2] < 154) & (c[:,1] < -18)

@@ -111,3 +111,9 @@ As round 1 noted, the photo must be recoloured to the decisions before this judg
   - White is 0.29% of faces; skin 26.86%, silver 38.58%.
   - At most 4 colours per band.
   - Regression cases under `regression/` were NOT added for reviews 2-5.
+
+## Review 6 (owner, 2026-11-19): "fill the glass till down as previous model"
+- The whisky now runs from the liquid line (102.3 mm) all the way down: the base ring, its groove and the underside
+  are orange (`finalize.py`, 5473 faces silver→orange). Above the liquid line the glass stays silver. Fingers are untouched.
+- `renders/cmp-glass-filled.png` shows the front, 300°, and the underside. Orange is used from 92.9 to 102.3 mm, still
+  below the 120 mm swap. At most 4 colours per band.
