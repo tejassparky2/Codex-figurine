@@ -121,3 +121,9 @@ wrong"). Their image is `reference/photo-front.jpg` (= round 1's). Round 2 had b
 - All pink (4915 faces, the mouth interior) is now skin: `cs_match7.npz`. The open mouth, the head match, the half-full whisky and the thinner brows are kept.
 - Back to one pause: 120 mm T4 orange→white (orange ≤106.0, white ≥158.7). T2 stays black.
 - 5 finish colours. At most 4 colours per band. verify_3mf passed. Not sliced.
+
+## Review (owner, 2026-11-20): "just open that gap fully below the teeth"
+- **Taller, deeper opening, no paint:** `cut_mouth.py cs.npz cs_cut.npz 6.0 0.06 0 2.5`, i.e. 6 mm deep, 2.5 mm lower into the lower lip, tapering to the corners. 382.9 mm³ removed.
+- Then `match_head.py` (σ 6) → `lift_ears.py 2.2` → `whisky_brows.py 106.0 0.6` → `cs_match8.npz`. 0 self-intersections, watertight, 1 body.
+- **Side cut at x=0** (`renders/cut-section8.png`): the opening is ~3 mm tall (z 155.9–158.9) under the upper teeth and runs >6 mm back. Shaded face: `renders/face8-ao.png`.
+- One pause, 120 mm T4. At most 4 colours per band. verify_3mf passed. Not sliced. The tooth row now overhangs a ~3 mm cavity: check bridging/support in the slicer.
