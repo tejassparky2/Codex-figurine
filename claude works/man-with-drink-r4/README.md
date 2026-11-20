@@ -111,3 +111,8 @@ wrong"). Their image is `reference/photo-front.jpg` (= round 1's). Round 2 had b
   - **Brows:** black above z 182.6 within 0.6 mm of the brow edge becomes skin. Area 135 → 81 mm², same shape, thinner and a little shorter.
   - Comparison: `renders/brows-whisky.png`.
 - Export is `MESH=cs_match5.npz`. Pauses: 120 T4 (orange ≤106.0, white ≥158.7); 151.4 T2 black→pink; 168.9 T2 pink→black. At most 4 colours per band. Not sliced.
+
+## Review (owner, 2026-11-20): "I said inside mouth lower side, not lips"
+- The lower-lip band (`lower_lip_pink.py`) is removed. Pink is only inside the opening: floor 2156, ceiling 1424, back/sides 1335 faces. The lips are skin.
+- Rebuilt as `whisky_brows.py cs_match2.npz cs_match6.npz 106.0 0.6`; export is `MESH=cs_match6.npz`. `renders/mouth6-cmp.png` shows the front, 20° above (the pink floor) and the shaded front.
+- Pauses: 120 T4; T2 black→pink and pink→black from the export notes. At most 4 colours per band. Not sliced.
