@@ -104,3 +104,10 @@ wrong"). Their image is `reference/photo-front.jpg` (= round 1's). Round 2 had b
 - **Mouth opened fully:** `cut_mouth.py cs.npz cs_cut.npz 4.0 0.06 5 1.2`. The bottom of the cut drops 1.2 mm into the lower lip (tapering to the corners), and the inside is pink. 154.9 mm³ removed, 0 self-intersections.
 - **`tools/lower_lip_pink.py cs_match2.npz cs_match4.npz 1.2`:** a pink band on the front of the lower lip, from the opening's bottom edge down 1.2 mm, tapering at the corners, as in the art. Comparison `renders/mouth-lip-compare.png`.
 - Export is `MESH=cs_match4.npz`. Pauses: 120 T4 orange→white; 151.4 T2 black→pink; 168.9 T2 pink→black. At most 4 colours per band. Not sliced.
+
+## Review (owner, 2026-11-20): "reduce whisky quantity and reduce the eyebrows"
+- **`tools/whisky_brows.py cs_match4.npz cs_match5.npz 106.0 0.6`:**
+  - **Whisky:** an exact plane split at z 106.0 (watertight, labels inherited). Orange above it inside the glass becomes silver: about half full (glass 97.1–115.7), like the art.
+  - **Brows:** black above z 182.6 within 0.6 mm of the brow edge becomes skin. Area 135 → 81 mm², same shape, thinner and a little shorter.
+  - Comparison: `renders/brows-whisky.png`.
+- Export is `MESH=cs_match5.npz`. Pauses: 120 T4 (orange ≤106.0, white ≥158.7); 151.4 T2 black→pink; 168.9 T2 pink→black. At most 4 colours per band. Not sliced.
