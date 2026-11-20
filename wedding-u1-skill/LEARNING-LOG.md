@@ -294,3 +294,15 @@ Copy this template. Commit the log, the playbook and any tool change together, a
 - **Why:** with one view Tripo guesses the depth of the face. Side views pin the face shape and tilt, but whatever they show (a squint) is sculpted.
 - **When:** every likeness complaint. First check that the model came from the exact image the customer approved (compare sha256). Then compare candidates as lit grey geometry beside the art (`likeness_rounds*.png` in the figurines repo).
 - **Result:** owner picked round 4. Coloured with a black gap line under the upper teeth (customer request). Not sliced or printed.
+
+## 2026-11-20 · Man with drink r4: match the head shape to the approved image 1:1 (owner)
+- **What:** Tripo's head was rounder and wider than the art. The owner asked for a 1:1 match.
+- **How:** a front-silhouette warp (`claude works/man-with-drink-r4/tools/match_head.py`).
+  1. Align the art on eye line and mouth line; that fixes the scale.
+  2. Map the heights piecewise through hair top, eyes, mouth and chin.
+  3. Scale each row to the art's silhouette width about the silhouette centre.
+  4. Fit the per-row scale, shift and centre with polynomials, fade out above the collar, then rescale to the target height.
+  5. Lift the ears separately (`lift_ears.py`).
+  - Check with a red art-outline overlay on a front render (`match_overlay.py`) and a self-intersection count.
+- **Why polynomials:** sampling the silhouette per vertex row makes a staircase field. It drove 900+ self-intersections through the layered hair and glasses arms. Pure height maps and smooth width fields give 0.
+- **When:** any likeness complaint about face or head shape once the right model is chosen. It is free, keeps the paint (vertices only), and is measurable. Depth is not constrained: use a side view of the art if the profile also matters.

@@ -72,3 +72,19 @@ wrong"). Their image is `reference/photo-front.jpg` (= round 1's). Round 2 had b
   - The slot is ~1 mm tall and ~5 mm deep behind the teeth line (`renders/cut-section.png`). 63.4 mm³ removed, 0 self-intersections, watertight, 1 body.
   - The renderer has no shadows, so the slot shows as skin in the previews. A real print shades it dark.
 - **Pink is gone, so T2 stays black all print.** Only the T4 Orange → White pause at 120 mm remains. The export prints the pink pauses only when pink is present.
+
+## Review (owner, 2026-11-20): "match head shape with photo 1:1"
+- **`tools/match_head.py`** (replaces the `taper_jaw.py` taper): a front-silhouette warp of the head onto the customer image.
+  - **Heights:** a piecewise-linear map with the eye→mouth scale fixed (7.14 px/mm):
+    - hair top 220.0 → 215.3;
+    - chin 139.3 → 141.85;
+    - eye line and mouth line held.
+  - **Widths:** a per-row scale k(z) = photo/model silhouette width (0.76–0.86) and the centre shift (-1.8 to -0.8 mm). Both are sampled every 1 mm and fitted with quartic polynomials.
+    - Per-vertex raster sampling made a step field and 932 self-intersections; the fitted field has 0.
+  - The warp fades in over z 134–142, so the collar is unchanged. y is unchanged. The whole model is then scaled x1.0218 back to 220 mm.
+- **`tools/lift_ears.py`** lifts both ears 2.2 mm (smooth local field, |x| > 22 mm only). The photo's ears sit higher.
+- **Result:** the red-outline overlay `renders/match-overlay.png` and before/after `renders/match-before-after.png`.
+  - The hair top, temples, ears, cheeks, jaw and chin follow the photo's head outline.
+  - Watertight, 1 body, 0 self-intersections. 73.7 x 78.5 x 220 mm.
+- **Chain:** `cut_mouth.py cs.npz cs_cut.npz 4.0 0.06 0` → `match_head.py cs_cut.npz cs_match.npz 6` → `lift_ears.py cs_match.npz cs_match2.npz 2.2` → `MESH=cs_match2.npz export.py`.
+  - The T4 swap still has room: orange ends at 111.4 mm, swap at 120, white starts at 158.7. At most 4 colours per band.
