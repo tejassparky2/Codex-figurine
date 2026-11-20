@@ -98,3 +98,9 @@ wrong"). Their image is `reference/photo-front.jpg` (= round 1's). Round 2 had b
   - Comparison `renders/smile-compare.png`; shaded face `renders/face-ao.png` (`tools/ao_closeup.py` adds ambient occlusion, so slots and creases read as they will print).
 - **`export.py`** now computes the T2 pink pauses and the T4 notes from the mesh. This version: T4 at 120 mm (orange ≤111.4, white ≥158.7); T2 black→pink at 152.5 mm and pink→black at 168.9 mm.
 - At most 4 colours per band. verify_3mf passed both files. Not sliced.
+
+## Review (owner, 2026-11-20): "revert that curls change ... below teeth fully open and paint pink on lower side ... just as art the inner lower pink"
+- **Smile creases reverted.** This version is built from `cs_match2.npz` (no `smile_creases.py`).
+- **Mouth opened fully:** `cut_mouth.py cs.npz cs_cut.npz 4.0 0.06 5 1.2`. The bottom of the cut drops 1.2 mm into the lower lip (tapering to the corners), and the inside is pink. 154.9 mm³ removed, 0 self-intersections.
+- **`tools/lower_lip_pink.py cs_match2.npz cs_match4.npz 1.2`:** a pink band on the front of the lower lip, from the opening's bottom edge down 1.2 mm, tapering at the corners, as in the art. Comparison `renders/mouth-lip-compare.png`.
+- Export is `MESH=cs_match4.npz`. Pauses: 120 T4 orange→white; 151.4 T2 black→pink; 168.9 T2 pink→black. At most 4 colours per band. Not sliced.

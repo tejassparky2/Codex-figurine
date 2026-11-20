@@ -10,7 +10,10 @@ z = np.load(src); V, F, L = z['v'], z['f'], z['l'].astype(int)
 m = trimesh.Trimesh(V, F, process=False)
 TOP = np.array([(-11,155.75),(-8.5,155.25),(-5,155.2),(0,155.35),(3.33,155.6),(6,156.0),(8.17,156.9),(10.33,158.0)])
 BOT = np.array([(-11,155.75),(-8.5,154.3),(-5,154.05),(0,154.15),(3.33,154.55),(6,155.15),(8.5,156.4),(10.33,158.0)])
-zt = lambda x: np.interp(x, TOP[:,0], TOP[:,1]) - inset; zb = lambda x: np.interp(x, BOT[:,0], BOT[:,1]) + inset
+DROP = float(sys.argv[6]) if len(sys.argv) > 6 else 0.0      # owner 2026-11-20: "fully open" -> cut DROP mm lower into the lower lip
+ENDS = np.interp(BOT[:,0], [-11, -8.5, 8.5, 10.33], [0, 1, 1, 0])     # full drop in the middle, tapering to the corners
+BOTd = BOT.copy(); BOTd[:,1] -= DROP * ENDS
+zt = lambda x: np.interp(x, TOP[:,0], TOP[:,1]) - inset; zb = lambda x: np.interp(x, BOTd[:,0], BOTd[:,1]) + inset
 xs = np.linspace(-11, 10.33, 2000); ok = zt(xs) - zb(xs) > 0.15; x0, x1 = xs[ok].min(), xs[ok].max()
 N, K = 160, 7; X = np.linspace(x0, x1, N)
 Z = np.array([np.linspace(zb(x), zt(x), K) for x in X])                 # N x K
