@@ -147,3 +147,25 @@ wrong"). Their image is `reference/photo-front.jpg` (= round 1's). Round 2 had b
 - **Fix:** `cut_mouth.py` now puts the back wall on a quadratic fitted to the front-most surface per column, DEPTH behind, the same at every height (and at least 0.5 mm behind the surface). The interior is plain skin. No black, no pink.
 - **Chain:** `cut_mouth.py cs.npz cs_cut.npz 6.0 0.06 0 2.5` → `match_head.py 6` → `lift_ears.py 2.2` → `whisky_brows.py 106.0 0.0` → `cs_match13.npz`. 0 self-intersections, 0 black in the mouth.
 - Before/after: `renders/mouth13-cmp.png`. One pause, 120 mm. At most 4 colours per band. verify_3mf passed. Not sliced.
+
+## Review (owner, 2026-11-20): "GPT did the mouth better, just take its mouth from GitHub"
+- **Source:** Codex's `codex works/man-with-drink/portrait-smile` on `origin/codex/figurine-evidence-sprint` (commits b7920c6, 0b2e06a). Codex started from our `cs_match10.npz` (identical triangles and paint).
+- **Why we didn't copy their 3MF:** rendered flat, their file is crinkly at triangle level. Their front-fit/couple-style refit did that, and their smooth-shaded Blender render hides it. It also has ~1,900 self-intersections (face fairing through the glasses, and the lower lip squeezed into our old cut). `renders/codex-own-cmp.png`.
+- **What we took:** Codex's mouth maths, re-applied to our clean surface (`tools/codex_mouth_formula.py`):
+  - the smile-corner lift (couple-style);
+  - the refined-smile lip closure and teeth arc;
+  - the portrait-smile photo-traced upper/lower lip curves, rounded lower tooth edge and asymmetric corner lift.
+  - Mapping: ours → Codex frame by an affine fitted on a ring round the mouth (residual 0.35 mm mean). Apply their formulas, map the displacement back.
+- **Changes from Codex's maths:**
+  - (a) tooth grooves only on tooth vertices; on the lip they made vertical stripes;
+  - (b) the clamped lip curves are Gaussian-smoothed along x (σ 1.5 mm); the clamp left a vertical crease on the right cheek;
+  - (c) the few hidden inner-lip crossings are relaxed back toward our surface until 0 self-intersections;
+  - (d) `tools/fair_moved_skin.py` Taubin-fairs the stretched smile-corner skin (front-facing skin only, not teeth or lip slit).
+- **Base is uncut:** the Codex look closes the gap under the teeth, so the chain no longer uses `cut_mouth.py`. The cut cavity walls caused a ghost tooth row. The old pink gap paint (3,205 faces) is skin.
+  - Chain: `match_head.py cs.npz u_match.npz 6` → `lift_ears.py 2.2` → `whisky_brows.py 106.0 0.0` → `u_base.npz` → `codex_mouth_formula.py u_base.npz <codex style.npz> cs_match16.npz cs_match10.npz` → `fair_moved_skin.py u_base.npz cs_match16.npz cs_match17.npz 10`.
+- `MESH=cs_match17.npz` export: 1,024,816 faces, 73.68 × 78.47 × 220.00 mm, watertight, 1 body, 0 self-intersections.
+  - Mouth box: skin + white only (no black, no pink).
+  - One pause 120 mm T4 (orange ≤106.0, white ≥158.75). At most 4 colours per band at 0.08 and 0.2 mm.
+  - verify_3mf passed. Not sliced.
+- Comparison: `renders/mouth-codex-compare.png` (photo / before / now).
+- `tools/codex_mouth.py` (direct vertex transplant) was tried first and rejected: it carried Codex's triangle noise.
