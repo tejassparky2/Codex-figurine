@@ -140,3 +140,4 @@ wrong"). Their image is `reference/photo-front.jpg` (= round 1's). Round 2 had b
   - Black is already on T2 all print, so no extra pause.
 - Previews are sent as the normal flat renders only (`out/Man-with-drink-front*.png`). AO renders are for internal checks.
 - One pause, 120 mm. At most 4 colours per band. verify_3mf passed. Not sliced.
+- **REVERTED the same day:** owner: "never black colour in mouth". Back to `cs_match10.npz`, skin inside the opening. Never paint a mouth opening black, even when it is cut open.
