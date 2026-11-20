@@ -170,3 +170,10 @@ wrong"). Their image is `reference/photo-front.jpg` (= round 1's). Round 2 had b
 - Comparison: `renders/mouth-codex-compare.png` (photo / before / now).
 - `tools/codex_mouth.py` (direct vertex transplant) was tried first and rejected: it carried Codex's triangle noise.
 - **REVERTED (owner, same day): "No revert it not good".** Export is back to `MESH=cs_match13.npz`. Codex's mouth (cs_match17) is rejected on this model.
+
+## Review (owner, 2026-11-20): "mouth don't look good" (screenshot of cs_match13)
+- **Cause:** the "open fully" 2.5 mm DROP sliced into the lower lip. With skin inside, the cut's flat floor reads as a lit box under the teeth with sawtooth edges.
+- **Fix:** the same 6 mm deep cut with no drop: `cut_mouth.py cs.npz v_cut0.npz 6.0 0.06 0 0.0` → `match_head.py 6` → `lift_ears.py 2.2` → `whisky_brows.py 106.0 0.0` → `cs_match18.npz`. A thin deep slit under the teeth, then the lower lip's own curve.
+- Compared in `variants/mouth-variants.png`: A drop 2.5 / B no drop / C no cut (C shows Tripo's lower-teeth clay).
+- **Note:** `render_outputs.py` renders the exported finish guide, not `$MESH`. Export before rendering a variant.
+- Checks: 0 self-intersections, watertight, 1 body; mouth = skin + white only; one pause 120 mm T4; max 4 colours per band; verify_3mf passed. Not sliced.
