@@ -22,7 +22,12 @@ orig = np.c_[np.repeat(X, K), np.full(N*K, -80.0), Z.ravel()]
 loc, ri, _ = m.ray.intersects_location(orig, np.tile([0, 1., 0], (N*K, 1)), multiple_hits=False)
 yf = np.full(N*K, np.nan); yf[ri] = loc[:, 1]; yf = yf.reshape(N, K)
 assert np.isfinite(yf).all(), 'a cutter ray missed the face'
-YB = yf + depth
+# The back wall must be smooth: following the front surface copied the teeth bumps 6 mm back, which read as skin
+# coloured teeth inside the opening (owner, 2026-11-20). Use the front-most surface per column, fit a quadratic in x,
+# and put the back wall DEPTH behind that curve, the same at every height.
+yfront = yf.min(1); qc = np.polyfit(X, yfront, 2)
+YB = np.repeat((np.polyval(qc, X) + depth)[:, None], K, axis=1)
+YB = np.maximum(YB, yf + 0.5)                                  # never shallower than 0.5 mm behind the surface
 vid = lambda i, k, back: (i*K + k) * 2 + back
 P = np.zeros((N*K*2, 3))
 for i in range(N):

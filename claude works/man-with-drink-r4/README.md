@@ -141,3 +141,9 @@ wrong"). Their image is `reference/photo-front.jpg` (= round 1's). Round 2 had b
 - Previews are sent as the normal flat renders only (`out/Man-with-drink-front*.png`). AO renders are for internal checks.
 - One pause, 120 mm. At most 4 colours per band. verify_3mf passed. Not sliced.
 - **REVERTED the same day:** owner: "never black colour in mouth". Back to `cs_match10.npz`, skin inside the opening. Never paint a mouth opening black, even when it is cut open.
+
+## Review (owner, 2026-11-20): inside of the opening = "Smooth skin, no shapes"
+- **Cause of the "skin-coloured teeth":** the cutter's back wall followed the front surface 6 mm behind it, copying the teeth bumps into the back of the opening.
+- **Fix:** `cut_mouth.py` now puts the back wall on a quadratic fitted to the front-most surface per column, DEPTH behind, the same at every height (and at least 0.5 mm behind the surface). The interior is plain skin. No black, no pink.
+- **Chain:** `cut_mouth.py cs.npz cs_cut.npz 6.0 0.06 0 2.5` → `match_head.py 6` → `lift_ears.py 2.2` → `whisky_brows.py 106.0 0.0` → `cs_match13.npz`. 0 self-intersections, 0 black in the mouth.
+- Before/after: `renders/mouth13-cmp.png`. One pause, 120 mm. At most 4 colours per band. verify_3mf passed. Not sliced.
