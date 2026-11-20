@@ -203,3 +203,7 @@ wrong"). Their image is `reference/photo-front.jpg` (= round 1's). Round 2 had b
   - Mouth: skin + white only.
   - One pause 120 mm T4 (white ≥158.97). Max 4 colours per band. verify_3mf passed. Not sliced.
 - Comparisons: `variants/mouth-art-model.png`, `variants/face-art-compare.png`.
+- 2026-11-20 follow-up ("photo has depth of mouth, the model doesn't"): the gap is already 6 mm deep and goes dark in room light (`variants/depth-print-light.png`).
+  - Recessing the teeth 1.2 mm (`tools/recess_teeth.py`) crumpled them: not used.
+  - Grey inside the gap: owner said "looks bad". Not used.
+  - The delivery stays `cs_match21.npz` (v21). Versions v19 and v21 are kept in figurines `out_r4/versions/`.
