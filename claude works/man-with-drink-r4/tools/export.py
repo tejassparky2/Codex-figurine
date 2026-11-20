@@ -45,12 +45,13 @@ def write(path, labels, colours, title, notes):
 guide_notes = ('Finish guide: the intended colours, one filament slot per finish colour.\n' +
                '\n'.join(f'Slot {i+1}: {nm} {h}' for i, (nm, h) in enumerate(zip(NAMES, FINISH))) +
                '\nPrint from Man-with-drink-U1-220mm.3mf, not from this file.\n')
+PINK_NOTES = ('PAUSE at the first layer at or above 148.00 mm: swap T2 Black -> Pink Cotton Candy #F2B3C0 (mouth). Black body ends 142.2 mm, pink starts 153.8 mm.\n'
+              'PAUSE at the first layer at or above 165.00 mm: swap T2 Pink -> Black #0E0E10 (eyes, brows). Pink ends 157.9 mm, black starts 172.7 mm.\n')
 print_notes = ('Snapmaker U1 project, 220 mm tall, scale 100%. Four tool heads:\n'
                'T1 Apricot #E6BAA8 (skin)  T2 Black #0E0E10  T3 Simply Silver #8C979D (hair, glasses, glass)  T4 Orange #F9A800 (whisky)\n'
                f'MANUAL SWAP (not embedded): add a pause at the first layer at or above {SWAP:.2f} mm and swap T4 Orange -> Pure White #F1ECE1 '
                '(teeth, eye whites, catchlights). Orange is only used up to 109.0 mm; white starts above 150 mm.\n'
-               'PAUSE at the first layer at or above 148.00 mm: swap T2 Black -> Pink Cotton Candy #F2B3C0 (mouth). Black body ends 142.2 mm, pink starts 153.8 mm.\n'
-               'PAUSE at the first layer at or above 165.00 mm: swap T2 Pink -> Black #0E0E10 (eyes, brows). Pink ends 157.9 mm, black starts 172.7 mm.\n'
+               + (PINK_NOTES if (lab == 5).any() else '') +
                'Select your real U1 printer, nozzle and PLA+ presets in Snapmaker Orca before slicing.\n')
 np.save('out/finish_slots.npy', finish.astype('u1')); np.save('out/tool_ids.npy', tools.astype('u1'))
 write('out/Man-with-drink-220mm-finish-guide.3mf', finish, FINISH, 'Man with drink - finish guide', guide_notes)
@@ -60,8 +61,10 @@ h = V[F][:,:,2]
 assert h[lab == 4].max() < SWAP and h[lab == 3].min() > SWAP, 'orange/white straddle the swap height'
 print('T4 orange top %.2f mm < swap %.1f mm < white bottom %.2f mm' % (h[lab == 4].max(), SWAP, h[lab == 3].min()))
 
-# T2 swap safety: black below PA, pink between PA and PB, black above PB.
+# T2 swap safety (only when the mouth is painted pink): black below, pink between the pauses, black above.
 hz = V[F][:,:,2]; blk = lab == 1; pk = lab == 5
-blo = hz[blk].max(1) <= hz[pk].min()  # black faces below the mouth
-print('T2 plan: black (body) top %.2f | pink %.2f..%.2f | black (face) bottom %.2f' % (hz[blk & (hz.max(1) < hz[pk].min())].max(), hz[pk].min(), hz[pk].max(), hz[blk & (hz.min(1) > hz[pk].max())].min()))
-assert not (blk & (hz.max(1) >= hz[pk].min()) & (hz.min(1) <= hz[pk].max())).any(), 'black and pink share a height band'
+if pk.any():
+    print('T2 plan: black (body) top %.2f | pink %.2f..%.2f | black (face) bottom %.2f' % (hz[blk & (hz.max(1) < hz[pk].min())].max(), hz[pk].min(), hz[pk].max(), hz[blk & (hz.min(1) > hz[pk].max())].min()))
+    assert not (blk & (hz.max(1) >= hz[pk].min()) & (hz.min(1) <= hz[pk].max())).any(), 'black and pink share a height band'
+else:
+    print('no pink: T2 stays black for the whole print')

@@ -53,4 +53,7 @@ lab = L[cKDTree(m.triangles_center).query(rc)[1]]; lab[on_cut] = 5
 inside = (rc[:,0] > x0) & (rc[:,0] < x1) & (rc[:,2] > zb(rc[:,0]) - 0.02) & (rc[:,2] < zt(rc[:,0]) + 0.02) & (rc[:,1] > -40) & (rc[:,1] < -18)
 spk = inside & (lab == 0); lab[spk] = 5
 print('cut faces (pink)', int(on_cut.sum()), '| skin specks inside the cut -> pink', int(spk.sum()))
+CUT_LABEL = int(sys.argv[5]) if len(sys.argv) > 5 else 5
+if CUT_LABEL != 5:                                      # owner 2026-11-20: "just cut it empty" -> no pink at all
+    lab[lab == 5] = CUT_LABEL; print('pink -> label', CUT_LABEL, '(empty cut, no mouth paint)')
 np.savez(dst, v=res.vertices, f=res.faces.astype('i4'), l=lab.astype('u1'))

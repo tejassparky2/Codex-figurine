@@ -66,3 +66,9 @@ wrong"). Their image is `reference/photo-front.jpg` (= round 1's). Round 2 had b
   - Vertices only, so the labels are kept. Watertight, 1 body, 0 self-intersections.
   - Before/after: `renders/heads_taper.png`.
 - Export is `MESH=cs_taper.npz tools/export.py`. Pauses unchanged. At most 4 colours per band.
+
+## Review (owner, 2026-11-20): "for mouth pink, instead of carving just cut it empty"
+- No mouth paint. The gap is an empty slot: `cut_mouth.py cs.npz cs_cut.npz 4.0 0.06 0` (cut faces → skin), then `taper_jaw.py`.
+  - The slot is ~1 mm tall and ~5 mm deep behind the teeth line (`renders/cut-section.png`). 63.4 mm³ removed, 0 self-intersections, watertight, 1 body.
+  - The renderer has no shadows, so the slot shows as skin in the previews. A real print shades it dark.
+- **Pink is gone, so T2 stays black all print.** Only the T4 Orange → White pause at 120 mm remains. The export prints the pink pauses only when pink is present.
