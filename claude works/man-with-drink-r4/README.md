@@ -116,3 +116,8 @@ wrong"). Their image is `reference/photo-front.jpg` (= round 1's). Round 2 had b
 - The lower-lip band (`lower_lip_pink.py`) is removed. Pink is only inside the opening: floor 2156, ceiling 1424, back/sides 1335 faces. The lips are skin.
 - Rebuilt as `whisky_brows.py cs_match2.npz cs_match6.npz 106.0 0.6`; export is `MESH=cs_match6.npz`. `renders/mouth6-cmp.png` shows the front, 20° above (the pink floor) and the shaded front.
 - Pauses: 120 T4; T2 black→pink and pink→black from the export notes. At most 4 colours per band. Not sliced.
+
+## Review (owner, 2026-11-20): "just remove pink"
+- All pink (4915 faces, the mouth interior) is now skin: `cs_match7.npz`. The open mouth, the head match, the half-full whisky and the thinner brows are kept.
+- Back to one pause: 120 mm T4 orange→white (orange ≤106.0, white ≥158.7). T2 stays black.
+- 5 finish colours. At most 4 colours per band. verify_3mf passed. Not sliced.
