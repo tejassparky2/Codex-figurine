@@ -134,3 +134,9 @@ wrong"). Their image is `reference/photo-front.jpg` (= round 1's). Round 2 had b
   - Options compared in `renders/brows-options.png`: photo / trimmed / thin traced / full sculpted.
   - Thinner brows would need the brow pads reshaped in the geometry, not just paint.
 - Export is `MESH=cs_match10.npz`. One pause, 120 mm. verify_3mf passed. Not sliced.
+
+## Review (owner, 2026-11-20): "still shows the teeth in skin colour here; don't send the shadow render, the normal one is better"
+- The empty opening read as skin in the normal (flat) render: the back of the cut shows Tripo's inner tooth shapes. The inside of the opening is now BLACK: `cut_mouth.py cs.npz cs_cut.npz 6.0 0.06 1 2.5`, then match/lift and `whisky_brows.py ... 106.0 0.0` → `cs_match11.npz`.
+  - Black is already on T2 all print, so no extra pause.
+- Previews are sent as the normal flat renders only (`out/Man-with-drink-front*.png`). AO renders are for internal checks.
+- One pause, 120 mm. At most 4 colours per band. verify_3mf passed. Not sliced.
