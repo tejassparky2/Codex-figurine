@@ -169,3 +169,4 @@ wrong"). Their image is `reference/photo-front.jpg` (= round 1's). Round 2 had b
   - verify_3mf passed. Not sliced.
 - Comparison: `renders/mouth-codex-compare.png` (photo / before / now).
 - `tools/codex_mouth.py` (direct vertex transplant) was tried first and rejected: it carried Codex's triangle noise.
+- **REVERTED (owner, same day): "No revert it not good".** Export is back to `MESH=cs_match13.npz`. Codex's mouth (cs_match17) is rejected on this model.
