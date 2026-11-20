@@ -127,3 +127,10 @@ wrong"). Their image is `reference/photo-front.jpg` (= round 1's). Round 2 had b
 - Then `match_head.py` (σ 6) → `lift_ears.py 2.2` → `whisky_brows.py 106.0 0.6` → `cs_match8.npz`. 0 self-intersections, watertight, 1 body.
 - **Side cut at x=0** (`renders/cut-section8.png`): the opening is ~3 mm tall (z 155.9–158.9) under the upper teeth and runs >6 mm back. Shaded face: `renders/face8-ao.png`.
 - One pause, 120 mm T4. At most 4 colours per band. verify_3mf passed. Not sliced. The tooth row now overhangs a ~3 mm cavity: check bridging/support in the slicer.
+
+## Review (owner, 2026-11-20): "eyebrows not good"
+- **Cause:** the brows are sculpted, raised pads. Painting less than the whole pad (the 0.6 mm trim, or `tools/redraw_brows.py` with outlines traced on the photo) leaves skin-coloured raised edges around the black.
+- **Fix:** paint the whole sculpted brow again (`whisky_brows.py cs_match2.npz cs_match10.npz 106.0 0.0`).
+  - Options compared in `renders/brows-options.png`: photo / trimmed / thin traced / full sculpted.
+  - Thinner brows would need the brow pads reshaped in the geometry, not just paint.
+- Export is `MESH=cs_match10.npz`. One pause, 120 mm. verify_3mf passed. Not sliced.
