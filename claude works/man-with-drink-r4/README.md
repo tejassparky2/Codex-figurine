@@ -47,3 +47,13 @@ wrong"). Their image is `reference/photo-front.jpg` (= round 1's). Round 2 had b
   - at 165.0 mm, T2 Pink → Black (pink ends 157.9, face black starts 172.7);
   - plus the T4 Orange → White pause at 120 mm, as before.
 - At most 4 colours per band at 0.08 and 0.2 mm. `renders/cmp-r4-mouth-pink.png`.
+
+## Review (owner, 2026-11-20): "cut open that pink part"
+- **`tools/cut_mouth.py`** (manifold3d boolean; `pip install manifold3d` in the e3d venv). It subtracts a cutter shaped like the traced mouth gap:
+  - front view: between the upper-teeth bottom edge and the lower-lip edge, inset 0.06 mm;
+  - depth: from in front of the face to 1.0 mm behind the front-most surface at each point.
+- **Result:** 16.2 mm³ removed. Watertight, consistent winding, 1 body, 0 self-intersecting faces. The cut walls and floor are pink.
+  - Side section at x=0 (`renders/cut-section.png`): a slot ~1.2 mm tall and ~2 mm deep behind the teeth line.
+- **Tried first and rejected:** extruding the pink patch inward (`carve_mouth.py`). With per-face normals it gave 2684 self-intersecting faces; with a radial direction 1545, and with a ray-limited depth 467. The walls ran into the underside of the upper teeth.
+- Export is `MESH=cs_cut.npz tools/export.py`. The T2 pink/black and T4 orange/white plans are unchanged. At most 4 colours per band.
+- **Print note:** a 1.2 mm slot under an overhanging tooth row. Check the slicer preview; the teeth ceiling over the slot may want support or a slightly smaller nozzle line width.
