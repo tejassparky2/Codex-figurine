@@ -88,3 +88,13 @@ wrong"). Their image is `reference/photo-front.jpg` (= round 1's). Round 2 had b
   - Watertight, 1 body, 0 self-intersections. 73.7 x 78.5 x 220 mm.
 - **Chain:** `cut_mouth.py cs.npz cs_cut.npz 4.0 0.06 0` → `match_head.py cs_cut.npz cs_match.npz 6` → `lift_ears.py cs_match.npz cs_match2.npz 2.2` → `MESH=cs_match2.npz export.py`.
   - The T4 swap still has room: orange ends at 111.4 mm, swap at 120, white starts at 158.7. At most 4 colours per band.
+
+## Review (owner, 2026-11-20): "add pink in it" + "add this same as photo" (smile-corner creases)
+- **Pink slot interior:** `cut_mouth.py cs.npz cs_cut.npz 4.0 0.06 5`, then the same `match_head.py` (σ 6) and `lift_ears.py 2.2`.
+- **`tools/smile_creases.py cs_match2.npz cs_match3.npz 1.0 0.35 1.35 2`** adds a short curved groove at each mouth corner, shaped from the photo:
+  - his right corner curls up and out, his left turns up;
+  - up to 0.88 mm deep, σ 0.35 mm, faded out within 1 mm of the slot and teeth, 2 rounds of local smoothing;
+  - 0 self-intersections.
+  - Comparison `renders/smile-compare.png`; shaded face `renders/face-ao.png` (`tools/ao_closeup.py` adds ambient occlusion, so slots and creases read as they will print).
+- **`export.py`** now computes the T2 pink pauses and the T4 notes from the mesh. This version: T4 at 120 mm (orange ≤111.4, white ≥158.7); T2 black→pink at 152.5 mm and pink→black at 168.9 mm.
+- At most 4 colours per band. verify_3mf passed both files. Not sliced.

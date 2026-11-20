@@ -45,12 +45,20 @@ def write(path, labels, colours, title, notes):
 guide_notes = ('Finish guide: the intended colours, one filament slot per finish colour.\n' +
                '\n'.join(f'Slot {i+1}: {nm} {h}' for i, (nm, h) in enumerate(zip(NAMES, FINISH))) +
                '\nPrint from Man-with-drink-U1-220mm.3mf, not from this file.\n')
-PINK_NOTES = ('PAUSE at the first layer at or above 148.00 mm: swap T2 Black -> Pink Cotton Candy #F2B3C0 (mouth). Black body ends 142.2 mm, pink starts 153.8 mm.\n'
-              'PAUSE at the first layer at or above 165.00 mm: swap T2 Pink -> Black #0E0E10 (eyes, brows). Pink ends 157.9 mm, black starts 172.7 mm.\n')
+# T2 pauses for the pink mouth, computed from the mesh: midway between the body black and the pink, and between
+# the pink and the face black (eyes, brows).
+PINK_NOTES = ''
+_hz = V[F][:,:,2]; _blk = lab == 1; _pk = lab == 5
+if _pk.any():
+    _btop = _hz[_blk & (_hz.max(1) < _hz[_pk].min())].max(); _pbot, _ptop = _hz[_pk].min(), _hz[_pk].max(); _fbot = _hz[_blk & (_hz.min(1) > _hz[_pk].max())].min()
+    PA, PB = round((_btop + _pbot) / 2, 1), round((_ptop + _fbot) / 2, 1)
+    PINK_NOTES = (f'PAUSE at the first layer at or above {PA:.2f} mm: swap T2 Black -> Pink Cotton Candy #F2B3C0 (mouth). Black body ends {_btop:.1f} mm, pink starts {_pbot:.1f} mm.\n'
+                  f'PAUSE at the first layer at or above {PB:.2f} mm: swap T2 Pink -> Black #0E0E10 (eyes, brows). Pink ends {_ptop:.1f} mm, black starts {_fbot:.1f} mm.\n')
+    print('T2 pauses: %.1f mm and %.1f mm' % (PA, PB))
 print_notes = ('Snapmaker U1 project, 220 mm tall, scale 100%. Four tool heads:\n'
                'T1 Apricot #E6BAA8 (skin)  T2 Black #0E0E10  T3 Simply Silver #8C979D (hair, glasses, glass)  T4 Orange #F9A800 (whisky)\n'
                f'MANUAL SWAP (not embedded): add a pause at the first layer at or above {SWAP:.2f} mm and swap T4 Orange -> Pure White #F1ECE1 '
-               '(teeth, eye whites, catchlights). Orange is only used up to 109.0 mm; white starts above 150 mm.\n'
+               f'(teeth, eye whites). Orange is only used up to {V[F][:,:,2][lab == 4].max():.1f} mm; white starts at {V[F][:,:,2][lab == 3].min():.1f} mm.\n'
                + (PINK_NOTES if (lab == 5).any() else '') +
                'Select your real U1 printer, nozzle and PLA+ presets in Snapmaker Orca before slicing.\n')
 np.save('out/finish_slots.npy', finish.astype('u1')); np.save('out/tool_ids.npy', tools.astype('u1'))
