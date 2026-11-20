@@ -190,3 +190,16 @@ wrong"). Their image is `reference/photo-front.jpg` (= round 1's). Round 2 had b
 - **Renderer fix (`render_outputs.py`):** a corner whose smooth normal is more than 35° off its face uses the face normal. Smooth normals across a cut rim drew dark sawtooth spikes; that was the "jagged" edge of the old opening, not geometry.
 - **Section:** `renders/hollow-section.png`: ~3.5 mm tall opening, ~5 mm deep, floor sloping down at the back. The ceiling under the teeth is a ~5 mm overhang; check bridging/support there in the slicer.
 - **Checks:** 0 self-intersections, watertight, 1 body; mouth = skin + white only; one pause 120 mm T4; max 4 colours per band; verify_3mf passed. Not sliced.
+
+## Review (owner, 2026-11-20): "mouth/lips not matching photo" (sent the approved art)
+- **Measured with `tools/mouth_compare.py`** (art px ↔ model mm via the match_head constants; traced lines: mouth top, teeth bottom, gap bottom, upper-lip top). The model's teeth sat ~0.5 mm low and ~3 mm short on his left. The right mouth corner was ~2 mm too low and ~4 mm too far in. The hollow was ~1 mm deeper than the art's thin gap.
+- **New `tools/art_mouth.py`** on the uncut final-frame chain (`u_base.npz`, pink → skin):
+  1. a thin-plate-spline warp in the front plane moves the model's teeth band and mouth corners onto the art lines (ring around the mouth fixed; Jacobian min 0.19; depth untouched);
+  2. the cut follows the art's crescent: teeth bottom (mouth top beyond the tooth row) down to the art's lower-lip line, to points at both corners, 6 mm deep, floor falling 2 mm. Skin inside.
+  - The cutter is a union of convex per-column pieces; a single swept cutter self-intersected along its top wall.
+- **`tools/weld_micro.py`:** merges <1e-4 mm boolean vertex clusters. verify_3mf's 1e-5 weld had flagged 2 non-manifold edges.
+- **Chain:** `art_mouth.py u_base.npz cs_match20.npz 6 2.0 1.0` → `weld_micro.py cs_match20.npz cs_match21.npz`. Export `MESH=cs_match21.npz`.
+  - 1,026,176 faces, watertight, 1 body, 0 self-intersections; 0 non-manifold after the 1e-5 weld.
+  - Mouth: skin + white only.
+  - One pause 120 mm T4 (white ≥158.97). Max 4 colours per band. verify_3mf passed. Not sliced.
+- Comparisons: `variants/mouth-art-model.png`, `variants/face-art-compare.png`.
