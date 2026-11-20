@@ -57,3 +57,12 @@ wrong"). Their image is `reference/photo-front.jpg` (= round 1's). Round 2 had b
 - **Tried first and rejected:** extruding the pink patch inward (`carve_mouth.py`). With per-face normals it gave 2684 self-intersecting faces; with a radial direction 1545, and with a ray-limited depth 467. The walls ran into the underside of the upper teeth.
 - Export is `MESH=cs_cut.npz tools/export.py`. The T2 pink/black and T4 orange/white plans are unchanged. At most 4 colours per band.
 - **Print note:** a 1.2 mm slot under an overhanging tooth row. Check the slicer preview; the teeth ceiling over the slot may want support or a slightly smaller nozzle line width.
+
+## Review (owner, 2026-11-20): "more in" + "his face is not round but in the model it seems round"
+- **Mouth cut deepened** to 2.0 mm behind the surface (`cut_mouth.py cs.npz cs_cut.npz 2.0`): 32.4 mm³ removed, 0 self-intersections.
+- **`tools/taper_jaw.py`** narrows the lower face to the customer image's taper.
+  - Front-view skin width profiles were aligned on the eye line (z 175.2) and mouth line (z 156.0) and compared relative to cheek width.
+  - x is scaled about the face centre: 1.0 above z 169.4, 0.88 at the mouth, 0.81 at the jaw (z 144.5), back to 1.0 by z 138.5. The collar is untouched.
+  - Vertices only, so the labels are kept. Watertight, 1 body, 0 self-intersections.
+  - Before/after: `renders/heads_taper.png`.
+- Export is `MESH=cs_taper.npz tools/export.py`. Pauses unchanged. At most 4 colours per band.
