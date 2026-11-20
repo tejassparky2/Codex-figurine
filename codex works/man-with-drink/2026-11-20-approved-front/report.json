@@ -1,0 +1,960 @@
+{
+ "image": "jobs/man-with-drink/judge/approved-front.jpg",
+ "verdict": "CANNOT_JUDGE",
+ "reasons": [
+  "silhouette IoU 0.902 < 0.95: pose or geometry differs; supply a mask or camera"
+ ],
+ "silhouette_iou": 0.9018,
+ "shape_drift_mm": {
+  "median": 2.0,
+  "p95": 2.0,
+  "max": 2.0
+ },
+ "px_per_mm": 6.21,
+ "edge_tolerance_mm": 0.35,
+ "figure_pixels": 387268,
+ "ambiguous_pct": 6.738,
+ "hard_mismatch_pct": 10.4883,
+ "consistent_close_call_pct": 1.5757,
+ "edge_band_mismatch_pct": 7.0068,
+ "boundary_offset_mm": {
+  "median": 0.0,
+  "p95": 3.672
+ },
+ "suspect_anchors": [
+  {
+   "anchor": "@330,600,6",
+   "slot": 1,
+   "sampled": "#F08949",
+   "nearest_palette_slot": 4
+  },
+  {
+   "anchor": "@180,930,6",
+   "slot": 1,
+   "sampled": "#FDA259",
+   "nearest_palette_slot": 4
+  },
+  {
+   "anchor": "@520,1100,5",
+   "slot": 1,
+   "sampled": "#FE9B55",
+   "nearest_palette_slot": 4
+  },
+  {
+   "anchor": "@250,190,5",
+   "slot": 3,
+   "sampled": "#5A4639",
+   "nearest_palette_slot": 2
+  },
+  {
+   "anchor": "@180,330,5",
+   "slot": 3,
+   "sampled": "#8A7869",
+   "nearest_palette_slot": 1
+  },
+  {
+   "anchor": "@510,280,4",
+   "slot": 3,
+   "sampled": "#AE988B",
+   "nearest_palette_slot": 1
+  },
+  {
+   "anchor": "@350,548,2",
+   "slot": 5,
+   "sampled": "#DAAB7D",
+   "nearest_palette_slot": 1
+  }
+ ],
+ "patches": 65,
+ "review_patches": 22,
+ "largest_patch_mm2": 238.766,
+ "largest_clear_error_mm2": 238.766,
+ "calibrated_prototypes": {
+  "1": "#FAA060",
+  "2": "#282521",
+  "3": "#857163",
+  "4": "#C16525",
+  "5": "#DAAB7D"
+ },
+ "per_slot": [
+  {
+   "slot": 1,
+   "color": "#E6BAA8",
+   "approved_mm2": 3127.5,
+   "model_mm2": 2849.7,
+   "iou": 0.6011
+  },
+  {
+   "slot": 2,
+   "color": "#0E0E10",
+   "approved_mm2": 5454.6,
+   "model_mm2": 5706.6,
+   "iou": 0.8259
+  },
+  {
+   "slot": 3,
+   "color": "#8C979D",
+   "approved_mm2": 1137.7,
+   "model_mm2": 1404.0,
+   "iou": 0.4888
+  },
+  {
+   "slot": 4,
+   "color": "#F9A800",
+   "approved_mm2": 235.4,
+   "model_mm2": 68.1,
+   "iou": 0.0
+  },
+  {
+   "slot": 5,
+   "color": "#F1ECE1",
+   "approved_mm2": 86.8,
+   "model_mm2": 13.6,
+   "iou": 0.0
+  }
+ ],
+ "confusion_rows_approved_cols_model": [
+  [
+   86537,
+   15725,
+   16143,
+   1744,
+   464
+  ],
+  [
+   9747,
+   194693,
+   5072,
+   842,
+   1
+  ],
+  [
+   6760,
+   4875,
+   32183,
+   40,
+   16
+  ],
+  [
+   5341,
+   3221,
+   475,
+   0,
+   43
+  ],
+  [
+   1514,
+   1560,
+   272,
+   0,
+   0
+  ]
+ ],
+ "tiles": {
+  "total": 66,
+  "wrong": 44,
+  "sheets": 6
+ },
+ "top_patches": [
+  {
+   "id": 1,
+   "area_mm2": 238.766,
+   "pixels": 9208,
+   "approved_slot": 1,
+   "model_slot": 3,
+   "needs_review": false,
+   "bbox_px": [
+    306,
+    221,
+    179,
+    137
+   ],
+   "centroid_mm": [
+    17.69,
+    -2.81,
+    198.04
+   ],
+   "face_count": 7325
+  },
+  {
+   "id": 2,
+   "area_mm2": 135.771,
+   "pixels": 5236,
+   "approved_slot": 1,
+   "model_slot": 2,
+   "needs_review": false,
+   "bbox_px": [
+    200,
+    914,
+    176,
+    58
+   ],
+   "centroid_mm": [
+    -0.99,
+    -17.1,
+    91.72
+   ],
+   "face_count": 1430
+  },
+  {
+   "id": 3,
+   "area_mm2": 128.303,
+   "pixels": 4948,
+   "approved_slot": 2,
+   "model_slot": 1,
+   "needs_review": false,
+   "bbox_px": [
+    132,
+    820,
+    139,
+    75
+   ],
+   "centroid_mm": [
+    -4.24,
+    -32.39,
+    105.35
+   ],
+   "face_count": 3801
+  },
+  {
+   "id": 4,
+   "area_mm2": 97.213,
+   "pixels": 3749,
+   "approved_slot": 2,
+   "model_slot": 3,
+   "needs_review": false,
+   "bbox_px": [
+    235,
+    798,
+    81,
+    60
+   ],
+   "centroid_mm": [
+    8.3,
+    -33.34,
+    111.61
+   ],
+   "face_count": 1397
+  },
+  {
+   "id": 5,
+   "area_mm2": 77.35,
+   "pixels": 2983,
+   "approved_slot": 1,
+   "model_slot": 2,
+   "needs_review": false,
+   "bbox_px": [
+    336,
+    613,
+    95,
+    124
+   ],
+   "centroid_mm": [
+    12.77,
+    -6.64,
+    133.1
+   ],
+   "face_count": 1230
+  },
+  {
+   "id": 6,
+   "area_mm2": 42.759,
+   "pixels": 1649,
+   "approved_slot": 3,
+   "model_slot": 1,
+   "needs_review": false,
+   "bbox_px": [
+    170,
+    247,
+    103,
+    99
+   ],
+   "centroid_mm": [
+    -11.51,
+    -21.82,
+    196.04
+   ],
+   "face_count": 922
+  },
+  {
+   "id": 7,
+   "area_mm2": 37.884,
+   "pixels": 1461,
+   "approved_slot": 2,
+   "model_slot": 1,
+   "needs_review": false,
+   "bbox_px": [
+    443,
+    1047,
+    39,
+    86
+   ],
+   "centroid_mm": [
+    25.95,
+    -4.49,
+    66.55
+   ],
+   "face_count": 883
+  },
+  {
+   "id": 8,
+   "area_mm2": 37.106,
+   "pixels": 1431,
+   "approved_slot": 1,
+   "model_slot": 3,
+   "needs_review": true,
+   "bbox_px": [
+    378,
+    359,
+    100,
+    37
+   ],
+   "centroid_mm": [
+    20.78,
+    -3.95,
+    182.83
+   ],
+   "face_count": 1163
+  },
+  {
+   "id": 9,
+   "area_mm2": 32.154,
+   "pixels": 1240,
+   "approved_slot": 4,
+   "model_slot": 2,
+   "needs_review": false,
+   "bbox_px": [
+    343,
+    878,
+    73,
+    53
+   ],
+   "centroid_mm": [
+    17.62,
+    -10.94,
+    97.42
+   ],
+   "face_count": 281
+  },
+  {
+   "id": 10,
+   "area_mm2": 29.146,
+   "pixels": 1124,
+   "approved_slot": 1,
+   "model_slot": 4,
+   "needs_review": false,
+   "bbox_px": [
+    260,
+    866,
+    54,
+    47
+   ],
+   "centroid_mm": [
+    10.16,
+    -31.51,
+    100.18
+   ],
+   "face_count": 482
+  },
+  {
+   "id": 11,
+   "area_mm2": 25.412,
+   "pixels": 980,
+   "approved_slot": 1,
+   "model_slot": 2,
+   "needs_review": false,
+   "bbox_px": [
+    317,
+    889,
+    71,
+    31
+   ],
+   "centroid_mm": [
+    11.12,
+    -15.82,
+    98.05
+   ],
+   "face_count": 181
+  },
+  {
+   "id": 12,
+   "area_mm2": 20.278,
+   "pixels": 782,
+   "approved_slot": 1,
+   "model_slot": 2,
+   "needs_review": false,
+   "bbox_px": [
+    318,
+    859,
+    56,
+    22
+   ],
+   "centroid_mm": [
+    10.32,
+    -16.06,
+    103.26
+   ],
+   "face_count": 142
+  },
+  {
+   "id": 13,
+   "area_mm2": 20.018,
+   "pixels": 772,
+   "approved_slot": 3,
+   "model_slot": 2,
+   "needs_review": false,
+   "bbox_px": [
+    334,
+    844,
+    58,
+    28
+   ],
+   "centroid_mm": [
+    14.03,
+    -14.23,
+    105.71
+   ],
+   "face_count": 193
+  },
+  {
+   "id": 14,
+   "area_mm2": 12.602,
+   "pixels": 486,
+   "approved_slot": 1,
+   "model_slot": 2,
+   "needs_review": false,
+   "bbox_px": [
+    244,
+    342,
+    98,
+    20
+   ],
+   "centroid_mm": [
+    6.27,
+    -26.61,
+    188.06
+   ],
+   "face_count": 436
+  },
+  {
+   "id": 15,
+   "area_mm2": 12.343,
+   "pixels": 476,
+   "approved_slot": 3,
+   "model_slot": 2,
+   "needs_review": false,
+   "bbox_px": [
+    164,
+    348,
+    33,
+    21
+   ],
+   "centroid_mm": [
+    -13.54,
+    -26.97,
+    185.95
+   ],
+   "face_count": 466
+  },
+  {
+   "id": 16,
+   "area_mm2": 12.084,
+   "pixels": 466,
+   "approved_slot": 3,
+   "model_slot": 1,
+   "needs_review": false,
+   "bbox_px": [
+    167,
+    382,
+    27,
+    30
+   ],
+   "centroid_mm": [
+    -14.95,
+    -24.33,
+    180.16
+   ],
+   "face_count": 388
+  },
+  {
+   "id": 17,
+   "area_mm2": 11.332,
+   "pixels": 437,
+   "approved_slot": 2,
+   "model_slot": 4,
+   "needs_review": false,
+   "bbox_px": [
+    265,
+    863,
+    35,
+    31
+   ],
+   "centroid_mm": [
+    8.44,
+    -34.26,
+    103.5
+   ],
+   "face_count": 165
+  },
+  {
+   "id": 18,
+   "area_mm2": 8.764,
+   "pixels": 338,
+   "approved_slot": 1,
+   "model_slot": 3,
+   "needs_review": false,
+   "bbox_px": [
+    416,
+    527,
+    30,
+    31
+   ],
+   "centroid_mm": [
+    12.37,
+    11.02,
+    154.48
+   ],
+   "face_count": 286
+  },
+  {
+   "id": 19,
+   "area_mm2": 8.583,
+   "pixels": 331,
+   "approved_slot": 1,
+   "model_slot": 3,
+   "needs_review": false,
+   "bbox_px": [
+    324,
+    402,
+    29,
+    52
+   ],
+   "centroid_mm": [
+    15.42,
+    -26.45,
+    174.66
+   ],
+   "face_count": 186
+  },
+  {
+   "id": 20,
+   "area_mm2": 7.027,
+   "pixels": 271,
+   "approved_slot": 2,
+   "model_slot": 1,
+   "needs_review": false,
+   "bbox_px": [
+    489,
+    858,
+    67,
+    19
+   ],
+   "centroid_mm": [
+    31.18,
+    6.26,
+    102.52
+   ],
+   "face_count": 113
+  },
+  {
+   "id": 21,
+   "area_mm2": 6.145,
+   "pixels": 237,
+   "approved_slot": 1,
+   "model_slot": 2,
+   "needs_review": false,
+   "bbox_px": [
+    401,
+    597,
+    22,
+    31
+   ],
+   "centroid_mm": [
+    12.18,
+    5.14,
+    144.19
+   ],
+   "face_count": 140
+  },
+  {
+   "id": 22,
+   "area_mm2": 5.212,
+   "pixels": 201,
+   "approved_slot": 1,
+   "model_slot": 3,
+   "needs_review": true,
+   "bbox_px": [
+    416,
+    410,
+    21,
+    15
+   ],
+   "centroid_mm": [
+    20.01,
+    -5.29,
+    175.79
+   ],
+   "face_count": 152
+  },
+  {
+   "id": 23,
+   "area_mm2": 4.875,
+   "pixels": 188,
+   "approved_slot": 3,
+   "model_slot": 2,
+   "needs_review": false,
+   "bbox_px": [
+    263,
+    353,
+    48,
+    7
+   ],
+   "centroid_mm": [
+    5.54,
+    -27.1,
+    186.73
+   ],
+   "face_count": 175
+  },
+  {
+   "id": 24,
+   "area_mm2": 4.045,
+   "pixels": 156,
+   "approved_slot": 3,
+   "model_slot": 1,
+   "needs_review": false,
+   "bbox_px": [
+    489,
+    375,
+    27,
+    14
+   ],
+   "centroid_mm": [
+    27.43,
+    7.64,
+    181.28
+   ],
+   "face_count": 110
+  },
+  {
+   "id": 25,
+   "area_mm2": 3.501,
+   "pixels": 135,
+   "approved_slot": 3,
+   "model_slot": 1,
+   "needs_review": false,
+   "bbox_px": [
+    378,
+    348,
+    19,
+    11
+   ],
+   "centroid_mm": [
+    16.01,
+    -11.39,
+    186.44
+   ],
+   "face_count": 28
+  },
+  {
+   "id": 26,
+   "area_mm2": 2.826,
+   "pixels": 109,
+   "approved_slot": 3,
+   "model_slot": 2,
+   "needs_review": true,
+   "bbox_px": [
+    397,
+    924,
+    21,
+    16
+   ],
+   "centroid_mm": [
+    19.22,
+    -9.6,
+    92.88
+   ],
+   "face_count": 36
+  },
+  {
+   "id": 27,
+   "area_mm2": 2.723,
+   "pixels": 105,
+   "approved_slot": 1,
+   "model_slot": 3,
+   "needs_review": true,
+   "bbox_px": [
+    277,
+    453,
+    27,
+    6
+   ],
+   "centroid_mm": [
+    7.67,
+    -28.98,
+    170.94
+   ],
+   "face_count": 57
+  },
+  {
+   "id": 28,
+   "area_mm2": 2.282,
+   "pixels": 88,
+   "approved_slot": 5,
+   "model_slot": 1,
+   "needs_review": false,
+   "bbox_px": [
+    486,
+    1038,
+    6,
+    28
+   ],
+   "centroid_mm": [
+    29.28,
+    -1.48,
+    73.96
+   ],
+   "face_count": 43
+  },
+  {
+   "id": 29,
+   "area_mm2": 2.023,
+   "pixels": 78,
+   "approved_slot": 1,
+   "model_slot": 3,
+   "needs_review": false,
+   "bbox_px": [
+    203,
+    369,
+    17,
+    7
+   ],
+   "centroid_mm": [
+    -5.6,
+    -31.55,
+    184.23
+   ],
+   "face_count": 51
+  },
+  {
+   "id": 30,
+   "area_mm2": 1.841,
+   "pixels": 71,
+   "approved_slot": 1,
+   "model_slot": 5,
+   "needs_review": false,
+   "bbox_px": [
+    231,
+    523,
+    29,
+    5
+   ],
+   "centroid_mm": [
+    0.19,
+    -30.23,
+    159.54
+   ],
+   "face_count": 55
+  },
+  {
+   "id": 31,
+   "area_mm2": 1.66,
+   "pixels": 64,
+   "approved_slot": 3,
+   "model_slot": 1,
+   "needs_review": true,
+   "bbox_px": [
+    189,
+    420,
+    8,
+    28
+   ],
+   "centroid_mm": [
+    -12.36,
+    -24.9,
+    173.62
+   ],
+   "face_count": 45
+  },
+  {
+   "id": 32,
+   "area_mm2": 1.608,
+   "pixels": 62,
+   "approved_slot": 3,
+   "model_slot": 2,
+   "needs_review": false,
+   "bbox_px": [
+    184,
+    401,
+    13,
+    7
+   ],
+   "centroid_mm": [
+    -12.58,
+    -25.23,
+    178.37
+   ],
+   "face_count": 38
+  },
+  {
+   "id": 33,
+   "area_mm2": 1.556,
+   "pixels": 60,
+   "approved_slot": 1,
+   "model_slot": 3,
+   "needs_review": true,
+   "bbox_px": [
+    344,
+    380,
+    21,
+    6
+   ],
+   "centroid_mm": [
+    16.95,
+    -25.04,
+    182.66
+   ],
+   "face_count": 48
+  },
+  {
+   "id": 34,
+   "area_mm2": 1.53,
+   "pixels": 59,
+   "approved_slot": 2,
+   "model_slot": 1,
+   "needs_review": false,
+   "bbox_px": [
+    468,
+    1147,
+    6,
+    18
+   ],
+   "centroid_mm": [
+    27.2,
+    -3.98,
+    57.09
+   ],
+   "face_count": 52
+  },
+  {
+   "id": 35,
+   "area_mm2": 1.504,
+   "pixels": 58,
+   "approved_slot": 4,
+   "model_slot": 2,
+   "needs_review": true,
+   "bbox_px": [
+    366,
+    894,
+    16,
+    6
+   ],
+   "centroid_mm": [
+    14.71,
+    -13.83,
+    99.19
+   ],
+   "face_count": 16
+  },
+  {
+   "id": 36,
+   "area_mm2": 1.504,
+   "pixels": 58,
+   "approved_slot": 4,
+   "model_slot": 1,
+   "needs_review": true,
+   "bbox_px": [
+    494,
+    1011,
+    5,
+    21
+   ],
+   "centroid_mm": [
+    29.64,
+    0.43,
+    78.4
+   ],
+   "face_count": 27
+  },
+  {
+   "id": 37,
+   "area_mm2": 1.167,
+   "pixels": 45,
+   "approved_slot": 5,
+   "model_slot": 2,
+   "needs_review": true,
+   "bbox_px": [
+    157,
+    1467,
+    8,
+    21
+   ],
+   "centroid_mm": [
+    -21.86,
+    -17.86,
+    4.48
+   ],
+   "face_count": 34
+  },
+  {
+   "id": 38,
+   "area_mm2": 1.063,
+   "pixels": 41,
+   "approved_slot": 2,
+   "model_slot": 1,
+   "needs_review": false,
+   "bbox_px": [
+    293,
+    672,
+    13,
+    16
+   ],
+   "centroid_mm": [
+    -2.72,
+    -6.11,
+    132.93
+   ],
+   "face_count": 30
+  },
+  {
+   "id": 39,
+   "area_mm2": 1.063,
+   "pixels": 41,
+   "approved_slot": 4,
+   "model_slot": 1,
+   "needs_review": true,
+   "bbox_px": [
+    490,
+    1133,
+    9,
+    14
+   ],
+   "centroid_mm": [
+    31.83,
+    -4.02,
+    59.72
+   ],
+   "face_count": 33
+  },
+  {
+   "id": 40,
+   "area_mm2": 0.933,
+   "pixels": 36,
+   "approved_slot": 2,
+   "model_slot": 1,
+   "needs_review": false,
+   "bbox_px": [
+    281,
+    412,
+    8,
+    6
+   ],
+   "centroid_mm": [
+    4.97,
+    -25.91,
+    177.26
+   ],
+   "face_count": 18
+  }
+ ]
+}
