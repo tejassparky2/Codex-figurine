@@ -177,3 +177,16 @@ wrong"). Their image is `reference/photo-front.jpg` (= round 1's). Round 2 had b
 - Compared in `variants/mouth-variants.png`: A drop 2.5 / B no drop / C no cut (C shows Tripo's lower-teeth clay).
 - **Note:** `render_outputs.py` renders the exported finish guide, not `$MESH`. Export before rendering a variant.
 - Checks: 0 self-intersections, watertight, 1 body; mouth = skin + white only; one pause 120 mm T4; max 4 colours per band; verify_3mf passed. Not sliced.
+
+## Review (owner, 2026-11-20, circled screenshot): "just open hollow that part"
+- The circled band = from the upper teeth down to the front of the lower lip (~3.5 mm at the centre). The same band as the old 2.5 mm DROP, which read as a box.
+- **New `tools/hollow_mouth.py`:**
+  - spline outline with a rounded smile-shaped bottom (DROP·(1−u²)^1.5);
+  - smooth back wall, 6 mm behind a quadratic of the front surface;
+  - the floor stays level just inside the lip, then falls 2.5 mm toward the back. You look into a hollow, not onto a shelf;
+  - fall point and back wall smoothed along x; per-column values left ridges and a pocket;
+  - all leftover pink → skin.
+- **Chain:** `hollow_mouth.py cs.npz h_cut.npz 6 3.0 2.5` → `match_head.py 6` → `lift_ears.py 2.2` → `whisky_brows.py 106.0 0.0` → `cs_match19.npz`.
+- **Renderer fix (`render_outputs.py`):** a corner whose smooth normal is more than 35° off its face uses the face normal. Smooth normals across a cut rim drew dark sawtooth spikes; that was the "jagged" edge of the old opening, not geometry.
+- **Section:** `renders/hollow-section.png`: ~3.5 mm tall opening, ~5 mm deep, floor sloping down at the back. The ceiling under the teeth is a ~5 mm overhang; check bridging/support there in the slicer.
+- **Checks:** 0 self-intersections, watertight, 1 body; mouth = skin + white only; one pause 120 mm T4; max 4 colours per band; verify_3mf passed. Not sliced.

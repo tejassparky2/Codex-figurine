@@ -29,13 +29,17 @@ sheet.save('out/Finish-all-sides.png')
 # 2) lit hero (presentation only; the file's labels stay flat)
 W, H = 1600, 3000; fb = ctx.simple_framebuffer((W, H)); fb.use(); fb.clear(.90, .88, .85, 1, depth=1)
 m = trimesh.Trimesh(v, f, process=False); nrm = m.vertex_normals.astype('f4')
+# Sharp edges stay sharp: a corner whose smooth normal is >35 deg off its face uses the face normal. Averaging across
+# the 90 deg rim of a cut opening shaded the rim's thin triangles into dark sawtooth spikes (owner saw them, 2026-11-20).
+fn = m.face_normals.astype('f4'); cn = nrm[f]; flat = np.einsum('fkj,fj->fk', cn, fn) < np.cos(np.deg2rad(35))
+cn[flat] = np.repeat(fn[:, None, :], 3, 1)[flat]; nrm_c = np.ascontiguousarray(cn, 'f4')
 pr = ctx.program(vertex_shader="""#version 330
 in vec3 pos; in vec3 normal; in vec3 rgb; out vec3 co; out vec3 N;
 void main(){float c=cos(.42),s=sin(.42); float x=c*pos.x+s*pos.y, y=-s*pos.x+c*pos.y; gl_Position=vec4(x/62.,(pos.z-110.+.03*y)/116.,y/160.,1); N=vec3(c*normal.x+s*normal.y,-s*normal.x+c*normal.y,normal.z); co=rgb;}""",
 fragment_shader="""#version 330
 in vec3 co; in vec3 N; out vec4 o; void main(){vec3 n=normalize(N); vec3 L=normalize(vec3(-.5,-.75,.6)); vec3 H=normalize(L+vec3(0,-1,.05));
 float d=.74+.30*max(0.,dot(n,L)); float sp=.05*pow(max(0.,dot(n,H)),30.); o=vec4(co*d+sp,1);}""")
-vao = ctx.vertex_array(pr, [(ctx.buffer(v[f].tobytes()), '3f', 'pos'), (ctx.buffer(nrm[f].tobytes()), '3f', 'normal'), (ctx.buffer(np.repeat(cols[l], 3, 0).tobytes()), '3f', 'rgb')])
+vao = ctx.vertex_array(pr, [(ctx.buffer(v[f].tobytes()), '3f', 'pos'), (ctx.buffer(nrm_c.tobytes()), '3f', 'normal'), (ctx.buffer(np.repeat(cols[l], 3, 0).tobytes()), '3f', 'rgb')])
 ctx.enable(gl.DEPTH_TEST); vao.render()
 hero = Image.frombytes('RGB', (W, H), fb.read()).transpose(Image.Transpose.FLIP_TOP_BOTTOM).resize((800, 1500), Image.Resampling.LANCZOS)
 hero.save('out/Man-with-drink-hero.png'); hero.crop((150, 0, 650, 520)).resize((1000, 1040), Image.Resampling.LANCZOS).save('out/Man-with-drink-face.png')
@@ -47,7 +51,7 @@ void main(){gl_Position=vec4((pos.x-B.x)/B.z,(pos.z-B.y)/B.w,pos.y/160.,1); N=no
 fragment_shader="""#version 330
 in vec3 co; in vec3 N; out vec4 o; void main(){vec3 n=normalize(N); vec3 L=normalize(vec3(-.35,-.85,.45)); vec3 H=normalize(L+vec3(0,-1,0));
 float d=.74+.30*max(0.,dot(n,L)); float sp=.05*pow(max(0.,dot(n,H)),30.); o=vec4(co*d+sp,1);}""")
-vao = ctx.vertex_array(pr, [(ctx.buffer(v[f].tobytes()), '3f', 'pos'), (ctx.buffer(nrm[f].tobytes()), '3f', 'normal'), (ctx.buffer(np.repeat(cols[l], 3, 0).tobytes()), '3f', 'rgb')])
+vao = ctx.vertex_array(pr, [(ctx.buffer(v[f].tobytes()), '3f', 'pos'), (ctx.buffer(nrm_c.tobytes()), '3f', 'normal'), (ctx.buffer(np.repeat(cols[l], 3, 0).tobytes()), '3f', 'rgb')])
 for name, Bx, By, hw, hh, size in [('front', 0, 110, 52, 116, (1400, 3000)), ('front-face', 0, 170, 34, 34, (2000, 2000))]:
     fb = ctx.simple_framebuffer(size); fb.use(); fb.clear(.90, .88, .85, 1, depth=1); pr['B'].value = (Bx, By, hw, hh); vao.render()
     im = Image.frombytes('RGB', size, fb.read()).transpose(Image.Transpose.FLIP_TOP_BOTTOM)
