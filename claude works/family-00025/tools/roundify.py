@@ -174,7 +174,37 @@ for who, k, e, R in plans:
     sdf_cut(sv, 1, S if len(S) == len(F) else np.zeros(len(F), bool))
     m = mesh(); c = m.triangles_center
     print('%-4s eye %d: lash line cut along the smoothed lid curve' % (who, k))
-# (baby eyebrows: painted from the sculpted clay brows in eyes.py; the drawn arcs were in the wrong place)
+# ---- baby eyebrows: painted from the clay in eyes.py, but face-by-face edges looked jagged (owner). Redraw each as a smooth
+#      shape: upper/lower edge of the clay brow per 0.2 mm along the eye axis, Gaussian-smoothed, tapered ends, exact cut. ----
+from scipy.ndimage import gaussian_filter1d as _g1
+for name, ex, ez, ang in [('baby R', 33.3, 72.96, 5.6), ('baby L', 45.0, 74.1, 5.6)]:
+    t = np.deg2rad(ang); ax3 = np.array([np.cos(t), 0, np.sin(t)]); up3 = np.array([-np.sin(t), 0, np.cos(t)])
+    o3 = np.array([ex, 0, ez])
+    cc = V[F].mean(1); d = cc - o3; u, v = d @ ax3, d @ up3
+    band = (np.abs(u) < 5.4) & (v > 1.5) & (v < 6.4) & (cc[:, 1] < -20)
+    bf = band & (L == 1)
+    if bf.sum() < 20: continue
+    bv_ = np.unique(F[bf]); pu, pv = (V[bv_] - o3) @ ax3, (V[bv_] - o3) @ up3
+    u0, u1 = np.percentile(pu, 1), np.percentile(pu, 99)
+    bins = np.arange(u0, u1 + 0.2, 0.2); lo = np.full(len(bins), np.nan); hi = np.full(len(bins), np.nan)
+    for i, b0 in enumerate(bins):
+        q = np.abs(pu - b0) < 0.2
+        if q.sum() >= 3: lo[i], hi[i] = np.percentile(pv[q], 8), np.percentile(pv[q], 92)
+    ok = np.isfinite(lo); lo = np.interp(bins, bins[ok], lo[ok]); hi = np.interp(bins, bins[ok], hi[ok])
+    lo, hi = _g1(lo, 2.5, mode='nearest'), _g1(hi, 2.5, mode='nearest')
+    mid = (lo + hi) / 2; half = np.maximum((hi - lo) / 2, 0.18)
+    tip = np.clip(np.minimum(bins - u0, u1 - bins) / 0.8, 0, 1); half = half * (0.35 + 0.65 * np.sqrt(tip))   # soft tapered ends
+    L[bf] = 0                                                   # clear the jagged paint, then cut the smooth shape
+    cen = o3 + ((u0 + u1) / 2) * ax3 + np.median(mid) * up3
+    cen = mesh().ray.intersects_location([[cen[0], -300., cen[2]]], [[0, 1., 0]], multiple_hits=False)[0][0]
+    refine(cen, (u1 - u0) / 2 + 0.8, 0.07)
+    dV = V - o3; uV, vV = dV @ ax3, dV @ up3
+    m_ = np.interp(uV, bins, mid); h_ = np.interp(uV, bins, half)
+    sv = np.maximum(np.abs(vV - m_) - h_, np.maximum(u0 - uV, uV - u1))
+    sv[(V[:, 1] > -20) | (np.abs(uV) > 6) | (vV < 1.0) | (vV > 7.0)] = 1.0
+    cc = V[F].mean(1); dc = cc - o3; elig = (L == 0) & (cc[:, 1] < -20) & (np.abs(dc @ ax3) < 6) & ((dc @ up3) > 1.0)
+    sdf_cut(sv, 1, elig)
+    print('%-7s eyebrow redrawn smooth: length %.1f mm, max width %.2f mm' % (name, u1 - u0, 2 * half.max()))
 # ---- dots ----
 s = 150.0 / 149.5
 DOTS = [('mother bindi', (19.77, -12.85, 120.23), 0.55, 5), ('baby forehead', (38.25, -41.52, 80.20), 0.45, 5), ('baby cheek', (49.56, -40.68, 67.44), 0.38, 1)]
