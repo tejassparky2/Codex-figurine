@@ -1,10 +1,10 @@
 """Family #00025 (Tripo A, v2 art, bumps removed), 150 mm, flat bottom (glued to a separately printed base), Snapmaker U1.
   out/Family-00025-150mm-finish-guide.3mf : 8 finish colours (after hand-painting)
   out/Family-00025-U1-150mm.3mf           : 4 heads, one pause (T4 navy -> red, mother bindi)
-Round 3 (MESH=cs_r3.npz from tools/recolor_r3.py): white + navy beads, navy baby T-shirt; only the forehead dot is painted.
+Round 3 (MESH=cs_r3.npz from tools/recolor_r3.py): white + navy beads, white baby T-shirt; only the forehead dot is painted.
 Finish: 0 skin, 1 black, 2 white, 3 navy, 4 light blue, 5 red, 6 royal blue, 7 gold.
 Heads: T1 Apricot (skin), T2 Black, T3 Pure White, T4 Navy (-> Red at the pause, for the bindi).
-One front bracelet bead is black (owner)."""
+Bracelet (owner): black, white, navy, black across the front."""
 import json, re, zipfile, os, numpy as np, trimesh
 MESH = os.environ.get('MESH', 'cs.npz'); NAVY = os.environ.get('NAVY', '#17254F')
 z = np.load(MESH); V, F = z['v'], z['f']; lab = z['l'].astype(int)
@@ -59,7 +59,7 @@ print_notes = ('Snapmaker U1 project, 150 mm tall, scale 100%. Flat bottom: glue
                f'Four heads at the start: T1 Apricot #E6BAA8 (skin)  T2 Black #0E0E10  T3 Pure White #F1ECE1  T4 Navy {NAVY}\n'
                f'PAUSE at the first layer at or above {PAUSE:.1f} mm: swap T4 Navy -> Red #BB1E10 (mother bindi). '
                f'Navy ends {hi[nav & ~bindi].max():.2f} mm, red starts {lo[bindi].min():.2f} mm.\n'
-               'Bracelet beads print white and navy; baby T-shirt prints navy like the mother top.\n'
+               'Bracelet beads print white and navy; baby T-shirt prints white.\n'
                'Kaala tika on the baby cheek prints black, flat. Baby forehead dot prints white, paint it red.\n'
                'Printed white, hand-paint afterwards:\n' + paint_txt + '\n'
                'Select your real U1 printer, nozzle and PLA+ presets in Snapmaker Orca before slicing. Supports and wipe tower on white.\n')
