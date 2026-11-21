@@ -52,4 +52,20 @@ for name, ex, ez, ang in EYES:
     mat[rim] = 0
     print('%-6s opening %.1f x %.1f mm, socket %.2f mm2, iris %.2f mm2 at u %+.2f, lash %.2f mm2' % (
         name, 2*hw, 2*hh, area[alm].sum(), area[iris].sum(), iu, area[lash].sum()))
+# owner 2026-11-21: "where is baby's eyebrows" -- faint in the texture, so no pass painted them. Draw each as a thin solid
+# black arc at the texture's darker brow band above the eye (couple eyes.py method).
+BABY = []   # moved to roundify.py: face-by-face arcs this thin came out as broken dashes; drawn there as exact cuts
+for name, ex, ez, ang, outer in BABY:
+    t = np.deg2rad(ang); ax, up = np.array([np.cos(t), np.sin(t)]), np.array([-np.sin(t), np.cos(t)])
+    d = np.c_[c[:,0]-ex, c[:,2]-ez]; u, v = d @ ax, d @ up
+    near = (nrm[:,1] < -0.1) & (c[:,1] < -20) & (np.abs(u) < 3.6) & (v > 0.9) & (v < 4.2) & (mat == 0)
+    sk = np.median(Lt[near]); bb = near & (Lt < sk - 4)
+    bv = np.average(v[bb], weights=area[bb]) if bb.sum() > 20 else 2.2
+    bv = float(np.clip(bv, 1.7, 3.0))
+    uu = (u * outer + 0.2) / 2.9                              # -1 inner end .. +1 outer tail
+    ctr = bv + 0.30 * (1 - uu**2) - 0.10 * uu                 # gentle arch, tail slightly lower
+    th = 0.25 * np.clip(1.1 - 0.45 * np.abs(uu + 0.25), 0.45, 1)   # half thickness, tapering
+    brow = (nrm[:,1] < -0.1) & (c[:,1] < -20) & (np.abs(uu) < 1) & (np.abs(v - ctr) < th) & (mat == 0)
+    mat[brow] = 1
+    print('%-7s brow: band at %.2f mm above the eye, %.2f mm2 black' % (name, bv, area[brow].sum()))
 np.save('materials_e.npy', mat.astype('u1'))
