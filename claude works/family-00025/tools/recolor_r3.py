@@ -22,5 +22,15 @@ BEADS = [('marked bead (navy)', 3, (-0.8, -32.5, 53.4), 1), ('front bead (white)
 sel = [(nm, bead(lbl, ctr), to) for nm, lbl, ctr, to in BEADS]
 for nm, t, to in sel:
     L[t] = to; print('%-19s -> %s: %.1f mm2, centre %s' % (nm, ['skin', 'black', 'white', 'navy'][to], area[t].sum(), np.round(c[t].mean(0), 1)))
+# owner (circled): skin tongue under the baby's chin running into the white T-shirt. Upward-facing skin below the jaw
+# is the neck / collar shelf, not the face -> white, so the jaw line is the edge.
+nz = m.face_normals[:, 2]
+neck = (L == 0) & (c[:, 0] > 46) & (c[:, 0] < 57) & (c[:, 2] > 55) & (c[:, 2] < 62) & (c[:, 1] < -15) & (nz > 0.35)
+L[neck] = 2
+# leftover skin flecks inside the new white (not joined to the face) -> white
+nb = (L == 0) & (c[:, 0] > 44) & (c[:, 0] < 58) & (c[:, 2] > 54) & (c[:, 2] < 64) & (c[:, 1] < -15)
+k = nb[a] & nb[b]; comp = connected_components(coo_matrix((np.ones(k.sum()), (a[k], b[k])), shape=(n, n)), directed=False)[1]
+ca = np.bincount(comp[nb], weights=area[nb], minlength=comp.max() + 1); fleck = nb & (ca[comp] < 3.0)
+L[fleck] = 2; neck |= fleck; print('skin under the baby jaw -> white: %.1f mm2' % area[neck].sum())
 r = L == 5; print('red left: z %.2f..%.2f mm, %.1f mm2' % (V[F[r]][:, :, 2].min(), V[F[r]][:, :, 2].max(), area[r].sum()))
 np.savez('cs_r3.npz', v=V, f=F, l=L.astype('u1'))
