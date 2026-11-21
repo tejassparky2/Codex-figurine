@@ -32,5 +32,17 @@ nb = (L == 0) & (c[:, 0] > 44) & (c[:, 0] < 58) & (c[:, 2] > 54) & (c[:, 2] < 64
 k = nb[a] & nb[b]; comp = connected_components(coo_matrix((np.ones(k.sum()), (a[k], b[k])), shape=(n, n)), directed=False)[1]
 ca = np.bincount(comp[nb], weights=area[nb], minlength=comp.max() + 1); fleck = nb & (ca[comp] < 3.0)
 L[fleck] = 2; neck |= fleck; print('skin under the baby jaw -> white: %.1f mm2' % area[neck].sum())
+# owner: "that should be white not black" -> the black strip on the shoulder between the white collar and the overall
+# strap (upward-facing shelf; texture shaded it dark) is T-shirt. x < 55: the strap itself runs over the shoulder at x 55-57
+shoulder = (L == 1) & (c[:, 0] > 50) & (c[:, 0] < 55.8) & (c[:, 2] > 61.5) & (c[:, 2] < 65) & (c[:, 1] < 5) & (nz > 0.3)
+L[shoulder] = 2
+# big shelf triangles leave spikes at the strap edge: small white / black islands there flip to the other colour
+reg = (c[:, 0] > 53.5) & (c[:, 0] < 57.5) & (c[:, 2] > 61) & (c[:, 2] < 65.5) & (c[:, 1] < 5) & np.isin(L, [1, 2])
+for _ in range(3):
+    same = reg[a] & reg[b] & (L[a] == L[b]); comp = connected_components(coo_matrix((np.ones(same.sum()), (a[same], b[same])), shape=(n, n)), directed=False)[1]
+    ca = np.bincount(comp[reg], weights=area[reg], minlength=comp.max() + 1); sm = reg & (ca[comp] < 0.6)
+    if not sm.any(): break
+    L[sm] = np.where(L[sm] == 1, 2, 1)
+print('black shoulder strip -> white: %.1f mm2' % area[shoulder].sum())
 r = L == 5; print('red left: z %.2f..%.2f mm, %.1f mm2' % (V[F[r]][:, :, 2].min(), V[F[r]][:, :, 2].max(), area[r].sum()))
 np.savez('cs_r3.npz', v=V, f=F, l=L.astype('u1'))
