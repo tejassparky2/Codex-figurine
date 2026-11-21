@@ -122,6 +122,18 @@ for who, eyes in EYES.items():
         smallb = (L == 1) & (bigb[cb] < 12.0) & near
         touch = np.zeros(n, bool); d = (white[ei] & smallb[ej]) | (smallb[ei] & white[ej]); touch[ei[d]] = touch[ej[d]] = True
         op = white | (np.isin(cb, np.unique(cb[touch & smallb])) & smallb)
+        # any small dark iris island near the eye centre is part of the opening too (left a black lobe beside a pupil)
+        oc = np.average(c[op], axis=0, weights=area[op])
+        op |= smallb & (np.linalg.norm(c - oc, axis=1) < 1.6)
+        if who == 'dad':
+            # owner 2026-11-21: dad's pupils read small next to the mother's -- his sculpted openings are 25% shorter, so the
+            # lids clip the iris. Open each eye 0.3 mm up and down (not at the corners).
+            from scipy.spatial import cKDTree
+            dd, _ = cKDTree(c[op]).query(c, distance_upper_bound=0.3)
+            ax_ = np.array([np.cos(np.deg2rad(-9.7)), 0, np.sin(np.deg2rad(-9.7))])
+            uu_ = (c - oc) @ ax_; uw = np.percentile(((c[op] - oc) @ ax_), [5, 95])
+            grow = np.isfinite(dd) & (L == 0) & near & (uu_ > uw[0] * 0.8) & (uu_ < uw[1] * 0.8)
+            op |= grow
         A = area[op]; ctr = np.average(c[op], axis=0, weights=A)
         nr = np.average(m.face_normals[op], axis=0, weights=A); nr /= np.linalg.norm(nr)
         dk = op & (Lt[:n] < np.percentile(Lt[:n][op], 35)); ic = np.average(c[dk], axis=0, weights=area[dk])
@@ -131,7 +143,9 @@ for who, eyes in EYES.items():
         u = axis - (axis @ e['nr']) * e['nr']; u /= np.linalg.norm(u); v = np.cross(e['nr'], u); e['u'], e['v'] = u, v
         pv = (c[e['op']] - e['ctr']) @ v; e['H'] = np.percentile(pv, 98) - np.percentile(pv, 2); e['vmid'] = (np.percentile(pv, 98) + np.percentile(pv, 2)) / 2
         offs.append((e['ic'] - e['ctr']) @ u)
-    R = 0.55 * min(e['H'] for e in info); gaze = float(np.clip(np.mean(offs), -0.6, 0.6))
+    R = 0.55 * min(e['H'] for e in info)
+    R = {'dad': 1.30}.get(who, R)                          # owner 2026-11-21: dad's pupils too small next to the mother's -> same size as hers
+    gaze = float(np.clip(np.mean(offs), -0.6, 0.6))
     for k, e in enumerate(info):
         e['pc'] = e['ctr'] + gaze * e['u'] + e['vmid'] * e['v']; plans.append((who, k, e, R))
         print('%-4s eye %d: opening %.2f mm2, height %.2f mm -> pupil radius %.2f mm (gaze %+.2f mm)' % (who, k, e['A'], e['H'], R, gaze))
