@@ -69,8 +69,20 @@ cx, cz = -29.3, 136.4
 ringf = (np.hypot(x - cx, zz - (cz - 1.9)) < 5) & (np.hypot(x - cx, zz - (cz - 1.9)) > 3) & (out == 0) & (y < 0)
 coef = np.linalg.lstsq(np.c_[x[ringf], zz[ringf], np.ones(ringf.sum())], y[ringf], rcond=None)[0]
 prot = (np.c_[x, zz, np.ones(n)] @ coef) - y
-curl = (np.hypot(x - cx, zz - cz) < 2.6) & (y < 0) & (out == 0) & (prot > 0.35)
-out[curl] = 1; print('dad forehead curl -> black: %.1f mm2' % area[curl].sum())
+# owner 2026-11-21: "only one line, not full" -> the curl is ONE strand line (0.6 mm wide) along the U the texture shows,
+# traced at 62.5 px/mm on renders/curl-tex.png; the U's own area (below the hairline) is skin.
+U_PATH = np.array([(-30.90, 138.86), (-30.74, 137.10), (-30.10, 135.82), (-29.14, 135.02), (-28.02, 135.50), (-27.22, 136.62), (-26.90, 138.54)])
+def dist_poly(px, pz):
+    d = np.full(len(px), 1e9)
+    for (x0, z0), (x1, z1) in zip(U_PATH[:-1], U_PATH[1:]):
+        vx, vz = x1 - x0, z1 - z0; t = np.clip(((px - x0) * vx + (pz - z0) * vz) / (vx*vx + vz*vz), 0, 1)
+        d = np.minimum(d, np.hypot(px - x0 - t*vx, pz - z0 - t*vz))
+    return d
+dU = dist_poly(x, zz)
+zoneU = (dU < 1.6) & (y < 0) & (zz < 138.4) & np.isin(out, [0, 1]) & (lab != 1) & (x > -32) & (x < -26)
+line = (dU < 0.30) & (y < 0) & np.isin(out, [0, 1])
+out[zoneU] = 0; out[line] = 1
+print('dad forehead curl: one strand line %.1f mm2 black, U area %.1f mm2 skin' % (area[line].sum(), area[zoneU & ~line].sum()))
 # --- 2) bracelet beads: one colour each. Beads are split by angle around the ring (necks = area minima) ---
 from scipy.ndimage import gaussian_filter1d
 S = np.isin(out, [5, 6]) & (x > -12) & (x < 20) & (zz > 44) & (zz < 68)
