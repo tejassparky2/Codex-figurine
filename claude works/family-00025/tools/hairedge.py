@@ -42,6 +42,20 @@ lx0, lx1 = np.percentile(x[pink], 1) - 0.3, np.percentile(x[pink], 99) + 0.3
 LIPS = MBOX & (x > lx0) & (x < lx1)
 lz0, lz1 = np.percentile(zz[pink], 1) - 0.8, np.percentile(zz[pink], 99) + 1.0          # lip height only (never the cheek above)
 BEARD_PATCH = MBOX & ~LIPS & (zz > lz0) & (zz < lz1)
+# owner 2026-11-21: skin tail at the lower-left lip corner -> beard. Reshape the lips: per 0.25 mm in x, top/bottom of the
+# lip skin, smoothed, pinched together over the last 1.6 mm at each corner; skin outside that shape (lip height) is beard.
+from scipy.ndimage import gaussian_filter1d as _gf
+xb = np.arange(lx0, lx1 + 0.25, 0.25); top = np.full(len(xb), np.nan); bot = np.full(len(xb), np.nan)
+cand = LIPS & (zz > lz0) & (zz < lz1)
+for i, x0_ in enumerate(xb):
+    q = cand & (np.abs(x - x0_) < 0.25)
+    if q.sum() > 3: top[i], bot[i] = np.percentile(zz[q], 99), np.percentile(zz[q], 1)
+ok_ = np.isfinite(top); top = _gf(np.interp(xb, xb[ok_], top[ok_]), 3); bot = _gf(np.interp(xb, xb[ok_], bot[ok_]), 3) - 0.08
+midl = (top + bot) / 2; endw = np.clip(np.minimum(xb - xb[0], xb[-1] - xb) / 1.6, 0, 1) ** 0.6
+topT = midl + (top - midl) * endw; botT = midl + (bot - midl) * endw
+LIPS2 = cand & (zz <= np.interp(x, xb, topT)) & (zz >= np.interp(x, xb, botT))
+BEARD_PATCH |= (LIPS & ~LIPS2 & (zz > lz0) & (zz < lz1)); LIPS = LIPS2 | (LIPS & ~((zz > lz0) & (zz < lz1)))
+print('lip corners tapered: %.1f mm2 of lip-height skin -> beard' % area[BEARD_PATCH].sum())
 print('lips x %.1f..%.1f; skin patch beside the lips -> black: %.1f mm2' % (lx0, lx1, area[BEARD_PATCH].sum()))
 U[LIPS, 1] = 1e9
 U[BEARD_PATCH, 0] = 1e9
