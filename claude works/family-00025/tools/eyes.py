@@ -54,7 +54,31 @@ for name, ex, ez, ang in EYES:
         name, 2*hw, 2*hh, area[alm].sum(), area[iris].sum(), iu, area[lash].sum()))
 # owner 2026-11-21: "where is baby's eyebrows" -- faint in the texture, so no pass painted them. Draw each as a thin solid
 # black arc at the texture's darker brow band above the eye (couple eyes.py method).
-BABY = []   # moved to roundify.py: face-by-face arcs this thin came out as broken dashes; drawn there as exact cuts
+BABY = []   # (texture-band arcs removed: owner "baby have different eyebrows clay and you painted other")
+# Paint the SCULPTED brows: high-pass of the surface (face centre minus its 1.6 mm neighbourhood mean, along the normal);
+# the clay brow is the biggest raised island in the band above each eye.
+from scipy.spatial import cKDTree
+from scipy.sparse import coo_matrix as _coo
+from scipy.sparse.csgraph import connected_components as _cc
+regb = (c[:,0] > 26) & (c[:,0] < 54) & (c[:,2] > 70) & (c[:,2] < 84) & (c[:,1] < -20) & (nrm[:,1] < -0.1)
+idb = np.flatnonzero(regb); tb_ = cKDTree(c[idb]); hp = np.zeros(n)
+for i, l in zip(idb, tb_.query_ball_point(c[idb], 1.6)):
+    w = area[idb[l]]; mc = (c[idb[l]] * w[:, None]).sum(0) / w.sum(); mn = (nrm[idb[l]] * w[:, None]).sum(0); mn /= np.linalg.norm(mn)
+    hp[i] = (c[i] - mc) @ mn
+eiB, ejB = m.face_adjacency.T
+for name, ex, ez, ang in [('baby R', 33.3, 72.96, 5.6), ('baby L', 45.0, 74.1, 5.6)]:
+    t = np.deg2rad(ang); ax, up = np.array([np.cos(t), np.sin(t)]), np.array([-np.sin(t), np.cos(t)])
+    d = np.c_[c[:,0]-ex, c[:,2]-ez]; u, v = d @ ax, d @ up
+    band = regb & (np.abs(u) < 4.8) & (v > 1.9) & (v < 6.0) & (mat == 0)
+    raised = band & (hp > 0.09)
+    k = raised[eiB] & raised[ejB]; comp = _cc(_coo((np.ones(k.sum()), (eiB[k], ejB[k])), shape=(n, n)), directed=False)[1]
+    ca = np.bincount(comp[raised], weights=area[raised], minlength=comp.max() + 1)
+    brow = raised & (comp == np.argmax(ca))
+    # close small gaps inside the brow (one ring grow, then keep only faces that were raised-ish)
+    G_ = _coo((np.ones(2*len(eiB)), (np.r_[eiB, ejB], np.r_[ejB, eiB])), shape=(n, n)).tocsr()
+    grown = brow | (((G_ @ brow.astype('f4')) >= 2) & band & (hp > 0.04))
+    mat[grown] = 1
+    print('%-7s eyebrow from the clay: %.2f mm2, v %.1f..%.1f mm above the eye' % (name, area[grown].sum(), v[grown].min(), v[grown].max()))
 for name, ex, ez, ang, outer in BABY:
     t = np.deg2rad(ang); ax, up = np.array([np.cos(t), np.sin(t)]), np.array([-np.sin(t), np.cos(t)])
     d = np.c_[c[:,0]-ex, c[:,2]-ez]; u, v = d @ ax, d @ up

@@ -174,21 +174,7 @@ for who, k, e, R in plans:
     sdf_cut(sv, 1, S if len(S) == len(F) else np.zeros(len(F), bool))
     m = mesh(); c = m.triangles_center
     print('%-4s eye %d: lash line cut along the smoothed lid curve' % (who, k))
-# ---- baby eyebrows (owner: "where is baby's eyebrows"): solid black arcs as exact cuts, ~0.65 mm wide, tapering ----
-for name, ex, ez, ang, outer, bv in [('baby R', 33.3, 72.96, 5.6, -1, 2.83), ('baby L', 45.0, 74.1, 5.6, +1, 3.00)]:
-    t = np.deg2rad(ang); ax3 = np.array([np.cos(t), 0, np.sin(t)]); up3 = np.array([-np.sin(t), 0, np.cos(t)])
-    bc = np.array([ex, 0, ez]) + (bv + 0.3) * up3
-    bc = mesh().ray.intersects_location([[bc[0], -300., bc[2]]], [[0, 1., 0]], multiple_hits=False)[0][0]   # front surface point
-    refine(bc, 3.4, 0.07)
-    d = V - np.array([ex, 0, ez]); u = d @ ax3; v = d @ up3
-    uu = (u * outer + 0.2) / 2.9
-    ctr = bv + 0.30 * (1 - uu**2) - 0.10 * uu
-    th = 0.33 * np.clip(1.1 - 0.45 * np.abs(uu + 0.25), 0.45, 1)
-    sv = np.maximum(np.abs(v - ctr) - th, (np.abs(uu) - 1) * 2.9)            # inside: within thickness and length
-    sv[(V[:, 1] > -20) | (np.abs(V[:, 0] - bc[0]) > 4.5)] = 1.0
-    cc = V[F].mean(1); elig = (L == 0) & (cc[:, 1] < -20)
-    sdf_cut(sv, 1, elig)
-    print('%-7s eyebrow: solid arc, %.2f mm above the eye, max width %.2f mm' % (name, bv, 2 * 0.33))
+# (baby eyebrows: painted from the sculpted clay brows in eyes.py; the drawn arcs were in the wrong place)
 # ---- dots ----
 s = 150.0 / 149.5
 DOTS = [('mother bindi', (19.77, -12.85, 120.23), 0.55, 5), ('baby forehead', (38.25, -41.52, 80.20), 0.45, 5), ('baby cheek', (49.56, -40.68, 67.44), 0.38, 1)]
