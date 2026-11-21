@@ -39,7 +39,8 @@ print('dad hair/beard edge: band %d faces | skin->black %.1f mm2, black->skin %.
 # --- 1b) hairlines (mother, dad): sculpted strands painted skin. Use the SHAPE: strands are rough, forehead skin smooth.
 from scipy.spatial import cKDTree
 rough = np.zeros(n)
-HL = [('mother', (c[:,0] > 4) & (c[:,0] < 38) & (zz > 119.5)), ('dad', (c[:,0] < -10) & (zz > 129.5))]
+HL = [('mother', (c[:,0] > 4) & (c[:,0] < 38) & (zz > 119.5)), ('dad', (c[:,0] < -10) & (zz > 129.5)),
+      ('baby', (c[:,0] > 24) & (c[:,0] < 58) & (zz > 82.0) & (c[:,1] < -20))]
 for nm, reg in HL:
     idx = np.flatnonzero(reg & (y < 5)); t = cKDTree(c[idx]); nb = t.query_ball_point(c[idx], 0.6); nr = m.face_normals
     for i, lst in zip(idx, nb):
@@ -63,26 +64,37 @@ for nm, reg in HL:
     out[bandh] = np.where(new[bandh] == 1, 1, 0)
     print('%s hairline: band %d faces | skin->black %.1f mm2, black->skin %.1f mm2' % (
         nm, bandh.sum(), area[(out == 1) & (before == 0)].sum(), area[(out == 0) & (before == 1)].sum()))
-# --- 1c) dad's forehead curl: a smooth sculpted lump (roughness misses it). Faces near it that stand > 0.35 mm proud of
-#         the forehead plane (fitted on a skin ring round it) become black.
 cx, cz = -29.3, 136.4
-ringf = (np.hypot(x - cx, zz - (cz - 1.9)) < 5) & (np.hypot(x - cx, zz - (cz - 1.9)) > 3) & (out == 0) & (y < 0)
-coef = np.linalg.lstsq(np.c_[x[ringf], zz[ringf], np.ones(ringf.sum())], y[ringf], rcond=None)[0]
-prot = (np.c_[x, zz, np.ones(n)] @ coef) - y
-# owner 2026-11-21: "only one line, not full" -> the curl is ONE strand line (0.6 mm wide) along the U the texture shows,
-# traced at 62.5 px/mm on renders/curl-tex.png; the U's own area (below the hairline) is skin.
-U_PATH = np.array([(-30.90, 138.86), (-30.74, 137.10), (-30.10, 135.82), (-29.14, 135.02), (-28.02, 135.50), (-27.22, 136.62), (-26.90, 138.54)])
-def dist_poly(px, pz):
-    d = np.full(len(px), 1e9)
-    for (x0, z0), (x1, z1) in zip(U_PATH[:-1], U_PATH[1:]):
-        vx, vz = x1 - x0, z1 - z0; t = np.clip(((px - x0) * vx + (pz - z0) * vz) / (vx*vx + vz*vz), 0, 1)
-        d = np.minimum(d, np.hypot(px - x0 - t*vx, pz - z0 - t*vz))
-    return d
-dU = dist_poly(x, zz)
-zoneU = (dU < 1.6) & (y < 0) & (zz < 138.4) & np.isin(out, [0, 1]) & (lab != 1) & (x > -32) & (x < -26)
-line = (dU < 0.30) & (y < 0) & np.isin(out, [0, 1])
-out[zoneU] = 0; out[line] = 1
-print('dad forehead curl: one strand line %.1f mm2 black, U area %.1f mm2 skin' % (area[line].sum(), area[zoneU & ~line].sum()))
+# owner 2026-11-21 (last review): "remove it" -> the curl is flattened out of the surface (tools/flatten.py); its area is skin.
+dU = np.hypot(x - (-28.9), zz - 136.6)
+zoneU = (dU < 2.6) & (y < 0) & (zz < 139.0) & np.isin(out, [0, 1]) & (lab != 1)
+out[zoneU] = 0; print('dad forehead curl area -> skin: %.1f mm2' % area[zoneU].sum())
+# --- 1d) owner 2026-11-21: "smooth the edges". Shortest-boundary re-solve of skin/black in a 6-ring band round every
+#         skin/black edge on the three heads (hair, beard, brows, glasses frames). Eyes (near white) and the dots stay out.
+from scipy.spatial import cKDTree as _KD
+heads = ((x < -10) & (zz > 92)) | ((x > 4) & (x < 38) & (zz > 98)) | ((x > 24) & (x < 58) & (zz > 60) & (y < -15))
+wv = np.flatnonzero(out == 2); dW, _ = _KD(c[wv]).query(c, distance_upper_bound=1.0) if len(wv) else (np.full(n, np.inf), None)
+dotsP = np.array([[19.86, -12.6, 120.03], [38.42, -41.19, 79.97], [49.35, -40.19, 67.2]])
+dD = np.min(np.linalg.norm(c[:, None, :] - dotsP[None], axis=2), axis=1)
+keepout = (((x > -50) & (x < -6) & (zz > 112) & (zz < 130.5)) |          # dad glasses (thin frame bars get eaten)
+           ((x > 4) & (x < 38) & (zz > 103.5) & (zz < 119)) |             # mother glasses
+           ((x > -39) & (x < -17) & (zz > 106.5) & (zz < 115.5)))          # dad lips between moustache and beard (shrank)
+spike = np.hypot(x - 33.4, zz - 108.7) < 1.3                              # ...except the black spike under the mother's frame
+okf = heads & np.isin(out, [0, 1]) & ~np.isfinite(dW) & (dD > 1.5) & (~keepout | spike)
+bdz = np.zeros(n, bool); d = (out[a] != out[b]) & np.isin(out[a], [0, 1]) & np.isin(out[b], [0, 1]); bdz[a[d]] = bdz[b[d]] = True
+bandS = bdz & okf
+for _ in range(6): bandS |= (G @ bandS.astype('f4')) > 0
+bandS &= okf
+cur = (out == 1).astype(int)
+U3 = np.zeros((n, 2)); U3[:, 0] = 1e9 * (~bandS & (cur == 1)); U3[:, 1] = 1e9 * (~bandS & (cur == 0))
+U3[bandS, 0] += 0.03 * area[bandS] * (cur[bandS] == 1); U3[bandS, 1] += 0.03 * area[bandS] * (cur[bandS] == 0)
+w3 = 1.0 * Ln; lin = U3[:, 1] - U3[:, 0]
+g = maxflow.Graph[float](n, len(a)); g.add_nodes(n); g.add_edges(a, b, w3, w3)
+g.add_grid_tedges(np.arange(n), np.maximum(lin, 0), np.maximum(-lin, 0)); g.maxflow()
+new3 = g.get_grid_segments(np.arange(n)).astype(int); before = out.copy()
+out[bandS] = np.where(new3[bandS] == 1, 1, 0)
+print('edge smoothing on heads: band %d faces | skin->black %.1f mm2, black->skin %.1f mm2' % (
+    bandS.sum(), area[(out == 1) & (before == 0)].sum(), area[(out == 0) & (before == 1)].sum()))
 # --- 2) bracelet beads: one colour each. Beads are split by angle around the ring (necks = area minima) ---
 from scipy.ndimage import gaussian_filter1d
 S = np.isin(out, [5, 6]) & (x > -12) & (x < 20) & (zz > 44) & (zz < 68)
