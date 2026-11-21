@@ -4,6 +4,7 @@
 Round 3 (MESH=cs_r3.npz from tools/recolor_r3.py): white + navy beads, navy baby T-shirt; only the forehead dot is painted.
 Finish: 0 skin, 1 black, 2 white, 3 navy, 4 light blue, 5 red, 6 royal blue, 7 gold.
 Heads: T1 Apricot (skin), T2 Black, T3 Pure White, T4 Navy (-> Red at the pause, for the bindi).
+One front bracelet bead is black (owner)."""
 import json, re, zipfile, os, numpy as np, trimesh
 MESH = os.environ.get('MESH', 'cs.npz'); NAVY = os.environ.get('NAVY', '#17254F')
 z = np.load(MESH); V, F = z['v'], z['f']; lab = z['l'].astype(int)
