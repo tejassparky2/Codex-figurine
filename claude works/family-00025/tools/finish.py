@@ -7,7 +7,7 @@ from scipy.sparse import coo_matrix
 from scipy.sparse.csgraph import connected_components
 MIN, DET = 0.6, 0.25
 z = np.load('printable.npz'); m = trimesh.Trimesh(z['v'], z['f'], process=False); area = m.area_faces; n = len(area)
-mat = np.load('materials_e.npy').astype(int)
+mat = np.load('materials_h.npy').astype(int)
 lab = mat.copy()
 ei, ej = m.face_adjacency.T; ev = m.face_adjacency_edges; L = np.linalg.norm(m.vertices[ev[:,0]] - m.vertices[ev[:,1]], axis=1)
 K = 8
