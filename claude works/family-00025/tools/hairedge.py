@@ -28,8 +28,23 @@ cur = (lab == 1).astype(int)
 U = np.zeros((n, 2)); U[:, 0] = 1e9 * (~band & (cur == 1)); U[:, 1] = 1e9 * (~band & (cur == 0))
 # owner 2026-11-21 (hero: "color leaks here"): the beard pass's lean to black swallowed the dad's lips. The lips (skin inside
 # the mouth box before any hair pass) are locked skin in every hair pass.
-LIPS = (x > -39) & (x < -17) & (zz > 106.5) & (zz < 115.5) & (y < -5) & (lab == 0)
+# owner 2026-11-21 (next review): "fill that skin patch on beard to black" -- only the LIPS are skin: the pink lower lip
+# (texture hue < 50 deg, largest island) and the mouth skin directly above/below it across the lip's width. Skin in the mouth
+# box beside the lips is beard -> black.
+from pathlib import Path as _P2; sys.path.insert(0, str(_P2(__file__).resolve().parents[3]/'wedding-u1-skill/toolkit/scripts'))
+from colorize_3mf import srgb_to_lab as _s2l
+_Lab = _s2l(np.load('face_rgb.npy').astype(float)); _hue = np.degrees(np.arctan2(_Lab[:, 2], _Lab[:, 1]))
+MBOX = (x > -39) & (x < -17) & (zz > 106.5) & (zz < 115.5) & (y < -5) & (lab == 0)
+pink = MBOX & (_hue < 50)
+kp = pink[a] & pink[b]; _pc = connected_components(coo_matrix((np.ones(kp.sum()), (a[kp], b[kp])), shape=(n, n)), directed=False)[1]
+_pa = np.bincount(_pc[pink], weights=area[pink], minlength=_pc.max() + 1); pink &= _pc == np.argmax(_pa)
+lx0, lx1 = np.percentile(x[pink], 1) - 0.3, np.percentile(x[pink], 99) + 0.3
+LIPS = MBOX & (x > lx0) & (x < lx1)
+lz0, lz1 = np.percentile(zz[pink], 1) - 0.8, np.percentile(zz[pink], 99) + 1.0          # lip height only (never the cheek above)
+BEARD_PATCH = MBOX & ~LIPS & (zz > lz0) & (zz < lz1)
+print('lips x %.1f..%.1f; skin patch beside the lips -> black: %.1f mm2' % (lx0, lx1, area[BEARD_PATCH].sum()))
 U[LIPS, 1] = 1e9
+U[BEARD_PATCH, 0] = 1e9
 U[band, 0] += 0.02 * area[band] * (cur[band] == 1); U[band, 1] += 0.02 * area[band] * (cur[band] == 0)
 w = LAM * Ln                                                     # shortest boundary: fills the comb of skin strands
 U[band, 1] -= 0.0; U[band, 0] += 0.01 * area[band]                # slight lean to black inside the band
@@ -99,7 +114,7 @@ g = maxflow.Graph[float](n, len(a)); g.add_nodes(n); g.add_edges(a, b, w3, w3)
 g.add_grid_tedges(np.arange(n), np.maximum(lin, 0), np.maximum(-lin, 0)); g.maxflow()
 new3 = g.get_grid_segments(np.arange(n)).astype(int); before = out.copy()
 out[bandS] = np.where(new3[bandS] == 1, 1, 0)
-out[LIPS] = 0
+out[LIPS] = 0; out[BEARD_PATCH] = 1
 print('edge smoothing on heads: band %d faces | skin->black %.1f mm2, black->skin %.1f mm2' % (
     bandS.sum(), area[(out == 1) & (before == 0)].sum(), area[(out == 0) & (before == 1)].sum()))
 # --- 2) bracelet beads: one colour each. Beads are split by angle around the ring (necks = area minima) ---
