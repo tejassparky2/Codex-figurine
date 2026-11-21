@@ -26,6 +26,10 @@ for _ in range(RINGS): band |= (G @ band.astype('f4')) > 0
 band &= head & ~frame_box & np.isin(lab, [0, 1])
 cur = (lab == 1).astype(int)
 U = np.zeros((n, 2)); U[:, 0] = 1e9 * (~band & (cur == 1)); U[:, 1] = 1e9 * (~band & (cur == 0))
+# owner 2026-11-21 (hero: "color leaks here"): the beard pass's lean to black swallowed the dad's lips. The lips (skin inside
+# the mouth box before any hair pass) are locked skin in every hair pass.
+LIPS = (x > -39) & (x < -17) & (zz > 106.5) & (zz < 115.5) & (y < -5) & (lab == 0)
+U[LIPS, 1] = 1e9
 U[band, 0] += 0.02 * area[band] * (cur[band] == 1); U[band, 1] += 0.02 * area[band] * (cur[band] == 0)
 w = LAM * Ln                                                     # shortest boundary: fills the comb of skin strands
 U[band, 1] -= 0.0; U[band, 0] += 0.01 * area[band]                # slight lean to black inside the band
@@ -95,6 +99,7 @@ g = maxflow.Graph[float](n, len(a)); g.add_nodes(n); g.add_edges(a, b, w3, w3)
 g.add_grid_tedges(np.arange(n), np.maximum(lin, 0), np.maximum(-lin, 0)); g.maxflow()
 new3 = g.get_grid_segments(np.arange(n)).astype(int); before = out.copy()
 out[bandS] = np.where(new3[bandS] == 1, 1, 0)
+out[LIPS] = 0
 print('edge smoothing on heads: band %d faces | skin->black %.1f mm2, black->skin %.1f mm2' % (
     bandS.sum(), area[(out == 1) & (before == 0)].sum(), area[(out == 0) & (before == 1)].sum()))
 # --- 2) bracelet beads: one colour each. Beads are split by angle around the ring (necks = area minima) ---
