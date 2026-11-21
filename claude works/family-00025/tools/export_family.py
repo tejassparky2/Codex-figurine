@@ -3,7 +3,7 @@
   out/Family-00025-U1-150mm.3mf           : 4 heads for the whole print, no pauses
 Finish: 0 skin, 1 black, 2 white, 3 navy, 4 light blue, 5 red, 6 royal blue, 7 gold.
 Heads: T1 Apricot (skin), T2 Black, T3 Pure White, T4 Navy.
-Printed white and hand-painted: baby's light-blue T-shirt, red bracelet beads, mother's gold ring. Blue beads print navy."""
+Printed white and hand-painted: baby's light-blue T-shirt, red bracelet beads, red bindi and forehead dot. Blue beads print navy."""
 import json, re, zipfile, os, numpy as np, trimesh
 MESH = os.environ.get('MESH', 'cs.npz'); NAVY = os.environ.get('NAVY', '#17254F')
 z = np.load(MESH); V, F = z['v'], z['f']; lab = z['l'].astype(int)
@@ -44,14 +44,14 @@ def write(path, labels, colours, title, notes):
     assert mm.is_watertight and mm.is_winding_consistent and mm.is_volume and np.all(np.bincount(mm.edges_unique_inverse) == 2)
     print(path, len(fs), 'faces | size', np.round(mm.extents, 2), 'mm | slots', dict(zip(colours, np.bincount(labels, minlength=len(colours)).tolist())))
 area = trimesh.Trimesh(V, F, process=False).area_faces
-paint = {'light blue (baby T-shirt sleeves)': lab == 4, 'red (bracelet beads)': lab == 5}
+paint = {'light blue (baby T-shirt sleeves)': lab == 4, 'red (bracelet beads, mother bindi, baby forehead dot)': lab == 5}
 paint_txt = '\n'.join('  - %s: %.1f mm2' % (k, area[v].sum()) for k, v in paint.items())
 paint_txt += '\n  - optional: gold on the ring finger of the mother (printed skin)'
 guide_notes = ('Finish guide: the intended colours after hand-painting. Print from Family-00025-U1-150mm.3mf, not this file.\n' +
                '\n'.join(f'Slot {i+1}: {nm} {hx}' for i, (nm, hx) in enumerate(zip(NAMES, FINISH))) + '\n')
 print_notes = ('Snapmaker U1 project, 150 mm tall, scale 100%. Flat bottom: glue onto the separately printed base.\n'
                f'Four heads for the whole print, no pauses: T1 Apricot #E6BAA8 (skin)  T2 Black #0E0E10  T3 Pure White #F1ECE1  T4 Navy {NAVY}\n'
-               'Blue bracelet beads print navy (T4). Kaala tika dots (mother bindi, baby forehead and cheek) print black, flat.\n'
+               'Blue bracelet beads print navy (T4). Kaala tika on the baby cheek prints black, flat. Mother bindi and baby forehead dot print white, paint red.\n'
                'Printed white, hand-paint afterwards:\n' + paint_txt + '\n'
                'Select your real U1 printer, nozzle and PLA+ presets in Snapmaker Orca before slicing. Supports and wipe tower on white.\n')
 os.makedirs('out', exist_ok=True)
