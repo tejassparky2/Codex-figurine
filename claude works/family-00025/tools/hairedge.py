@@ -76,8 +76,10 @@ heads = ((x < -10) & (zz > 92)) | ((x > 4) & (x < 38) & (zz > 98)) | ((x > 24) &
 wv = np.flatnonzero(out == 2); dW, _ = _KD(c[wv]).query(c, distance_upper_bound=1.0) if len(wv) else (np.full(n, np.inf), None)
 dotsP = np.array([[19.86, -12.6, 120.03], [38.42, -41.19, 79.97], [49.35, -40.19, 67.2]])
 dD = np.min(np.linalg.norm(c[:, None, :] - dotsP[None], axis=2), axis=1)
-keepout = (((x > -50) & (x < -6) & (zz > 112) & (zz < 130.5)) |          # dad glasses (thin frame bars get eaten)
-           ((x > 4) & (x < 38) & (zz > 103.5) & (zz < 119)) |             # mother glasses
+# owner 2026-11-21: "why you destroyed eyebrows" -- thin shapes get eaten by boundary shortening: glasses AND brows stay out
+keepout = (((x > -50) & (x < -6) & (zz > 112) & (zz < 133.5)) |          # dad glasses + brows
+           ((x > 4) & (x < 38) & (zz > 103.5) & (zz < 123.0)) |           # mother glasses + brows
+           ((x > 24) & (x < 58) & (zz > 70) & (zz < 80) & (y < -20)) |   # baby eyes/brows
            ((x > -39) & (x < -17) & (zz > 106.5) & (zz < 115.5)))          # dad lips between moustache and beard (shrank)
 spike = np.hypot(x - 33.4, zz - 108.7) < 1.3                              # ...except the black spike under the mother's frame
 okf = heads & np.isin(out, [0, 1]) & ~np.isfinite(dW) & (dD > 1.5) & (~keepout | spike)
