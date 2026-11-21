@@ -55,6 +55,29 @@ def refine(center, rad, hmax, passes=8):
             for t3 in tris: addF.append(t3); addL.append(lf); addLt.append(ltf)
         F = np.vstack([F[keep], np.array(addF, np.int64)]); L = np.r_[L[keep], addL]; Lt = np.r_[Lt[keep], addLt]
 
+def sdf_cut(s, label, elig):
+    """exact cut along the zero set of a per-vertex signed value s (< 0 inside); elig faces inside get label."""
+    global V, F, L, Lt
+    EPS = 0.012; s = np.where(np.abs(s) < EPS, np.where(s < 0, -EPS, EPS), s)
+    inside_v = s < 0; cand = np.flatnonzero(inside_v[F].any(1) & ~inside_v[F].all(1)); full = np.flatnonzero(inside_v[F].all(1))
+    L[full[elig[full]]] = label
+    newV = []; key = {}
+    def cut(i, j):
+        k = (min(i, j), max(i, j))
+        if k not in key:
+            t = s[i] / (s[i] - s[j]); key[k] = len(V) + len(newV); newV.append(V[i] + t * (V[j] - V[i]))
+        return key[k]
+    keep = np.ones(len(F), bool); addF, addL, addLt = [], [], []
+    for fi in cand:
+        tri = F[fi]; ins = inside_v[tri]; lab_in = label if elig[fi] else L[fi]; keep[fi] = False
+        lone = np.flatnonzero(ins) if ins.sum() == 1 else np.flatnonzero(~ins)
+        k0 = int(lone[0]); v0, v1, v2 = tri[k0], tri[(k0+1) % 3], tri[(k0+2) % 3]
+        p01, p02 = cut(v0, v1), cut(v0, v2); lone_in = bool(ins[k0])
+        for t3, is_in in [((v0, p01, p02), lone_in), ((p01, v1, v2), not lone_in), ((p01, v2, p02), not lone_in)]:
+            addF.append(t3); addL.append(lab_in if is_in else L[fi]); addLt.append(Lt[fi])
+    if newV: V = np.vstack([V, np.array(newV)])
+    F = np.vstack([F[keep], np.array(addF, np.int64).reshape(-1, 3)]); L = np.r_[L[keep], np.array(addL, int)]; Lt = np.r_[Lt[keep], np.array(addLt)]
+
 def circle(center, nrm, r, label, elig, depth=1.0):
     """exact circle cut; faces flagged in elig that fall inside get label."""
     global V, F, L, Lt
@@ -108,7 +131,7 @@ for who, eyes in EYES.items():
         u = axis - (axis @ e['nr']) * e['nr']; u /= np.linalg.norm(u); v = np.cross(e['nr'], u); e['u'], e['v'] = u, v
         pv = (c[e['op']] - e['ctr']) @ v; e['H'] = np.percentile(pv, 98) - np.percentile(pv, 2); e['vmid'] = (np.percentile(pv, 98) + np.percentile(pv, 2)) / 2
         offs.append((e['ic'] - e['ctr']) @ u)
-    R = 0.38 * min(e['H'] for e in info); gaze = float(np.clip(np.mean(offs), -0.6, 0.6))
+    R = 0.55 * min(e['H'] for e in info); gaze = float(np.clip(np.mean(offs), -0.6, 0.6))
     for k, e in enumerate(info):
         e['pc'] = e['ctr'] + gaze * e['u'] + e['vmid'] * e['v']; plans.append((who, k, e, R))
         print('%-4s eye %d: opening %.2f mm2, height %.2f mm -> pupil radius %.2f mm (gaze %+.2f mm)' % (who, k, e['A'], e['H'], R, gaze))
@@ -117,6 +140,26 @@ for who, k, e, R in plans:                                     # round pupils
     refine(e['pc'], R + 0.45, 0.06)
     cc = V[F].mean(1); elig = (L == 2) & (np.linalg.norm(cc - e['ctr'], axis=1) < 3.2) & (cc[:,1] < 0)
     circle(e['pc'], e['nr'], R, 1, elig, depth=1.2)
+# ---- upper lash line (semi-realistic recipe, man-with-drink r4: opening white, big iris clipped by the lids, liner on the
+#      upper lid, no catchlight). Black band LINER mm deep along the top edge of each opening. ----
+LINER = 0.22
+m = mesh(); c = m.triangles_center
+for who, k, e, R in plans:
+    near = (np.linalg.norm(c - e['ctr'], axis=1) < 3.2) & (c[:,1] < 0)
+    pupil = (L == 1) & near & (np.linalg.norm(c - e['pc'], axis=1) < R + 0.05)
+    S = near & ((L == 2) | pupil)
+    uu = (c - e['ctr']) @ e['u']; vv = (c - e['ctr']) @ e['v']
+    bins = np.round(uu / 0.1).astype(int); top = {}
+    for b_, v_ in zip(bins[S], vv[S]): top[b_] = max(top.get(b_, -9), v_)
+    ks = np.array(sorted(top)); tv = np.array([top[q] for q in ks])
+    tv = np.array([np.median(tv[max(0, i-2):i+3]) for i in range(len(tv))])          # smooth the lid curve
+    # exact cut along the smooth curve v = top(u) - LINER (per-vertex signed value), painted only inside the opening
+    uv_ = (V - e['ctr']) @ e['u']; vv_ = (V - e['ctr']) @ e['v']
+    lid = np.interp(uv_, ks * 0.1, tv, left=-9, right=-9)
+    sv = (lid - LINER) - vv_; sv[(np.linalg.norm(V - e['ctr'], axis=1) > 3.2) | (lid < -8)] = 1.0
+    sdf_cut(sv, 1, S if len(S) == len(F) else np.zeros(len(F), bool))
+    m = mesh(); c = m.triangles_center
+    print('%-4s eye %d: lash line cut along the smoothed lid curve' % (who, k))
 # ---- dots ----
 s = 150.0 / 149.5
 DOTS = [('mother bindi', (19.77, -12.85, 120.23), 0.55, 5), ('baby forehead', (38.25, -41.52, 80.20), 0.45, 5), ('baby cheek', (49.56, -40.68, 67.44), 0.38, 1)]
