@@ -1,0 +1,24 @@
+{
+  "judge_command": [
+    "C:/path/to/python.exe",
+    "C:/owner-judge/adapter.py",
+    "--candidate",
+    "{candidate}",
+    "--output",
+    "{output}",
+    "--commit",
+    "{commit}"
+  ],
+  "allowed_paths": [
+    "wedding-u1-skill/coloring/approved_match.py"
+  ],
+  "metrics": {
+    "missed_defects": "min",
+    "false_alarms": "min"
+  },
+  "priority": [
+    "missed_defects",
+    "false_alarms"
+  ],
+  "timeout_seconds": 3600
+}

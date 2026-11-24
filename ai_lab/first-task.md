@@ -1,0 +1,3 @@
+# Experiment: improve the approval gate without weakening defect detection
+
+Independently investigate false positives in approved_match.py. Preserve the baseline. Do not modify judge inputs, thresholds, reference labels or tests. Propose a narrow algorithmic improvement and measure its effects on clean controls and planted defects across camera modes, drift conditions and defect categories. Record before/after results, commands, failure cases and visual evidence. No blanket threshold relaxation. Do not claim success unless all required regressions pass. Commit candidate changes for cross-review. Production files remain unchanged until owner-approved integration and retest.
